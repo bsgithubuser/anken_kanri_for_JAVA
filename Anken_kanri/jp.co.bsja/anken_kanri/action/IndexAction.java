@@ -15,13 +15,44 @@
  */
 package anken_kanri.action;
 
+import javax.annotation.Resource;
+
+import org.seasar.struts.annotation.ActionForm;
 import org.seasar.struts.annotation.Execute;
 
+import anken_kanri.dto.SessionDto;
+import anken_kanri.form.IndexForm;
+
 public class IndexAction {
+
+	@Resource
+	protected SessionDto sessionDto;
+
+	@ActionForm
+	@Resource
+	protected IndexForm indexForm;
 
 
     @Execute(validator = false)
 	public String index() {
+
+    	sessionDto.str = "せっしょん";
+
+    	indexForm.sessionDto = sessionDto;
+
+
         return "index.jsp";
 	}
+
+    @Execute(validator = false)
+   	public String test() {
+
+
+    	indexForm.sessionDto = sessionDto;
+
+
+
+           return "index.jsp";
+   	}
+
 }
