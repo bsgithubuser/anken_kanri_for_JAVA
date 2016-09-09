@@ -1,4 +1,4 @@
-package jp.co.anken;
+package jp.co.bsja.anken;
 
 public class AnkenTest {
     // サンプルソースです。

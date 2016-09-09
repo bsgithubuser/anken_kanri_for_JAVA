@@ -1,9 +1,9 @@
 <project name="Anken_kanri-s2jdbc-gen" default="gen-ddl" basedir=".">
 
   <property name="classpathdir" value="src/main/webapp/WEB-INF/classes"/>
-  <property name="rootpackagename" value="anken_kanri"/>
+  <property name="rootpackagename" value="anken"/>
   <property name="entitypackagename" value="entity"/>
-  <property name="entityfilepattern" value="anken_kanri/entity/**/*.java"/>
+  <property name="entityfilepattern" value="anken/entity/**/*.java"/>
   <property name="javafiledestdir" value="src/main/java"/>
   <property name="testjavafiledestdir" value="src/test/java"/>
   <property name="javafileencoding" value="UTF-8"/>

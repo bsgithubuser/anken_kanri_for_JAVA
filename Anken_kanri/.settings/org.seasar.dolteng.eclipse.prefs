@@ -1,7 +1,7 @@
 DaoType=S2JDBC
 DefaultResourcePath=/Anken_kanri/src/main/resources
-DefaultRootPackage=anken_kanri
-DefaultSrcPath=/Anken_kanri/jp.co.bsja
+DefaultRootPackage=anken
+DefaultSrcPath=/Anken_kanri/src/main/java
 ServletPath=/Anken_kanri
 ViewType=SA-Struts
 WebContentsRoot=src/main/webapp/

@@ -1,4 +1,4 @@
-package anken_kanri.dto;
+package jp.co.bsja.anken.dto;
 
 import java.io.Serializable;
 
@@ -7,8 +7,8 @@ import org.seasar.framework.container.annotation.tiger.InstanceType;
 
 @Component(instance = InstanceType.SESSION)
 public class SessionDto implements Serializable {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public String str = "";
+  public String str = "";
 
 }
