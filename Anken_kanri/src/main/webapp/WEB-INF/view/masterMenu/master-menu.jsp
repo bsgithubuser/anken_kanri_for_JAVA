@@ -8,21 +8,14 @@
 <title>Insert title here</title>
 </head>
 <body>
-<!-- ヘッダー -->
-<td>
-<img src = "/Anken_kanri/img/bs_logo.jpg" width = "250" height = "40">
-</td>
-<div class = "tytle"><b>案件情報管理システム</b></div>
+<jsp:include page="../common/header.jsp"/>
+<p class="screenTytle"><u><b>マスタ管理メニュー</b></u></p>
+<div class="menuItem"><a href="../personalMaster/"><u><b>・担当者管理マスタ</b></u></a></div>
+<div class="menuItem"><a href="../skillMaster/"><u><b>・スキル管理マスタ</b></u></a></div>
+<div class="menuItem"><a href="../companyInformationMaster/"><u><b>・会社情報管理マスタ</b></u></a></div>
 <br>
 <br>
-<hr>
-<!-- ヘッダー終わり -->
-<br>
-<br>
-<br>
-<br>
-<div class = "errorMessage">システムエラーが発生しました。管理者までご連絡下さい。</div>
-<div class = "errorMessage"><html:errors/></div>
+<div class="menuItem"><a href="../menu/"><u><b>・メニュー画面へ戻る</b></u></a></div>
 <br>
 <br>
 <br>
@@ -33,8 +26,6 @@
 <br>
 <br>
 <br>
-<br>
-<div class = "link"><a href = "../menu/"><u><b>メニュー画面へ戻る</b></u></a></div>
 <br>
 <br>
 <br>

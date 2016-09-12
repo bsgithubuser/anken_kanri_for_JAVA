@@ -5,5 +5,5 @@
 <br>
 <div class="userNameAndLogOut">ユーザー名:▲▲▲▲▲</div>
 <br>
-<div class="userNameAndLogOut"><a href=""><u>ログアウト</u></a></div>
+<div class="userNameAndLogOut"><a href="../login/"><u>ログアウト</u></a></div>
 <hr>
