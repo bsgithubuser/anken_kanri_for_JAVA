@@ -2,14 +2,14 @@ package jp.co.bsja.anken.action;
 
 import javax.annotation.Resource;
 
-import jp.co.bsja.anken.dto.LoginCheckDto;
+import jp.co.bsja.anken.dto.SessionDto;
 
 import org.seasar.struts.annotation.Execute;
 
 public class MasterMenuAction {
 
   @Resource
-  public LoginCheckDto loginCheckDto;
+  public SessionDto sessionDto;
 
   /**
    * マスタ管理画面に遷移するためのメソッドです。
@@ -17,8 +17,8 @@ public class MasterMenuAction {
    */
   @Execute(validator = false)
   public String index() {
-    //    if (loginCheckDto.administrativePermission.equals("0")) {
-    //      if (loginCheckDto.loginData == null) {
+    //    if (sessionDto.administrativePermission.equals("0")) {
+    //      if (sessionDto.loginData == null) {
     //        return "/login/login.jsp";
     //      } else {
            return "master-menu.jsp";
