@@ -1,44 +1,54 @@
 @charset "UTF-8";
 /* フッダー・ヘッダー */
 div.tytle {
-	text-align: center;
-	color: #00CC00;
-	font-size: 20px
+  text-align: center;
+  color: #00CC00;
+  font-size: 20px
 }
 
 div.userNameAndLogOut {
-	text-align: right;
-	font-size: 14px
+  text-align: right;
+  font-size: 14px
 }
 
 div.menuItem {
-	margin-left: 50px;
+  margin-left: 50px;
 }
 
 p.copyright {
-	text-align: center;
-	font-size: 14px
+  text-align: center;
+  font-size: 14px
 }
 
 p.screenTytle {
-	margin-left: 50px;
+  margin-left: 50px;
 }
 
 /* 会社情報管理マスタ・一覧画面 */
 div.buttonPosition {
-	margin-left: 1100px;
+  margin-left: 1100px;
 }
 
 table.list {
-    border-left: 1px solid #333;
-    border-spacing: 0;
-    border-top: 1px solid #333;
-    margin: 20px 0 30px;
-    width: 50%;
+  border-left: 1px solid #333;
+  border-spacing: 0;
+  border-top: 1px solid #333;
+  margin: 20px 0 30px;
+  width: 50%;
 }
 
 tr.listTytle {
-	text-align: left;
-	background-color: #00CC00;
-	margin-left: 50px;
+  text-align: left;
+  background-color: #00CC00;
+  margin-left: 50px;
+}
+
+/* エラー画面 */
+div.errorMessage {
+  font-size: 20px;
+  text-align: center;
+}
+
+div.link {
+  text-align: center;
 }
