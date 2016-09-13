@@ -3,7 +3,7 @@ package jp.co.bsja.anken.di;
 import java.util.List;
 
 import jp.co.bsja.anken.dao.SampleDao;
-import jp.co.bsja.anken.entity.MUsers;
+import jp.co.bsja.anken.entity.MSkill;
 
 public class SampleImpl implements SampleInterface {
   /**
@@ -15,7 +15,8 @@ public class SampleImpl implements SampleInterface {
   @Override
   public List<String> makeSample(String userName) {
     SampleDao dao = new SampleDao();
-    List<MUsers> users = dao.findUsers(userName);
+    List<MSkill> users = dao.findUsers(userName);
+    System.out.println(users.get(0));
     return null;
   }
 }
