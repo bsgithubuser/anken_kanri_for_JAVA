@@ -1,12 +1,18 @@
 package jp.co.bsja.anken.action;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
+import jp.co.bsja.anken.di.SampleInterface;
 import jp.co.bsja.anken.dto.SessionDto;
 import jp.co.bsja.anken.form.IndexForm;
 
+import org.seasar.framework.container.S2Container;
+import org.seasar.framework.container.factory.SingletonS2ContainerFactory;
 import org.seasar.struts.annotation.ActionForm;
 import org.seasar.struts.annotation.Execute;
+
 
 /*
  * Copyright 2004-2008 the Seasar Foundation and the Others.
@@ -45,6 +51,10 @@ public class IndexAction {
 
     indexForm.sessionDto = sessionDto;
 
+    SingletonS2ContainerFactory.init();
+    S2Container container = SingletonS2ContainerFactory.getContainer();
+    SampleInterface sample = (SampleInterface)container.getComponent("SampleImpl");
+    List<String> list = sample.makeSample("test");
 
     return "index.jsp";
   }
