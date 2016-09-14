@@ -54,7 +54,7 @@ public class IndexAction {
     SingletonS2ContainerFactory.init();
     S2Container container = SingletonS2ContainerFactory.getContainer();
     SampleInterface sample = (SampleInterface)container.getComponent("SampleImpl");
-    List<String> list = sample.makeSample("");
+    List<String> list = sample.makeSample("test");
 
     return "index.jsp";
   }
