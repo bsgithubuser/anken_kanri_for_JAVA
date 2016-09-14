@@ -5,6 +5,7 @@ import static org.seasar.extension.jdbc.parameter.Parameter.*;
 import java.util.List;
 
 import jp.co.bsja.anken.SqlFiles;
+import jp.co.bsja.anken.entity.MSkill;
 import jp.co.bsja.anken.entity.MUsers;
 
 import org.seasar.framework.beans.util.BeanMap;
@@ -44,6 +45,19 @@ public class SampleDao extends Dao {
     //return jdbcManager.from(MUsers.class).getResultList();
     return null;
 
+  }
+
+  public int insert(MSkill entity) {
+    return jdbcManager.insert(entity).execute();
+  }
+
+  public int uptate(MSkill entity) {
+    return jdbcManager.update(entity).execute();
+
+  }
+
+  public int delete(MSkill entity) {
+    return jdbcManager.delete(entity).execute();
   }
 }
 
