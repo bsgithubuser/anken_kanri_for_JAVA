@@ -68,7 +68,7 @@ public class Dao {
    */
   public int getAnkenSkillIdSeq() {
     String seq = jdbcManager.selectBySql(String.class,
-        "SELECT nextval('prj_skill_id_seq')FROM T_PROJ_INFO").getSingleResult();
+        "SELECT nextval('prj_skill_id_seq')FROM T_PROJ_SKILL").getSingleResult();
     int ankenId = Integer.parseInt(seq);
     return ankenId;
   }
@@ -80,7 +80,7 @@ public class Dao {
    */
   public int getUserIdSeq() {
     String seq = jdbcManager.selectBySql(String.class,
-        "SELECT nextval('users_id_seq')FROM T_PROJ_INFO").getSingleResult();
+        "SELECT nextval('users_id_seq')FROM M_USERS").getSingleResult();
     int ankenId = Integer.parseInt(seq);
     return ankenId;
   }
@@ -92,7 +92,7 @@ public class Dao {
    */
   public int getCmpnIdSeq() {
     String seq = jdbcManager.selectBySql(String.class,
-        "SELECT nextval('cmpn_id_seq')FROM T_PROJ_INFO").getSingleResult();
+        "SELECT nextval('cmpn_id_seq')FROM M_CMPN").getSingleResult();
     int ankenId = Integer.parseInt(seq);
     return ankenId;
   }
@@ -104,7 +104,7 @@ public class Dao {
    */
   public int getSkillIdSeq() {
     String seq = jdbcManager.selectBySql(String.class,
-        "SELECT nextval('skill_id_seq')FROM T_PROJ_INFO").getSingleResult();
+        "SELECT nextval('skill_id_seq')FROM M_SKILL").getSingleResult();
     int ankenId = Integer.parseInt(seq);
     return ankenId;
   }
