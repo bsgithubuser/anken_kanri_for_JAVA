@@ -1,6 +1,7 @@
 package jp.co.bsja.anken.common;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -200,5 +201,14 @@ public class CommonFunction {
     }
     SimpleDateFormat sdf = new SimpleDateFormat(fmt);
     return sdf.parse((String) targ);
+  }
+
+  /**
+   * 現在時刻をTimestampで取得します .
+   *
+   * @return Timestamp型の現在時刻
+   */
+  public static Timestamp getBaseDt() {
+    return new Timestamp(System.currentTimeMillis());
   }
 }
