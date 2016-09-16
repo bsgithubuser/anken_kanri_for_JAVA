@@ -1,6 +1,9 @@
 package jp.co.bsja.anken.dao;
 
+import static jp.co.bsja.anken.common.CommonFunction.*;
+
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.seasar.extension.jdbc.JdbcManager;
@@ -12,11 +15,11 @@ public class Dao {
   public JdbcManager jdbcManager = SingletonS2Container.getComponent("jdbcManager");
   public static final String PATH = "data/";
 
-  public static final String CMPN_ID_SEQ = "CMPN_ID_SEQ";
-  public static final String PRJ_ID_SEQ = "PRJ_ID_SEQ";
-  public static final String PRJ_SKILL_ID_SEQ = "PRJ_SKILL_ID_SEQ";
-  public static final String SKILL_ID_SEQ = "SKILL_ID_SEQ";
-  public static final String USERS_ID_SEQ = "USERS_ID_SEQ";
+  public static final String TABLE_M_CMPN = "M_CMPN";
+  public static final String TABLE_M_SKILL = "M_SKILL";
+  public static final String TABLE_M_USERS = "M_USERS";
+  public static final String TABLE_T_PROJ_INFO = "T_PROJ_INFO";
+  public static final String TABLE_T_PROJ_SKILL = "T_PROJ_SKILL";
 
   /**
    * SELECTを実行します .
@@ -26,6 +29,16 @@ public class Dao {
    */
   public List<BeanMap> selectBySql(String sql) {
     return jdbcManager.selectBySql(BeanMap.class, sql).getResultList();
+  }
+
+  /**
+   * 単一結果文字列を返却するSELECTを実行します .
+   *
+   * @param sql SQL文
+   * @return 文字列
+   */
+  public String selectBySqlSingleString(String sql) {
+    return jdbcManager.selectBySql(String.class, sql).getSingleResult();
   }
 
   /**
@@ -54,11 +67,9 @@ public class Dao {
    *
    * @return BeanMapのリスト
    */
-  public int getAnkenIdSeq() {
-    String seq = jdbcManager.selectBySql(String.class,
-        "SELECT nextval('prj_id_seq')FROM T_PROJ_INFO").getSingleResult();
-    int ankenId = Integer.parseInt(seq);
-    return ankenId;
+  public int getPrjIdSeq() {
+    return jdbcManager.selectBySql(int.class,
+        "SELECT nextval('PRJ_ID_SEQ')").getSingleResult();
   }
 
   /**
@@ -66,11 +77,9 @@ public class Dao {
    *
    * @return 次のシーケンス番号
    */
-  public int getAnkenSkillIdSeq() {
-    String seq = jdbcManager.selectBySql(String.class,
-        "SELECT nextval('prj_skill_id_seq')FROM T_PROJ_SKILL").getSingleResult();
-    int ankenId = Integer.parseInt(seq);
-    return ankenId;
+  public int getPrjSkillIdSeq() {
+    return jdbcManager.selectBySql(int.class,
+        "SELECT nextval('PRJ_SKILL_ID_SEQ')").getSingleResult();
   }
 
   /**
@@ -79,10 +88,8 @@ public class Dao {
    * @return 次のシーケンス番号
    */
   public int getUserIdSeq() {
-    String seq = jdbcManager.selectBySql(String.class,
-        "SELECT nextval('users_id_seq')FROM M_USERS").getSingleResult();
-    int ankenId = Integer.parseInt(seq);
-    return ankenId;
+    return jdbcManager.selectBySql(int.class,
+        "SELECT nextval('USERS_ID_SEQ')").getSingleResult();
   }
 
   /**
@@ -91,10 +98,8 @@ public class Dao {
    * @return 次のシーケンス番号
    */
   public int getCmpnIdSeq() {
-    String seq = jdbcManager.selectBySql(String.class,
-        "SELECT nextval('cmpn_id_seq')FROM M_CMPN").getSingleResult();
-    int ankenId = Integer.parseInt(seq);
-    return ankenId;
+    return jdbcManager.selectBySql(int.class,
+        "SELECT nextval('CMPN_ID_SEQ')").getSingleResult();
   }
 
   /**
@@ -103,43 +108,48 @@ public class Dao {
    * @return 次のシーケンス番号
    */
   public int getSkillIdSeq() {
-    String seq = jdbcManager.selectBySql(String.class,
-        "SELECT nextval('skill_id_seq')FROM M_SKILL").getSingleResult();
-    int ankenId = Integer.parseInt(seq);
-    return ankenId;
-  }
-
-  public List<BeanMap> allseach(String formName) {
-    return jdbcManager.selectBySql(BeanMap.class,"SELECT * FROM " + formName ).getResultList();
+    return jdbcManager.selectBySql(int.class,
+        "SELECT nextval('SKILL_ID_SEQ')").getSingleResult();
   }
 
   /**
-   * 存在チェックSQL .
+   * 検索条件指定なし全件検索します.
    *
-   * @fromName fromName テーブル名
-   * @idName idName カラム名
-   * @params params パラメータ
-   * @return 次のシーケンス番号
+   * @param tableName テーブル名
+   * @return 検索結果リスト
    */
-  public int presenceCheck(String fromName,String idName,int params) {
-    return jdbcManager.selectBySql(
-        int.class,"SELECT COUNT(1) FROM " + fromName + " WHERE " + idName + " = " + params )
+  public List<BeanMap> selectAll(String tableName) {
+    return jdbcManager.selectBySql(BeanMap.class, "SELECT * FROM " + tableName).getResultList();
+  }
+
+  /**
+   * 存在チェックSQL 存在しなければnullを返却 .
+   *
+   * @fromName tableName テーブル名
+   * @idName columnName カラム名
+   * @params param パラメータ
+   * @return 存在可否
+   */
+  public Integer existCheck(String tableName, String columnName, int param) {
+    return jdbcManager.selectBySql(Integer.class,
+        String.format("SELECT COUNT(1) FROM %s WHERE %s = %s", tableName, columnName, param))
         .getSingleResult();
   }
 
   /**
    * 排他制御SQL .
    *
-   * @param fromName テーブル名
-   * @param idName カラム名
-   * @param id ID番号
+   * @param tableName テーブル名
+   * @param columnName カラム名
+   * @param param パラメータ
    * @param time 更新日時
    * @return 他のユーザーにより変更されていた場合1を返す
    */
-  public int lock(String fromName,String idName,String id,Timestamp time) {
-    return jdbcManager.selectBySql(
-        int.class,"SELECT COUNT(1) FROM " + fromName + " WHERE "
-    + idName + " = " + id + "UPDATE_DATE <> " + time).getSingleResult();
+  public Integer hasLocked(String tableName, String columnName, String param, Timestamp time) {
+    return jdbcManager.selectBySql(Integer.class,
+          String.format("SELECT COUNT(1) FROM %s WHERE %s = %s AND UPDATE_DATE <> '%s'",
+              tableName, columnName, param,
+              new SimpleDateFormat(FORMAT_YMDHMSS_HYPEN).format(time)))
+        .getSingleResult();
   }
-
 }
