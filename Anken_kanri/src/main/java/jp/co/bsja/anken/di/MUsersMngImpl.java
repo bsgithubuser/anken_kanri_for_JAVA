@@ -1,5 +1,7 @@
 package jp.co.bsja.anken.di;
-import java.security.MessageDigest;
+import static jp.co.bsja.anken.common.CommonFunction.*;
+
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +14,6 @@ import org.apache.struts.action.ActionMessages;
 import org.seasar.framework.beans.util.BeanMap;
 import org.seasar.struts.util.ActionMessagesUtil;
 import org.seasar.struts.util.RequestUtil;
-
 
 public class MUsersMngImpl implements MUsersMngInterface{
 
@@ -100,19 +101,19 @@ public class MUsersMngImpl implements MUsersMngInterface{
     ActionMessages errors = new ActionMessages();
     int count = 0;
     //パスワードnullチェック
-    if ((form.passWord == null) || (form.passWord.isEmpty()) ) {
+    if (empty(form.passWord)) {
       errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("MSG_E00001", "パスワード"));
       ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
       return count;
     }
     //確認用パスワードnullチェック
-    if ((form.certifiedPass == null) || (form.certifiedPass.isEmpty()) ) {
+    if (empty(form.certifiedPass)) {
       errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("MSG_E00001", "確認用パスワード"));
       ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
       return count;
     }
     if ((form.passWord.length() == 8)
-          && (form.passWord.equals(form.certifiedPass))) {
+          && (eq(form.passWord, form.certifiedPass))) {
       //パスワードハッシュ化処理
       form.passWord = toEncryptedHashValue("SHA-256", form.passWord);
       count = dao.entryUser(form);
@@ -136,11 +137,11 @@ public class MUsersMngImpl implements MUsersMngInterface{
     ActionMessages errors = new ActionMessages();
     int count = 0;
     //パスワードチェック
-    if ((form.passWord == null) || (form.passWord.length() == 0)) {
+    if (empty(form.passWord)) {
       count = dao.updateUser(form);
     } else {
       if ((form.passWord.length() == 8)
-              && (form.passWord.equals(form.certifiedPass))) {
+              && (eq(form.passWord, form.certifiedPass))) {
         //パスワードハッシュ化処理
         form.passWord = toEncryptedHashValue("SHA-256", form.passWord);
         count = dao.updateUser(form);
@@ -207,7 +208,7 @@ public class MUsersMngImpl implements MUsersMngInterface{
   /**
    * 削除前チェックを行います。 .
    *
-   * @param form
+   * @param form .
    * @return checkCount 該当案件情報件数
    **/
   public int existPrjInfo(PersonalForm form) {
@@ -219,7 +220,7 @@ public class MUsersMngImpl implements MUsersMngInterface{
   /**
    * 削除前チェックを行います。 .
    *
-   * @param form
+   * @param form .
    * @return loginCheck 該当する情報のログイン
    **/
   public boolean findLoginState(PersonalForm form) {
