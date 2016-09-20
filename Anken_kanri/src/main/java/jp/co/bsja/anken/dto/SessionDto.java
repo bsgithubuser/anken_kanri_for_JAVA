@@ -11,4 +11,10 @@ public class SessionDto implements Serializable {
 
   public String str = "";
 
+  /* ログイン情報 */
+  public String userId;
+  public String userName;
+  public String password;
+  public boolean loginState;
+  public String admin;
 }

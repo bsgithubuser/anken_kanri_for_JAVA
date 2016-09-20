@@ -52,3 +52,29 @@ div.errorMessage {
 div.link {
   text-align: center;
 }
+
+/* ログイン */
+div.login_form {
+  margin-top: 50px;
+  margin-left: 50px;
+}
+
+td, th {
+padding: 5px 10px;
+}
+
+html, body {
+  height: 98%;
+}
+
+div.wrap {
+  width: 100%;
+  position: relative;
+  min-height: 98%;
+}
+
+footer {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+}

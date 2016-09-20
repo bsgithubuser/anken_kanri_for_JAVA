@@ -8,4 +8,5 @@
   <include path="s2jdbc.dicon"/>
   <component name="actionMessagesThrowsInterceptor" class="org.seasar.struts.interceptor.ActionMessagesThrowsInterceptor"/>
   <component name="SampleImpl" class="jp.co.bsja.anken.di.SampleImpl" instance="singleton"/>
+  <component name="LoginImpl" class="jp.co.bsja.anken.di.LoginImpl" instance="singleton"/>
 </components>

@@ -3,7 +3,7 @@
 </td>
 <div class="tytle"><b>案件情報管理システム</b></div>
 <br>
-<div class="userNameAndLogOut">ユーザー名:▲▲▲▲▲</div>
+<div class="userNameAndLogOut"><c:if test="${ sessionDto.userName != null }">ユーザー名:${sessionDto.userName}</c:if></div>
 <br>
-<div class="userNameAndLogOut"><a href="../login/"><u>ログアウト</u></a></div>
+<div class="userNameAndLogOut"><c:if test="${ sessionDto.userName != null }"><html:link page="/login/logout"><u>ログアウト</u></html:link></c:if></div>
 <hr>
