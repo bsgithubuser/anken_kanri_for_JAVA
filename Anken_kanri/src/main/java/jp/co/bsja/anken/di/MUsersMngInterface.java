@@ -13,6 +13,4 @@ public interface MUsersMngInterface {
 
   public void deleteUser(PersonalForm form);
 
-  public String toEncryptedHashValue(String algorithmName, String value);
-
 }

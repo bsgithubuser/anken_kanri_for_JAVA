@@ -1,8 +1,6 @@
 package jp.co.bsja.anken.di;
 import static jp.co.bsja.anken.common.CommonFunction.*;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -151,30 +149,6 @@ public class MUsersMngImpl implements MUsersMngInterface{
       }
     }
     return count;
-  }
-
-  /**
-   * パスワードハッシュ化処理を行います。 .
-   *
-   * @param algorithmName ハッシュ化アルゴリズム .
-   * @param value  パスワード
-   * @return ハッシュ化により出来た64byte文字列
-   */
-  public String toEncryptedHashValue(String algorithmName, String value) {
-    MessageDigest md = null;
-    StringBuilder sb = null;
-    try {
-      md = MessageDigest.getInstance(algorithmName);
-    } catch (NoSuchAlgorithmException e) {
-      e.printStackTrace();
-    }
-    md.update(value.getBytes());
-    sb = new StringBuilder();
-    for (byte b : md.digest()) {
-      String hex = String.format("%02x", b);
-      sb.append(hex);
-    }
-    return sb.toString();
   }
 
   /**
