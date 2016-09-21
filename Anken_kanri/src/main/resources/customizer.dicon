@@ -74,8 +74,8 @@
         </initMethod>
       </component>
     </arg>
-  </initMethod>
- -->
+    </initMethod>
+  -->
 
   </component>
   <component name="serviceCustomizer" class="org.seasar.framework.container.customizer.CustomizerChain">
