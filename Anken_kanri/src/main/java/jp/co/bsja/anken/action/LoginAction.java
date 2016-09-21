@@ -19,7 +19,7 @@ import org.seasar.struts.annotation.ActionForm;
 import org.seasar.struts.annotation.Execute;
 import org.seasar.struts.util.ActionMessagesUtil;
 
-public class LoginAction extends CommonFunction {
+public class LoginAction extends CommonFunction{
 
   @ActionForm
   @Resource
@@ -59,6 +59,9 @@ public class LoginAction extends CommonFunction {
     //userIdに文字列が含まれていた場合、int型0に変換
     loginForm.asIntUserId = asInt(loginForm.userId,0);
 
+    //パスワードをハッシュ化
+    loginForm.tempPassword = toEncryptedHashValue("SHA-256", loginForm.password);
+
     //user情報取得
     MUsers userList = login.getUser(loginForm);
 
@@ -86,7 +89,7 @@ public class LoginAction extends CommonFunction {
         sessionDto.userId = String.valueOf(userList.userId);
         sessionDto.userName = userList.userName;
         sessionDto.password = userList.password;
-        sessionDto.loginState = userList.loginState;
+        sessionDto.loginState = true;
         sessionDto.admin = userList.admin;
 
         return "/menu";

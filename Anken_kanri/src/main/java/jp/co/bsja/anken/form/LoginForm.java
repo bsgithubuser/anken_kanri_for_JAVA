@@ -19,4 +19,7 @@ public class LoginForm {
 
   /** int型担当者ID . */
   public int asIntUserId;
+
+  /** ハッシュ化したパスワード . */
+  public String tempPassword;
 }

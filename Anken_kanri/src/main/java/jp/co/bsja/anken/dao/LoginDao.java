@@ -14,7 +14,7 @@ public class LoginDao extends Dao {
   public MUsers getUser(LoginForm loginForm) {
     MUsers musers = new MUsers();
     musers.userId = loginForm.asIntUserId;
-    musers.password = loginForm.password;
+    musers.password = loginForm.tempPassword;
 
     return jdbcManager.selectBySqlFile(MUsers.class,
         "data/findMUsersByUserIdAndPassword.sql",musers).getSingleResult();
