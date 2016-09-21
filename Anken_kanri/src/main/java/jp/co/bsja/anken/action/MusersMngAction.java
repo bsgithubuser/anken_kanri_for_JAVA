@@ -3,6 +3,7 @@ package jp.co.bsja.anken.action;
 import javax.annotation.Resource;
 
 import jp.co.bsja.anken.di.MUsersMngInterface;
+import jp.co.bsja.anken.dto.SessionDto;
 import jp.co.bsja.anken.form.PersonalForm;
 
 import org.seasar.framework.container.S2Container;
@@ -11,6 +12,9 @@ import org.seasar.struts.annotation.ActionForm;
 import org.seasar.struts.annotation.Execute;
 
 public class MusersMngAction {
+
+  public SessionDto sessionDto;
+
   @Resource
   @ActionForm
   protected PersonalForm personalForm;
