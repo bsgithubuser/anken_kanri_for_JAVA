@@ -10,4 +10,6 @@
   <component name="SampleImpl" class="jp.co.bsja.anken.di.SampleImpl" instance="singleton"/>
   <component name="LoginImpl" class="jp.co.bsja.anken.di.LoginImpl" instance="singleton"/>
   <component name="MUsersMng" class="jp.co.bsja.anken.di.MUsersMngImpl" instance="singleton"/>
+  <component name="PrjInfoList" class="jp.co.bsja.anken.di.PrjInfoListImpl" instance="singleton"/>
+  <component name="SkillMasterImpl" class="jp.co.bsja.anken.di.SkillMasterImpl" instance="singleton"/>
 </components>
