@@ -9,18 +9,18 @@
 </head>
 <body>
 <jsp:include page="../common/header.jsp"/>
-
 <p class="screenTytle"><u><b>メニュー</b></u></p>
 <br>
-
-<div class="menuItem" style="line-height:0"><a href="">・案件情報一覧</a></div>
+<div class="menuItem" style="line-height:0"><a href="../prjList/"><u><b>・案件情報一覧</b></u></a></div>
 <br>
-<div class="menuItem" style="line-height:0"><a href="">・案件情報登録</a></div>
+<div class="menuItem" style="line-height:0"><a href="../prjRegist/"><u><b>・案件情報登録</b></u></a></div>
 <br>
-<div class="menuItem" style="line-height:0"><a href="">・案件方法取込処理</a></div>
+<div class="menuItem" style="line-height:0"><a href="../prjInfoBatch/"><u><b>・案件方法取込処理</b></u></a></div>
 <br>
-<div class="menuItem" style="line-height:0"><a href="">・マスタ管理</a></div>
-
+<c:if test="${sessionDto.admin == 0}">
+<div class="menuItem" style="line-height:0"><a href="../masterMenu/"><u><b>・マスタ管理</b></u></a></div>
+</c:if>
+<br>
 <br>
 <br>
 <br>
