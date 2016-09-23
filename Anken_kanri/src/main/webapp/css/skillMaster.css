@@ -1,0 +1,95 @@
+@charset "UTF-8";
+
+table.tablePosition {
+  margin-left: 50px;
+}
+
+table.tableStyle {
+  border-collapse: collapse;
+    background-color: #000000;
+    border: 1px #000000 solid;
+}
+
+th.titleStyle {
+  border: 1px #000000 solid;
+    padding: 8px;
+}
+
+th.inputTytle {
+  text-align: left;
+}
+
+td.listStyle {
+  border: 1px #000000 solid;
+    padding: 8px;
+}
+
+td.inputPosition {
+  width: 180px;
+  text-align: right;
+}
+
+td.saveButton {
+   text-align: left;
+}
+
+td.returnButton {
+     text-align: center;
+}
+
+td.clearButton {
+     text-align: right;
+}
+
+tr.buttonPosition {
+    text-align: right;
+}
+
+tr.columnStyle {
+  background-color: #FFFFFF;
+}
+
+tr.buttons {
+  height: 50px;
+    vertical-align: bottom;
+    position:relative;
+    top:10px;
+}
+
+div.success {
+  text-align: center;
+}
+
+div.links {
+  text-align: center;
+  position:relative;
+  top:40px;
+}
+
+div.errorDisplay {
+    position:relative;
+    left: 35px;
+    color: #ff0000;
+}
+
+div.footerPosition {
+  position:relative;
+  top:10px;
+}
+
+div.footerPosition2 {
+    position:relative;
+    top:60px;
+}
+
+div.sideBySide1 {
+    display: inline-block;
+    position:relative;
+    right:40px;
+}
+
+div.sideBySide2 {
+    display: inline-block;
+    position:relative;
+    left:40px;
+}
