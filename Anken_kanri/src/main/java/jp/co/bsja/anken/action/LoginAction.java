@@ -2,7 +2,6 @@ package jp.co.bsja.anken.action;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import jp.co.bsja.anken.common.CommonFunction;
 import jp.co.bsja.anken.di.Login;
@@ -29,10 +28,6 @@ public class LoginAction extends CommonFunction{
 
   @Resource
   protected HttpServletRequest request;
-
-  @Resource
-  protected HttpServletResponse response;
-
 
   /**
    * ログイン画面(初期表示) .
@@ -74,6 +69,8 @@ public class LoginAction extends CommonFunction{
 
       return "login.jsp";
     } else {
+      //TODO: 要検討事項 現時点は機能落ちしています
+      /*
       //ログイン状況がTRUEの場合、エラーメッセージを返す
       if (userList.loginState == true) {
         //ログイン失敗:loginへエラーを返す
@@ -85,15 +82,14 @@ public class LoginAction extends CommonFunction{
       } else {
         //ログイン成功:セッションへ値を渡し、ログイン状況を更新後、menu画面へ遷移
         login.updateLoginStateToLogin(userList);
+       */
+      sessionDto.userId = String.valueOf(userList.userId);
+      sessionDto.userName = userList.userName;
+      sessionDto.password = userList.password;
+      //sessionDto.loginState = true;
+      sessionDto.admin = userList.admin;
 
-        sessionDto.userId = String.valueOf(userList.userId);
-        sessionDto.userName = userList.userName;
-        sessionDto.password = userList.password;
-        sessionDto.loginState = true;
-        sessionDto.admin = userList.admin;
-
-        return "/menu";
-      }
+      return "/menu";
     }
   }
 
@@ -105,6 +101,8 @@ public class LoginAction extends CommonFunction{
   @Execute(validator = false)
   @RemoveSession(name = "sessionDto")
   public String logout() {
+    //TODO: 要検討事項 現時点は機能落ちしています
+    /*
     SingletonS2ContainerFactory.init();
     S2Container container = SingletonS2ContainerFactory.getContainer();
     Login login = (Login)container.getComponent("LoginImpl");
@@ -112,7 +110,7 @@ public class LoginAction extends CommonFunction{
     //ログイン状況を「ログアウト」に変更
     int userId = Integer.parseInt(sessionDto.userId);
     login.updateLoginStateToLogout(userId);
-
+     */
     sessionDto = null;
 
     return "/login/index";
