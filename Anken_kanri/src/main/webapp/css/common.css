@@ -25,27 +25,150 @@ p.screenTytle {
 }
 
 /* 会社情報管理マスタ・一覧画面 */
-div.buttonPosition {
-  margin-left: 1100px;
+div.entryButtonPosition {
+  margin-left: 1094px;
+}
+
+div.returnButtonPosition {
+  margin-left: 1124px;
+}
+
+div.errorMessagePosition {
+  margin-left: 50px;
 }
 
 table.list {
-  border-left: 1px solid #333;
   border-spacing: 0;
-  border-top: 1px solid #333;
-  margin: 20px 0 30px;
-  width: 50%;
+  height: 10px;
+  margin: 20px 50px 30px;
+  border-collapse: collapse;
 }
 
 tr.listTytle {
   text-align: left;
-  background-color: #00CC00;
+  background-color: #BCF2D5;
+}
+
+th.companyID {
+  width: 140px;
+  border: 1px #000000 solid;
+  text-align: left;
+  background-color: #BCF2D5;
+}
+
+th.companyName {
+  width: 360px;
+  border: 1px #000000 solid;
+  text-align: left;
+  background-color: #BCF2D5;
+}
+
+th.companyNameKana {
+  width: 400px;
+  border: 1px #000000 solid;
+  text-align: left;
+  background-color: #BCF2D5;
+}
+
+th.edit {
+  width: 160px;
+  border: 1px #000000 solid;
+  text-align: center;
+  background-color: #BCF2D5;
+}
+
+th.delete {
+  width: 160px;
+  border: 1px #000000 solid;
+  background-color: #BCF2D5;
+  text-align: center;
+}
+
+td.companyIDSearchResult {
+  width: 140px;
+  border: 1px #000000 solid;
+  text-align: left;
+}
+
+td.companyNameSearchResult {
+  width: 360px;
+  border: 1px #000000 solid;
+  text-align: left;
+}
+
+td.companyNameKanaSearchResult {
+  width: 400px;
+  border: 1px #000000 solid;
+  text-align: left;
+}
+
+td.editAndDeleteLink {
+  width: 160px;
+  border: 1px #000000 solid;
+  text-align: center;
+}
+
+/* 会社情報管理マスタ・登録画面 */
+input.IDTextForm {
+  width: 450px;
+  border: 1px #000000 solid;
+  margin: 0 0 0 53px;
+  background-color: #bfbfbf;
+}
+
+input.nameTextForm {
+  width: 450px;
+  border: 1px #000000 solid;
+  margin: 0 0 0 44px;
+}
+
+input.nameKanaTextForm {
+  width: 450px;
+  border: 1px #000000 solid;
+  margin: 0 0 0 37px;
+}
+
+p.inputItem {
   margin-left: 50px;
+}
+
+div.entryErrorMessage {
+  margin-left: 25px;
+}
+
+font.requiredMark {
+  color: #FF0000;
+}
+
+div.buttonPosition {
+  margin-left: 50px;
+}
+
+input.buttonSize {
+  width: 80px;
+}
+
+/* 登録完了画面 */
+div.message {
+  font-size: 20px;
+  text-align: center;
+}
+
+a.listLink {
+  margin-left: 450px;
 }
 
 /* エラー画面 */
 div.errorMessage {
   font-size: 20px;
+  text-align: center;
+}
+
+div.link {
+  text-align: center;
+}
+  /* エラー画面 */
+  div .errorMessage { font-size : 20px;
   text-align: center;
 }
 
@@ -60,7 +183,7 @@ div.login_form {
 }
 
 td, th {
-padding: 5px 10px;
+  padding: 5px 10px;
 }
 
 html, body {

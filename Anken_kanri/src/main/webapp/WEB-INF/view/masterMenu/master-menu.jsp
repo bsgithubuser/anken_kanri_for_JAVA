@@ -5,14 +5,14 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link type = "text/css" rel = "stylesheet" href = "../css/common.css"/>
-<title>Insert title here</title>
+<title>マスタ管理メニュー</title>
 </head>
 <body>
 <jsp:include page="../common/header.jsp"/>
 <p class="screenTytle"><u><b>マスタ管理メニュー</b></u></p>
-<div class="menuItem"><a href="../personalMaster/"><u><b>・担当者管理マスタ</b></u></a></div>
+<div class="menuItem"><a href="../musersMng/"><u><b>・担当者管理マスタ</b></u></a></div>
 <div class="menuItem"><a href="../skillMaster/"><u><b>・スキル管理マスタ</b></u></a></div>
-<div class="menuItem"><a href="../companyInformationMaster/"><u><b>・会社情報管理マスタ</b></u></a></div>
+<div class="menuItem"><a href="../compMngMaster/"><u><b>・会社情報管理マスタ</b></u></a></div>
 <br>
 <br>
 <div class="menuItem"><a href="../menu/"><u><b>・メニュー画面へ戻る</b></u></a></div>
