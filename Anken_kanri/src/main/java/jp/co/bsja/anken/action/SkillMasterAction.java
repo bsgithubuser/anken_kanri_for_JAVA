@@ -55,6 +55,7 @@ public class SkillMasterAction {
     SkillMasterInterface skillMaster =
               (SkillMasterInterface)container.getComponent("SkillMasterImpl");
     String destination = skillMaster.fetchEditData(skillMasterForm,sessionDto);
+
     return destination;
   }
 

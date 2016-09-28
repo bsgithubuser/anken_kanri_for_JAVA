@@ -171,7 +171,6 @@ public class SkillMasterImpl implements SkillMasterInterface {
       entity.skillId = skillId;
       //削除処理
       int delResult = dao.delete(entity);
-
       //delResult = 0 なら削除済み
       if (delResult == 0) {
         ActionMessages errors = new ActionMessages();
