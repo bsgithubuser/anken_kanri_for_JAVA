@@ -179,6 +179,49 @@ div.login_form {
 td, th {
   padding: 5px 10px;
 }
+/* 案件情報登録画面 */
+.div-table{
+}
+
+.div-table dl{
+  display: table;
+  width: 100%;
+}
+
+.div-table dt{
+  display: table-cell;
+  width: 10%;
+  vertical-align: top;
+}
+
+
+
+.center {
+
+  top: 10%;
+  left: 30%;
+  right: 30%;
+  bottom: 0;
+  margin: auto;
+  width: 700px;
+  height: 800px;
+
+}
+
+.tantou {
+  width: 150px;
+}
+span.required{
+    color: #ff0000;
+}
+
+.skill {
+  margin: 40px;
+}
+
+.skill-text {
+  width: 200px;
+}
 
 html, body {
   height: 98%;

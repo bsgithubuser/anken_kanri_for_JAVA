@@ -6,6 +6,7 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -238,4 +239,28 @@ public class CommonFunction {
     return sb.toString();
   }
 
+  /**
+   * 年度取得.
+   * @return 年度
+   */
+  public static String fiscalYear() {
+    //現在日時を取得する
+    Calendar time = Calendar.getInstance();
+    String fiscalYear = "";
+    int year = 0;
+    //フォーマットパターンを指定して表示する
+    SimpleDateFormat yyyyTime = new SimpleDateFormat("yyyy");
+    SimpleDateFormat mmTime = new SimpleDateFormat("MM");
+    int month = Integer.parseInt(mmTime.format(time.getTime()));
+
+    if (month < 4) {
+      year = Integer.parseInt(yyyyTime.format(time.getTime()));
+      year = year - 1;
+    } else {
+      year = Integer.parseInt(yyyyTime.format(time.getTime()));
+    }
+    fiscalYear = String.valueOf(year);
+    return fiscalYear;
+  }
 }
+

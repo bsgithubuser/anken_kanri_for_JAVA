@@ -1,47 +1,72 @@
 package jp.co.bsja.anken.form;
 
-import java.sql.Date;
+
 import java.util.List;
+
+import jp.co.bsja.anken.entity.TProjInfo;
 
 import org.seasar.framework.beans.util.BeanMap;
 
 public class AnkenRegisterForm {
 
-  public int[] skill;
+  /** スキルID . */
+  public String[] skillId;
 
+  /** スキルリスト . */
   public List<BeanMap> skillList;
 
+  /** 担当者リスト . */
   public List<BeanMap> usersList;
 
+  /** 案件ID . */
   public int id;
 
-  public  List<BeanMap> ankenList;
+  /** 案件リスト . */
+  public TProjInfo ankenList;
 
-
+  /** スキルその他 . */
   public String skillOther;
 
+  /** 案件名 . */
   public String prjName;
 
+  /** 担当者ID . */
   public int userId;
 
-  public int cmpnId;
+  /** 会社名 . */
+  public String cmpnName;
 
-  public Date genDate;
+  /** 発生日 . */
+  public String genDate;
 
-  public Date periFrom;
+  /** 期間FROM . */
+  public String periFrom;
 
-  public Date periTo;
+  /** 期間TO . */
+  public String periTo;
 
-  public boolean longTermFlg;
+  /** 長期フラグ . */
+  public String longTermFlg;
 
-  public boolean sameDayFlg;
+  /** 即日フラグ . */
+  public String sameDayFlg;
 
-  public boolean anyTimeFlg;
+  /** 随時フラグ . */
+  public String anyTimeFlg;
 
-  public boolean extentionFlg;
+  /** 延長フラグ . */
+  public String extentionFlg;
 
+  /** 概要 . */
   public String orverview;
 
+  /** 案件情報その他 . */
   public String prjOther;
+
+  /** 更新フラグ . */
+  public int editFlg;
+
+  /** 更新日時 . */
+  public String updateDate;
 
 }
