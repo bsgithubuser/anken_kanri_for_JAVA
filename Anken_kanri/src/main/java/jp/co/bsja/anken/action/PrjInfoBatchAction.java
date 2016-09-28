@@ -2,9 +2,9 @@ package jp.co.bsja.anken.action;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
 
 import jp.co.bsja.anken.dao.impl.PrjInfoBatch;
+import jp.co.bsja.anken.dto.SessionDto;
 import jp.co.bsja.anken.form.PrjInfoBatchForm;
 
 import org.seasar.framework.container.S2Container;
@@ -20,7 +20,8 @@ public class PrjInfoBatchAction {
   @ActionForm
   PrjInfoBatchForm prjInfoBatchForm;
 
-  public HttpServletRequest request;
+  @Resource
+  public SessionDto sessionDto;
 
   public ServletContext application;
 
