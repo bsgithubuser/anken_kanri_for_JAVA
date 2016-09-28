@@ -6,6 +6,7 @@
   <include path="aop.dicon"/>
   <include path="j2ee.dicon"/>
   <include path="s2jdbc.dicon"/>
+  <include path="s2csv.dicon"/>
   <component name="actionMessagesThrowsInterceptor" class="org.seasar.struts.interceptor.ActionMessagesThrowsInterceptor"/>
   <component name="SampleImpl" class="jp.co.bsja.anken.di.SampleImpl" instance="singleton"/>
   <component name="LoginImpl" class="jp.co.bsja.anken.di.LoginImpl" instance="singleton"/>
@@ -13,4 +14,6 @@
   <component name="PrjInfoList" class="jp.co.bsja.anken.di.PrjInfoListImpl" instance="singleton"/>
   <component name="SkillMasterImpl" class="jp.co.bsja.anken.di.SkillMasterImpl" instance="singleton"/>
   <component name="CompMngMasterImpl" class="jp.co.bsja.anken.di.CompMngMasterImpl" instance="singleton"/>
+  <component name="AnkenRegisterImpl" class="jp.co.bsja.anken.di.AnkenRegisterImpl" instance="singleton"/>
+  <component name="PrjInfoBatchImpl" class="jp.co.bsja.anken.dao.impl.PrjInfoBatchImpl" instance="singleton"/>
 </components>

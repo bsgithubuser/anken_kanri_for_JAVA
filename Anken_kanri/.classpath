@@ -43,5 +43,6 @@
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/sa-struts-1.0.4-sp9.jar" sourcepath="src/main/webapp/WEB-INF/lib/sources/sa-struts-1.0.4-sp9-sources.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/struts-1.2.9.jar" sourcepath="src/main/webapp/WEB-INF/lib/sources/struts-1.2.9-sources.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/postgresql-9.4.1210.jre6.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/s2csv-0.0.2-sp1.jar"/>
 	<classpathentry kind="output" path="src/main/webapp/WEB-INF/classes"/>
 </classpath>
