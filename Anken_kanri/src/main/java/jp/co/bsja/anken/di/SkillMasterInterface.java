@@ -17,7 +17,7 @@ public interface SkillMasterInterface {
    * @param skillMasterForm スキル管理マスタのアクションフォームクラス
    * @param sessionDto スキル管理マスタのデータ転送オブジェクトクラス
    */
-  public void fetchEditData(SkillMasterForm skillMasterForm, SessionDto sessionDto);
+  public String fetchEditData(SkillMasterForm skillMasterForm, SessionDto sessionDto);
 
   /**
    * スキル情報の登録、又はスキル名が重複しているとき登録画面に戻る .

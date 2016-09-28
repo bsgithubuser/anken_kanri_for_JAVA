@@ -11,13 +11,19 @@
             /*
              * 編集押下時、対象のスキルIDをFormに渡す
              */
-            function editSkill(skillId){
+            function editSkill(skillId,skillName){
               var hiddenField = document.createElement('input');
               hiddenField.type = 'hidden';
               hiddenField.name = 'skillId';
               hiddenField.value = skillId;
 
+              var hiddenNMField = document.createElement('input');
+              hiddenNMField.type = 'hidden';
+              hiddenNMField.name = 'skillName';
+              hiddenNMField.value = skillName;
+
               document.forms[1].appendChild(hiddenField);
+              document.forms[1].appendChild(hiddenNMField);
               document.forms[1].submit();
             }
 
@@ -74,7 +80,7 @@
                                 <td class="listStyle">${date.skillId}</td>
                                 <td class="listStyle">${date.skillName}</td>
                                 <s:form action="regist" method="post">
-                                    <td class="listStyle"><a href="#" onclick="editSkill(${f:h(date.skillId)});">編集</a></td>
+                                    <td class="listStyle"><a href="#" onclick="editSkill(${f:h(date.skillId)},'${f:h(date.skillName)}');">編集</a></td>
                                 </s:form>
                                 <s:form action="delete" method="post">
                                     <td class="listStyle"><a href="#" onclick="deleteSkill(${f:h(date.skillId)},'${f:h(date.skillName)}');">削除</a></td>

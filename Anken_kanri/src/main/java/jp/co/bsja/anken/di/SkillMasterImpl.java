@@ -28,19 +28,30 @@ public class SkillMasterImpl implements SkillMasterInterface {
   }
 
   @Override
-  public void fetchEditData(SkillMasterForm skillMasterForm, SessionDto sessionDto) {
+  public String fetchEditData(SkillMasterForm skillMasterForm, SessionDto sessionDto) {
     //skillIdに値が入っている = 編集
     //値が入っていなければ新規なので、何もしない
     SkillMasterDao dao = new SkillMasterDao();
+    String destination = "skill-master-regist.jsp";
     if (!empty(skillMasterForm.skillId)) {
       //スキルIDから、スキル名を検索する
       String sql = "SELECT * FROM M_SKILL WHERE skill_id = " + skillMasterForm.skillId;
       BeanMap data = dao.fetchData(sql);
 
-      skillMasterForm.fetchSkillData = data;
-      sessionDto.createDate = (Timestamp) data.get("createDate");
-      sessionDto.updateDate = (Timestamp) data.get("updateDate");
+      if (!empty(data)) {
+        skillMasterForm.fetchSkillData = data;
+        sessionDto.createDate = (Timestamp) data.get("createDate");
+        sessionDto.updateDate = (Timestamp) data.get("updateDate");
+      } else {
+        ActionMessages errors = new ActionMessages();
+        errors.add(ActionMessages.GLOBAL_MESSAGE,
+                            new ActionMessage("MSG_E00009", skillMasterForm.skillName));
+        ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
+        destination = "/skillMaster/";
+      }
+
     }
+    return destination;
   }
 
   @Override
@@ -108,6 +119,10 @@ public class SkillMasterImpl implements SkillMasterInterface {
         entity.createDate = sessionDto.createDate;
         //更新処理
         result = dao.uptate(entity);
+        //result = 0のとき、削除済み
+        if (result == 0) {
+          result = -1;
+        }
       }
     }
 
@@ -123,11 +138,19 @@ public class SkillMasterImpl implements SkillMasterInterface {
       destination =  "skill-master-saved.jsp";
     } else {
       //登録失敗 登録画面に戻り、エラーを表示する
-      ActionMessages errors = new ActionMessages();
-      errors.add(ActionMessages.GLOBAL_MESSAGE,
-                          new ActionMessage("MSG_E00006", skillMasterForm.skillName));
-      ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
-
+      //result = -1 のとき、削除済みエラー
+      if (result == -1) {
+        ActionMessages errors = new ActionMessages();
+        errors.add(ActionMessages.GLOBAL_MESSAGE,
+                            new ActionMessage("MSG_E00009", skillMasterForm.skillName));
+        ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
+      } else {
+      //排他制御エラー
+        ActionMessages errors = new ActionMessages();
+        errors.add(ActionMessages.GLOBAL_MESSAGE,
+                            new ActionMessage("MSG_E00006", skillMasterForm.skillName));
+        ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
+      }
       destination =  "skill-master-regist.jsp";
     }
     return destination;
@@ -141,13 +164,21 @@ public class SkillMasterImpl implements SkillMasterInterface {
     int skillId = Integer.parseInt(skillMasterForm.skillId);
     int existCnt = dao.existCheck("T_PROJ_SKILL", "skl_id", skillId);
 
-    //isDataInUse で返却された値が0なら削除処理を行う
+    //existCnt で返却された値が0なら削除処理を行う
     if (existCnt < 1) {
       MSkill entity = new MSkill();
       //エンティティにスキルIDを格納
       entity.skillId = skillId;
       //削除処理
-      dao.delete(entity);
+      int delResult = dao.delete(entity);
+
+      //delResult = 0 なら削除済み
+      if (delResult == 0) {
+        ActionMessages errors = new ActionMessages();
+        errors.add(ActionMessages.GLOBAL_MESSAGE,
+                            new ActionMessage("MSG_E00009", skillMasterForm.skillName));
+        ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
+      }
 
     } else {
       //1 以上の場合、エラーを表示する

@@ -54,8 +54,8 @@ public class SkillMasterAction {
     S2Container container = SingletonS2ContainerFactory.getContainer();
     SkillMasterInterface skillMaster =
               (SkillMasterInterface)container.getComponent("SkillMasterImpl");
-    skillMaster.fetchEditData(skillMasterForm,sessionDto);
-    return "skill-master-regist.jsp";
+    String destination = skillMaster.fetchEditData(skillMasterForm,sessionDto);
+    return destination;
   }
 
   /**
