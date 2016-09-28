@@ -15,7 +15,7 @@
 <br>
 <div class="menuItem" style="line-height:0"><a href="../prjRegist/"><u><b>・案件情報登録</b></u></a></div>
 <br>
-<div class="menuItem" style="line-height:0"><a href="../prjInfoBatch/"><u><b>・案件方法取込処理</b></u></a></div>
+<div class="menuItem" style="line-height:0"><a href="../prjInfoBatch/"><u><b>・案件情報取込処理</b></u></a></div>
 <br>
 <c:if test="${sessionDto.admin == 0}">
 <div class="menuItem" style="line-height:0"><a href="../masterMenu/"><u><b>・マスタ管理</b></u></a></div>
