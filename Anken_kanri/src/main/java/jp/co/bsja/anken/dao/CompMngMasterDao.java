@@ -85,7 +85,7 @@ public class CompMngMasterDao extends Dao{
    * @return 該当した件数
    */
   public int idUsedCheck(Integer id) {
-    return (int)jdbcManager.from(TProjInfo.class).where("prjId = ?", id).getCount();
+    return (int)jdbcManager.from(TProjInfo.class).where("cmpnId= ?", id).getCount();
   }
 
   /**

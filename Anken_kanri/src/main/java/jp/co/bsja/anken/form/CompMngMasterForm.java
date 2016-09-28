@@ -1,6 +1,5 @@
 package jp.co.bsja.anken.form;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 import jp.co.bsja.anken.entity.MCmpn;
@@ -17,10 +16,7 @@ public class CompMngMasterForm {
   public Integer idItemInteger;
 
   /** 排他制御に使用する、データの最終更新日時 .*/
-  public Timestamp beforeItemDate;
-
-  /** 排他制御に使用する、データの最終更新日時 .*/
-  public Timestamp afterItemDate;
+  public String date;
 
   /** 編集時に入力欄に表示させるデータ .*/
   public MCmpn searchResultForEntryJsp;

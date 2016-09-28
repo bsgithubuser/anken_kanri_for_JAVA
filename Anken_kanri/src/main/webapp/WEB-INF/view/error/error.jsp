@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link type = "text/css" rel = "stylesheet" href = "../css/common.css"/>
-<title>Insert title here</title>
+<title>案件情報管理システム</title>
 </head>
 <body>
 <!-- ヘッダー -->

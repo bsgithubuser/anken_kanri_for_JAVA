@@ -46,9 +46,9 @@
           <td class="companyNameKanaSearchResult"><c:out
               value="${list.cmpnNameFuri}" /></td>
           <td class="editAndDeleteLink"><a
-            href="javascript:link('edit', '${list.cmpnId}', '')">編集</a></td>
+            href="javascript:link('edit', '${list.cmpnId}', '${f:h(list.cmpnName)}')">編集</a></td>
           <td class="editAndDeleteLink"><a
-            href="javascript:link('delete', ${list.cmpnId}, '${list.cmpnName}')">削除</a>
+            href="javascript:link('delete', ${list.cmpnId}, '${f:h(list.cmpnName)}')">削除</a>
           </td>
         </tr>
       </c:forEach>
@@ -76,7 +76,12 @@
         id.type = 'hidden';
         id.name = 'idItemInteger';
         id.value = idItem;
+      var selectName = document.createElement('input');
+        selectName.type = 'hidden';
+        selectName.name = 'nameItem';
+        selectName.value = name;
         document.forms[0].appendChild(id);
+        document.forms[0].appendChild(selectName);
         document.forms[0].submit();
     } else {
       if (confirm(name + 'を削除します。よろしいですか？') == true) {

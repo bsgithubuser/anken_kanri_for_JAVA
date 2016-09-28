@@ -14,9 +14,6 @@ import org.seasar.struts.util.RequestUtil;
 
 public class CompMngMasterImpl implements CompMngMasterInterface {
 
-  //エラーメッセージを入れる変数
-  ActionMessages errors = new ActionMessages();
-
   @Override
   public List<MCmpn> searchListData() {
     CompMngMasterDao dao = new CompMngMasterDao();
@@ -24,14 +21,20 @@ public class CompMngMasterImpl implements CompMngMasterInterface {
   }
 
   @Override
-  public  MCmpn search(Integer id) {
+  public  MCmpn search(Integer id, String name) {
     CompMngMasterDao dao = new CompMngMasterDao();
+    ActionMessages errors = new ActionMessages();
     MCmpn searchResult = dao.search(id);
+    if (searchResult == null) {
+      errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("MSG_E00009", name));
+      ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
+    }
     return searchResult;
   }
 
   @Override
   public int entry(String name, String nameKana, String id, int flgAfterClickDialog) {
+    ActionMessages errors = new ActionMessages();
     if (checkSameName(name) != 0 && flgAfterClickDialog == 0) {
       //登録画面に戻ってダイアログを表示
       return 2;
@@ -43,6 +46,7 @@ public class CompMngMasterImpl implements CompMngMasterInterface {
         //登録時に何かあった場合の登録エラー
         errors.add(ActionMessages.GLOBAL_MESSAGE,
             new ActionMessage("MSG_E00012", name));
+        ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
         return 1;
       }
     }
@@ -50,6 +54,7 @@ public class CompMngMasterImpl implements CompMngMasterInterface {
 
   @Override
   public int update(String name, String nameKana, String id, Timestamp time) {
+    ActionMessages errors = new ActionMessages();
     if (checkLock(time,id) == 1) {
       //更新済みエラー
       errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("MSG_E00006", name));
@@ -62,6 +67,7 @@ public class CompMngMasterImpl implements CompMngMasterInterface {
       } else {
         //更新済みエラー以外で何かあった場合の更新エラー
         errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("MSG_E00012", name));
+        ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
         return 1;
       }
     }
@@ -131,6 +137,7 @@ public class CompMngMasterImpl implements CompMngMasterInterface {
    */
   private int confirmExists(Integer id, String name) {
     CompMngMasterDao dao = new CompMngMasterDao();
+    ActionMessages errors = new ActionMessages();
     int count = dao.idCheck(id);
     if (count == 1) {
       return 1;
@@ -150,6 +157,7 @@ public class CompMngMasterImpl implements CompMngMasterInterface {
    */
   private int checkUsed(Integer id, String name) {
     CompMngMasterDao dao = new CompMngMasterDao();
+    ActionMessages errors = new ActionMessages();
     int countUsed = dao.idUsedCheck(id);
     if (countUsed >= 1) {
       errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("MSG_E00005", name));
@@ -167,6 +175,7 @@ public class CompMngMasterImpl implements CompMngMasterInterface {
    */
   private void executeDelete(Integer id, String name) {
     CompMngMasterDao dao = new CompMngMasterDao();
+    ActionMessages errors = new ActionMessages();
     int count = dao.delete(id);
     if (count == 1) {
       //削除成功
@@ -174,6 +183,7 @@ public class CompMngMasterImpl implements CompMngMasterInterface {
     } else {
       //何らかの理由で削除ができなかった場合はこちらに分岐します。
       errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("MSG_E00013", name));
+      ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
       return ;
     }
   }

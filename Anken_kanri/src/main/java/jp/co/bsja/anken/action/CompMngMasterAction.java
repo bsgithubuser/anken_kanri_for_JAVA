@@ -3,6 +3,7 @@ package jp.co.bsja.anken.action;
 import static jp.co.bsja.anken.common.CommonFunction.*;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -77,15 +78,10 @@ public class CompMngMasterAction {
       }
     } else {
       //更新処理
-      //日付をアクションフォームに入れることができなかったのでここで取得します。
-      String dateString = request.getParameter("date");
-      Timestamp dateTimestamp = Timestamp.valueOf(dateString);
-      compMngMasterForm.afterItemDate = dateTimestamp;
+      Timestamp date = Timestamp.valueOf(compMngMasterForm.date);
       if (compMngMaster.update(compMngMasterForm.nameItem,
           compMngMasterForm.nameKanaItem,
-          compMngMasterForm.idItemString, compMngMasterForm.afterItemDate) == 1) {
-        //エラー
-        compMngMasterForm.beforeItemDate = dateTimestamp;
+          compMngMasterForm.idItemString, date) == 1) {
         return "entry-comp-mng.jsp";
       } else {
         //更新成功
@@ -127,13 +123,18 @@ public class CompMngMasterAction {
     S2Container container = SingletonS2ContainerFactory.getContainer();
     CompMngMasterInterface compMngMaster =
         (CompMngMasterInterface)container.getComponent("CompMngMasterImpl");
-    MCmpn searchResult = compMngMaster.search(compMngMasterForm.idItemInteger);
-    compMngMasterForm.idItemString = Integer.toString(searchResult.cmpnId);
-    compMngMasterForm.nameItem = searchResult.cmpnName;
-    compMngMasterForm.nameKanaItem = searchResult.cmpnNameFuri;
-    //排他制御に使うため、最終更新時間も取得します。
-    compMngMasterForm.beforeItemDate = searchResult.updateDate;
-
-    return "entry-comp-mng.jsp";
+    MCmpn searchResult = compMngMaster.search(compMngMasterForm.idItemInteger,
+        compMngMasterForm.nameItem);
+    if (searchResult == null) {
+      return "index";
+    } else {
+      compMngMasterForm.idItemString = Integer.toString(searchResult.cmpnId);
+      compMngMasterForm.nameItem = searchResult.cmpnName;
+      compMngMasterForm.nameKanaItem = searchResult.cmpnNameFuri;
+      //排他制御に使うため、最終更新時間も取得します。
+      compMngMasterForm.date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+      .format(searchResult.updateDate);
+      return "entry-comp-mng.jsp";
+    }
   }
 }

@@ -46,7 +46,7 @@
   <br>
   <br>
   <br>
-  <input type="hidden" name="date" value="${beforeItemDate}">
+  <input type="hidden" name="date" value="${date}">
   <div class="buttonPosition" style="float: left">
     <s:submit value="登録" styleClass="buttonSize" />
   </div>

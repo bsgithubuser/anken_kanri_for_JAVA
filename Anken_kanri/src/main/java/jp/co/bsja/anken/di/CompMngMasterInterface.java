@@ -18,7 +18,7 @@ public interface CompMngMasterInterface {
    * @param idItem 会社ID
    * @return 会社IDと会社名とフリガナの入った変数
    */
-  public  MCmpn search(Integer idItem);
+  public  MCmpn search(Integer id, String name);
 
   /**
    * 登録処理をするメソッドです。

@@ -28,9 +28,11 @@
   <br>
   <br>
   <br>
-  <a href="index" class="listLink"><u><b>一覧画面へ戻る</b></u></a>
+  <div class="listLink">
+  <a href="index"><u><b>一覧画面へ戻る</b></u></a>
   &emsp;&emsp;&emsp;&emsp;
   <a href="javascript:submit('${idItemString}')"><u><b>登録画面へ戻る</b></u></a>
+  </div>
   <br>
   <br>
   <br>

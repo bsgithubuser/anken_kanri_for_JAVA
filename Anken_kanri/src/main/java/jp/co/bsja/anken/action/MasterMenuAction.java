@@ -22,7 +22,7 @@ public class MasterMenuAction {
    */
   @Execute(validator = false)
   public String index() {
-    if (sessionDto.admin.equals("0")) {
+    if (sessionDto.admin.equals("0") || sessionDto.admin.equals("9")) {
       return "master-menu.jsp";
     } else {
       // 管理者ではない人が管理者ページに行こうとした場合のエラー
