@@ -2,6 +2,8 @@ package jp.co.bsja.anken.dao;
 
 import java.util.List;
 
+import jp.co.bsja.anken.form.PrjInfoListForm;
+
 import org.seasar.framework.beans.util.BeanMap;
 
 public class PrjInfoListDao extends Dao {
@@ -24,5 +26,17 @@ public class PrjInfoListDao extends Dao {
     List<BeanMap> list = selectBySqlFile("findSkillInfo");
     return list;
   }
+
+  /**
+   * 選択した項目で検索を行い、案件情報を取得します。 .
+   * @param prjInfoListForm
+   *
+   * @return list 案件情報一覧
+   */
+  public List<BeanMap> simpleSearch(PrjInfoListForm prjInfoListForm) {
+    List<BeanMap> list = selectBySqlFile("simpleSearch");
+    return list;
+  }
+
 
 }

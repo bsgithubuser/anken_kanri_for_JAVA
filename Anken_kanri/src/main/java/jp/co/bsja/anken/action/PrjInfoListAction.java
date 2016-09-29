@@ -31,7 +31,22 @@ public class PrjInfoListAction {
     PrjInfoListInterface prjInfoList = (PrjInfoListInterface)container
         .getComponent("PrjInfoList");
     prjInfoListForm.userNameList = prjInfoList.findMUsersName();
-//    prjInfoListForm.skillMasterFormList = prjInfoList.findSkillInfo();
+    prjInfoListForm.skillMasterFormList = prjInfoList.findSkillInfo();
+    return "prj-info-list.jsp";
+  }
+
+  /**
+   * 簡易検索を行います。 .
+   *
+   * @return 案件情報一覧画面のJSPファイル名
+   */
+  @Execute(validator = false)
+  public String select() {
+    SingletonS2ContainerFactory.init();
+    S2Container container = SingletonS2ContainerFactory.getContainer();
+    PrjInfoListInterface prjInfoList = (PrjInfoListInterface)container
+         .getComponent("PrjInfoList");
+    prjInfoListForm.prjInfoListFormList = prjInfoList.simpleSearch(prjInfoListForm);
     return "prj-info-list.jsp";
   }
 

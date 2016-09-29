@@ -5,40 +5,59 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link type = "text/css" rel = "stylesheet" href = "../css/common.css"/>
+
+<script type="text/javascript">
+
+function ChangeTab(tabname) {
+  // 全部消す
+  document.getElementById('tab1').style.display = 'none';
+  document.getElementById('tab2').style.display = 'none';
+  // 指定箇所のみ表示
+  document.getElementById(tabname).style.display = 'block';
+}
+
+function hide(title1,title2){
+  document.getElementById(title1).style.display = 'none';
+  document.getElementById(title2).style.display = '';
+}
+
+</script>
+
 <title>Insert title here</title>
 </head>
 <body>
 <jsp:include page="../common/header.jsp"/>
+
 <p><u><b>案件情報一覧</b></u></p>
 <s:form method="POST">
-<table Border Bordercolor="black" Rules="NONE">
-  <tr>
-    <th>担当者名</th>
-    <td><html:select property="userNameList" value="" ><html:options property="userNameList"/></html:select></td>
-    <td></td>
-    <td></td>
-  </tr>
-  <tr>
-    <th>発生日</th>
-    <td><html:text property="periStDt" size="20" maxlength="30"/></td>
-    <td>～</td>
-    <td><html:text property="periEnDt" size="20" maxlength="30"/></td>
-  </tr>
-  <tr>
-    <th>会社名</th>
-    <td><html:text property="compName" size="20" maxlength="30"/></td>
-    <td></td>
-    <td>
-    <div id='visi'>
-    <html:checkbox property="periFlg" value="0"/>長期
-    <html:checkbox property="periFlg" value="1"/>即日
-    <html:checkbox property="periFlg" value="2"/>随時
-    </div>
-    </td>
-     <s:submit value = "検索" property="select" />
-      <input type="button" value="詳細検索" onclick="hyoji2(0)">
-  </tr>
-  <div id='visi'>
+<div>
+
+  <div id="tab1">
+  <!-- 詳細検索  -->
+  <p>
+    <table Border Bordercolor="black" Rules="NONE">
+    <tr>
+      <th>担当者名</th>
+      <td><html:select property="userNameList" value="" ><html:options property="userNameList"/></html:select></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>発生日</th>
+      <td><html:text property="periStDt" size="20" maxlength="30"/></td>
+      <td>～</td>
+      <td><html:text property="periEnDt" size="20" maxlength="30"/></td>
+    </tr>
+    <tr>
+      <th>会社名</th>
+      <td><html:text property="compName" size="20" maxlength="30"/></td>
+      <td></td>
+      <td>
+      <html:checkbox property="periFlg" value="0"/>長期
+      <html:checkbox property="periFlg" value="1"/>即日
+      <html:checkbox property="periFlg" value="2"/>随時
+      </td>
+      </tr>
     <tr>
       <th>延長</th>
       <td></td>
@@ -47,24 +66,59 @@
     </tr>
     <tr>
       <th>スキル</th>
-        <c:forEach var = "info" items = "${skillMasterFormList}" varStatus="infoNo">
-          <html:checkbox property="exteFlg" value="${info.skillId}"/>${f:(info.skillId)}
-          <c:if test="${infoNo.count==5}">
-            <br>
-          </c:if>
-        </c:forEach>
-        <td></td>
-        <td></td>
-        <td></td>
+      <td colspan="3">
+      <c:forEach var = "info" items = "${skillMasterFormList}" varStatus="infoNo">
+      <html:checkbox property="exteFlg" value="${info.skillId}"/>${f:h(info.skillName)}
+      <c:if test="${infoNo.count %5 == 0}"></br></c:if>
+      </c:forEach>
+      </td>
     </tr>
     <tr>
       <th>概要</th>
       <td><html:text property="periStDt" size="20" maxlength="30"/></td>
       <td></td>
-      <td></td>
+      <td align="right"><s:submit value = "検索" property="select" />
+      <input type="button" id="simpleSearch" onclick="location.href='#tab2';ChangeTab('tab2');hide('simpleSearch','detailedSearch');return false;" value="簡易検索" /></td>
     </tr>
+    </table>
+  </p>
   </div>
-</table>
+
+  <!-- 簡易検索  -->
+  <div id="tab2">
+    <p>
+    <table Border Bordercolor="black" Rules="NONE">
+    <tr>
+    <th>担当者名</th>
+    <td><html:select property="userNameList" value="" ><html:options property="userNameList"/></html:select></td>
+    <td></td>
+    <td></td>
+    </tr>
+    <tr>
+    <th>発生日</th>
+    <td><html:text property="periStDt" size="20" maxlength="30"/></td>
+    <td>～</td>
+    <td><html:text property="periEnDt" size="20" maxlength="30"/></td>
+    </tr>
+    <tr>
+    <th>会社名</th>
+    <td><html:text property="compName" size="20" maxlength="30"/></td>
+    <td></td>
+    <td align="right"><s:submit value = "検索" property="select" />
+    <input type="button" id="detailedSearch" onclick="location.href='#tab1';ChangeTab('tab1');hide('detailedSearch','simpleSearch');return false;" value="詳細検索"/></td>
+    </tr>
+    </table>
+    </p>
+  </div>
+
+</div>
+
+<!-- デフォルトのテーブルとボタンを指定 -->
+<script type="text/javascript">
+   ChangeTab('tab1');
+   hide('detailedSearch','simpleSearch');
+</script>
+
 <table>
   <tr bgcolor = "lightgreen">
     <th>印刷</th>
@@ -106,19 +160,6 @@
   </tr>
   </c:forEach>
 </table>
- <SCRIPT type="text/javascript" language="javascript">
- function hyoji2(num)
- {
-   if (num == 0)
-   {
-     document.getElementById("visi").style.visibility="visible";
-   }
-   else
-   {
-     document.getElementById("visi").style.visibility="hidden";
-   }
- }
- </SCRIPT>
 
 </s:form>
 <jsp:include page="../common/footer.jsp"/>
