@@ -3,6 +3,7 @@ package jp.co.bsja.anken.action;
 import javax.annotation.Resource;
 
 import jp.co.bsja.anken.di.AnkenRegisterInterface;
+import jp.co.bsja.anken.dto.SessionDto;
 import jp.co.bsja.anken.form.AnkenRegisterForm;
 
 import org.seasar.framework.container.S2Container;
@@ -15,6 +16,7 @@ public class AnkenRegisterAction {
   @ActionForm
   @Resource
   protected  AnkenRegisterForm ankenRegisterForm;
+  public SessionDto sessionDto;
 
   /**
    * 新規登録画面遷移処理を行います。 .
@@ -27,10 +29,9 @@ public class AnkenRegisterAction {
     AnkenRegisterInterface  ankenRegister = (AnkenRegisterInterface)container
         .getComponent("AnkenRegisterImpl");
 
-    int num = 3;
     String jsp;
 
-    if (num == 0) {
+    if (ankenRegisterForm.id == 0) {
       jsp = ankenRegister.initEntry(ankenRegisterForm);
     } else {
       jsp = ankenRegister.initEdit(ankenRegisterForm);

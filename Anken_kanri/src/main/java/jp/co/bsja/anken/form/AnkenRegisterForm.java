@@ -69,4 +69,10 @@ public class AnkenRegisterForm {
   /** 更新日時 . */
   public String updateDate;
 
+  /** スキルその他フラグ */
+  public String skillOtherFlg;
+
+  /** スキルその他入力可否フラグ */
+  public String disabledFlg;
+
 }

@@ -13,11 +13,18 @@
         function del(code) {
     	if(confirm("入力中の内容が初期化されますがよろしいですか？") == true) {
     		var id = document.createElement('input');
-    		u.type = 'hidden';
-            u.name = 'id';
-            u.value = code;
+    		id.type = 'hidden';
+    		id.name = 'id';
+    		id.value = code;
     		document.forms[0].appendChild(id);
     		document.forms[0].submit();
+
+            }
+        }
+
+    function back() {
+        if(confirm("メニュー画面へ戻りますがよろしいですか？") == true) {
+            document.forms[1].submit();
 
             }
         }
@@ -29,14 +36,18 @@
     	   }
     	   else {
     	      // チェックが入っていなかったら無効化
+    	      document.getElementById(textid).value="";
     	      document.getElementById(textid).disabled = true;
+
     	   }
     	}
+
     -->
     </script>
 </head>
 <body>
 <s:form action="clear" method="post"></s:form>
+<s:form action="/menu" method="post"></s:form>
 	<div>
 		<jsp:include page="../common/header.jsp" />
 	</div>
@@ -103,47 +114,60 @@
 					<dt>期間</dt>
 					<dd>
 						<input type="text" name="periFrom" value="${f:h(periFrom)}" />&ensp;～&ensp;<input type="text" name="periTo" value="${f:h(periTo)}" />
-						<input type="hidden" name="longTermFlg" value="0">
-						<input type="checkbox" name="longTermFlg" value="1" />長期&ensp;
-						<input type="hidden" name="sameDayFlg" value="0">
-						<input type="checkbox" name="sameDayFlg" value="1" />即日&ensp;
-						<input type="hidden" name="anyTimeFlg" value="0">
-						<input type="checkbox" name="anyTimeFlg" value="1" />随時
+						<input type="hidden" name="longTermFlg" value="1">
+						<input type="checkbox" name="longTermFlg" value="0" ${f:h(longTermFlg)} />長期&ensp;
+						<input type="hidden" name="sameDayFlg" value="1">
+						<input type="checkbox" name="sameDayFlg" value="0" ${f:h(sameDayFlg)} />即日&ensp;
+						<input type="hidden" name="anyTimeFlg" value="1">
+						<input type="checkbox" name="anyTimeFlg" value="0" ${f:h(anyTimeFlg)} />随時
 					</dd>
 				</dl>
 				<dl>
 					<dt>延長</dt>
 					<dd>
+					<c:if test="${f:h((extentionFlg) == 0)}">
 						<input name="extentionFlg" type="radio" value="1" />あり
 						<input type="radio" name="extentionFlg" value="0" checked  />なし
+				    </c:if>
+				    <c:if test="${f:h((extentionFlg) == 1)}">
+						<input name="extentionFlg" type="radio" value="1" checked />あり
+                        <input type="radio" name="extentionFlg" value="0"  />なし
+                    </c:if>
 					</dd>
 				</dl>
 				<dl>
 
-					<dt>スキル</dt>
-					<dd>
-					<span id="skillId">
-                    <%int i = 0; %>
-
-
-                    <c:forEach items="${skillList}" var="data" >
-                         <input type="checkbox" name="skillId" value="${f:h(data.skillId)}" />
-                         ${f:h(data.skillName)}&ensp;
-                    <%
-                    i++;
-                    if (i ==5) {
-
-                    %>
-                    <br />
-                    <%} %>
-                    </c:forEach>
-                    <br />
-
-						<input type="checkbox" name="skillId" value="-1" name="skillOther" onclick="connecttext('skillOther',this.checked);" />その他
-						<span class="skill"><input type="text" id="skillOther" name="skillOther" class="skill-text" value="${f:h(skillOther)}" disabled="" /></span>
-						</span>
-					</dd>
-				</dl>
+						<dt>スキル</dt>
+						<dd>
+							<span id="skillId">
+<%
+  int i = 0;
+ %>
+                                <c:forEach items="${skillList}" var="list">
+										<input type="checkbox" name="skillId"value="${f:h(list.skillId)}" ${f:h(list.checked)} />
+                                        ${f:h(list.skillName)}&ensp;
+<%
+  i++;
+%>
+<%
+  if (i == 5) {
+%>
+									<br />
+<%
+  }
+%>
+								</c:forEach>
+								<br />
+                                <input type="checkbox" name="skillId" value="-1"name="skillOther" ${f:h(skillOtherFlg)}
+                                onclick="connecttext('skillOther',this.checked);" />
+								その他
+								 <span	class="skill">
+								    <input type="text" id="skillOther"	name="skillOther" class="skill-text"
+								    value="${f:h(skillOther)}" ${f:h(disabledFlg)} />
+							     </span>
+							</span>
+						</dd>
+					</dl>
 				<dl>
 					<dt>概要</dt>
 					<dd>
@@ -157,13 +181,15 @@
 					</dd>
 				</dl>
 				<html:hidden property="updateDate" value="${f:h(updateDate)}" />
-			<c:if test="${f:h((editCount) == 0)}">
+			<c:if test="${f:h((editFlg) == 0)}">
 			    <s:submit property="entry" value="登録"></s:submit>
+			    <input type="button" onClick="back()"  value="戻る" />
 			</c:if>
-			<c:if test="${f:h((editCount) == 1)}">
+			<c:if test="${f:h((editFlg) == 1)}">
 			    <s:submit property="edit" value="登録"></s:submit>
-			</c:if>
 			    <input type="button" onClick="処理"  value="戻る" />
+			</c:if>
+
 			    <input type="button" onClick="del(${f:h(id)})"  value="クリア" />
 
 			</s:form>

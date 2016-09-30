@@ -6,6 +6,7 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -47,10 +48,21 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
     String stId = fiscalYear + id;
     int prjId = Integer.parseInt(stId);
 
-    ankenRegisterForm.skillList = skillList;
+    List<BeanMap> skillView =  new ArrayList<BeanMap>();
+    for (int i = 0; skillList.size() > i; i++) {
+      BeanMap setSkill = new BeanMap();
+      setSkill.put("skillId", skillList.get(i).get("skillId"));
+      setSkill.put("skillName", skillList.get(i).get("skillName"));
+      setSkill.put("checked", "0");
+      skillView.add(setSkill);
+    }
+    ankenRegisterForm.skillList = skillView;
     ankenRegisterForm.usersList = usersList;
     ankenRegisterForm.id = prjId;
+    ankenRegisterForm.skillOtherFlg = "0";
+    ankenRegisterForm.disabledFlg = "disabled";
     ankenRegisterForm.editFlg = 0;
+    ankenRegisterForm.extentionFlg = "0";
 
     return "ankenRegister.jsp";
   }
@@ -70,9 +82,7 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
     List<BeanMap> userList;
     userList = dao.selectAll("M_USERS");
     TProjInfo ankenList = dao.initEdit(ankenRegisterForm.id);
-    String cmpn;
-    cmpn = dao.cmpm(ankenList.cmpnId);
-    String update;
+
 
     //案件情報がない場合エラーとする
     if (CommonFunction.empty(ankenList)) {
@@ -83,13 +93,15 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
 
       return "一覧画面";
     }
+    String cmpn;
+    cmpn = dao.cmpm(ankenList.cmpnId);
+    String update;
+    List<BeanMap> dbSkill = dao.ankenSkill(ankenList.prjSklId);
     update = ankenList.updateDate.toString();
     SimpleDateFormat sd;
     sd = new SimpleDateFormat("yyyy/MM/dd");
 
-    ankenRegisterForm.skillList = skillList;
     ankenRegisterForm.usersList = userList;
-    ankenRegisterForm.ankenList = ankenList;
     ankenRegisterForm.updateDate = update;
     ankenRegisterForm.prjName = ankenList.prjName;
     ankenRegisterForm.genDate = sd.format(ankenList.genDate.getTime()).toString();
@@ -97,13 +109,59 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
     ankenRegisterForm.prjOther = ankenList.other;
     ankenRegisterForm.editFlg = 1;
     ankenRegisterForm.cmpnName = cmpn;
+    ankenRegisterForm.disabledFlg = "disabled";
+
+    List<BeanMap> skillView =  new ArrayList<BeanMap>();
+    if (!CommonFunction.empty(dbSkill)) {
+      for (int i = 0; skillList.size() > i; i++) {
+        boolean countFlg = false;
+        for (int j = 0; dbSkill.size() > j; j++) {
+          if (skillList.get(i).get("skillId").equals(dbSkill.get(j).get("sklId"))) {
+            BeanMap setSkill = new BeanMap();
+            setSkill.put("skillId", skillList.get(i).get("skillId"));
+            setSkill.put("skillName", skillList.get(i).get("skillName"));
+            setSkill.put("checked", "checked");
+            skillView.add(setSkill);
+            countFlg = true;
+          } else if (dbSkill.get(j).get("sklId").equals(-1)) {
+            ankenRegisterForm.skillOtherFlg = "checked";
+            ankenRegisterForm.skillOther = String.valueOf(dbSkill.get(j).get("other"));
+            ankenRegisterForm.disabledFlg = "";
+          }
+        }
+        if (countFlg == false) {
+          BeanMap setSkill = new BeanMap();
+          setSkill.put("skillId", skillList.get(i).get("skillId"));
+          setSkill.put("skillName", skillList.get(i).get("skillName"));
+          setSkill.put("checked", "0");
+          skillView.add(setSkill);
+        }
+      }
+    }
+    ankenRegisterForm.skillList = skillView;
     if (!CommonFunction.empty(ankenList.periFrom)) {
       ankenRegisterForm.periFrom = sd.format(ankenList.periFrom.getTime()).toString();
     }
     if (!CommonFunction.empty(ankenList.periTo)) {
       ankenRegisterForm.periTo = sd.format(ankenList.periTo.getTime()).toString();
     }
-
+    if (ankenList.longTermFlg == true) {
+      ankenRegisterForm.longTermFlg = "checked";
+    }
+    if (ankenList.sameDayFlg == true) {
+      ankenRegisterForm.sameDayFlg = "checked";
+    }
+    if (ankenList.sameDayFlg == true) {
+      ankenRegisterForm.sameDayFlg = "checked";
+    }
+    if (ankenList.anyTimeFlg == true) {
+      ankenRegisterForm.anyTimeFlg = "checked";
+    }
+    if (ankenList.extentionFlg == true) {
+      ankenRegisterForm.extentionFlg = "1";
+    } else {
+      ankenRegisterForm.extentionFlg = "0";
+    }
 
     return "ankenRegister.jsp";
   }
@@ -199,7 +257,7 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
       for (int i = 0;ankenRegisterForm.skillId.length > i;i++) {
         for (int j = 0;skillList.size() > j;j++) {
           String skill = String.valueOf(skillList.get(j).get("skillId"));
-          if (skill.equals(ankenRegisterForm.skillId[i])) {
+          if (skill.equals(ankenRegisterForm.skillId[i]) || ankenRegisterForm.skillId[i].equals("-1")) {
             //スキルあり
             skillCount++;
           }
@@ -260,14 +318,21 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
       extentionflg = true;
     }
 
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+    DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
     Date genDate = null;
     Date from = null;
     Date to = null;
     try {
-      genDate = (Date) sdf.parse(ankenRegisterForm.genDate);
-      from = (Date) sdf.parse(ankenRegisterForm.periFrom);
-      to = (Date) sdf.parse(ankenRegisterForm.periTo);
+      java.util.Date genSdf = sdf.parse(ankenRegisterForm.genDate);
+      genDate = new Date(genSdf.getTime());
+      if (!CommonFunction.empty(ankenRegisterForm.periFrom)) {
+        java.util.Date fromSdf = sdf.parse(ankenRegisterForm.periFrom);
+        from = new Date(fromSdf.getTime());
+      }
+      if (!CommonFunction.empty(ankenRegisterForm.periTo)) {
+        java.util.Date toSdf = sdf.parse(ankenRegisterForm.periTo);
+        to = new Date(toSdf.getTime());
+      }
     } catch (ParseException e) {
       // TODO 自動生成された catch ブロック
       e.printStackTrace();
@@ -508,8 +573,15 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
     List<BeanMap> skillList = dao.selectAll("M_SKILL");
     List<BeanMap> usersList = dao.selectAll("M_USERS");
     TProjInfo ankenList = dao.initEdit(ankenRegisterForm.id);
-
-    ankenRegisterForm.skillList = skillList;
+    List<BeanMap> skillView =  new ArrayList<BeanMap>();
+    for (int i = 0; skillList.size() > i; i++) {
+      BeanMap setSkill = new BeanMap();
+      setSkill.put("skillId", skillList.get(i).get("skillId"));
+      setSkill.put("skillName", skillList.get(i).get("skillName"));
+      setSkill.put("checked", "0");
+      skillView.add(setSkill);
+    }
+    ankenRegisterForm.skillList = skillView;
     ankenRegisterForm.usersList = usersList;
 
     if (!CommonFunction.empty(ankenList)) {
@@ -518,6 +590,9 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
       update = ankenList.updateDate.toString();
       ankenRegisterForm.ankenList = ankenList;
       ankenRegisterForm.updateDate = update;
+      ankenRegisterForm.skillOtherFlg = "0";
+      ankenRegisterForm.disabledFlg = "disabled";
+      ankenRegisterForm.extentionFlg = "0";
       ankenRegisterForm.editFlg = 1;
     } else {
       ankenRegisterForm.editFlg = 0;
