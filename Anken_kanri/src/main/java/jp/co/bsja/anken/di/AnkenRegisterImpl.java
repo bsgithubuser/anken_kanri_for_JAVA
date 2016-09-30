@@ -41,12 +41,14 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
 
     //スキルと担当者と案件IDを画面へ渡す
     List<BeanMap> skillList = dao.selectAll("M_SKILL");
-    List<BeanMap> usersList = dao.selectAll("M_USERS");
+    List<BeanMap> usersList;
+    usersList = dao.selectAll("M_USERS");
     int idSeq = dao.getPrjIdSeq();
     String id = String.valueOf(idSeq);
     String fiscalYear = CommonFunction.fiscalYear();
     String stId = fiscalYear + id;
-    int prjId = Integer.parseInt(stId);
+    int prjId;
+    prjId = Integer.parseInt(stId);
 
     List<BeanMap> skillView =  new ArrayList<BeanMap>();
     for (int i = 0; skillList.size() > i; i++) {
@@ -96,7 +98,8 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
     String cmpn;
     cmpn = dao.cmpm(ankenList.cmpnId);
     String update;
-    List<BeanMap> dbSkill = dao.ankenSkill(ankenList.prjSklId);
+    List<BeanMap> dbSkill;
+    dbSkill = dao.ankenSkill(ankenList.prjSklId);
     update = ankenList.updateDate.toString();
     SimpleDateFormat sd;
     sd = new SimpleDateFormat("yyyy/MM/dd");
@@ -257,7 +260,8 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
       for (int i = 0;ankenRegisterForm.skillId.length > i;i++) {
         for (int j = 0;skillList.size() > j;j++) {
           String skill = String.valueOf(skillList.get(j).get("skillId"));
-          if (skill.equals(ankenRegisterForm.skillId[i]) || ankenRegisterForm.skillId[i].equals("-1")) {
+          if (skill.equals(ankenRegisterForm.skillId[i])
+              || ankenRegisterForm.skillId[i].equals("-1")) {
             //スキルあり
             skillCount++;
           }
@@ -571,8 +575,10 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
   @Override
   public void clear(AnkenRegisterForm ankenRegisterForm) {
     List<BeanMap> skillList = dao.selectAll("M_SKILL");
-    List<BeanMap> usersList = dao.selectAll("M_USERS");
-    TProjInfo ankenList = dao.initEdit(ankenRegisterForm.id);
+    List<BeanMap> usersList;
+    usersList = dao.selectAll("M_USERS");
+    TProjInfo ankenList;
+    ankenList = dao.initEdit(ankenRegisterForm.id);
     List<BeanMap> skillView =  new ArrayList<BeanMap>();
     for (int i = 0; skillList.size() > i; i++) {
       BeanMap setSkill = new BeanMap();
