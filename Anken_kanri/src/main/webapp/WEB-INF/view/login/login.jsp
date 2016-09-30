@@ -45,7 +45,7 @@
 
         <div>
           <s:submit property="login" value="ログイン" />&nbsp;&nbsp;&nbsp;
-          <s:submit value="クリア" onclick="clr()" />
+          <input type="button" value="クリア" onclick="clr()" />
         </div>
 
       </div>
