@@ -6,9 +6,8 @@ import org.seasar.s2csv.csv.annotation.column.CSVColumn;
 import org.seasar.s2csv.csv.annotation.column.CSVMaxLength;
 import org.seasar.s2csv.csv.annotation.column.CSVRequired;
 import org.seasar.s2csv.csv.annotation.entity.CSVEntity;
-import org.seasar.struts.annotation.Maxlength;
 
-@CSVEntity(header = false, columnCountCheck = false)
+@CSVEntity(header = false, columnCountCheck = true)
 public class AnkenKanriCsv implements Serializable{
 
   /** 番号 .*/
@@ -77,7 +76,7 @@ public class AnkenKanriCsv implements Serializable{
   public String skillName;
 
   /** その他 .*/
-  @Maxlength(maxlength = 1000)
+  @CSVMaxLength(maxlength = 1000)
   @CSVColumn(columnIndex = 13, columnName = "その他")
   public String other;
 }

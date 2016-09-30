@@ -8,6 +8,7 @@ import java.io.UnsupportedEncodingException;
 import java.sql.Date;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -73,9 +74,22 @@ public class PrjInfoBatchImpl extends CommonFunction implements PrjInfoBatch {
       // 年度を取得し、string型へ変更
       String fiscalYear = fiscalYear();
 
+      // 繰り返し数カウント
+      int count = 0;
+
       try {
-        // 取得行数ループ処理を実行
-        while (controller.readNext()) {
+        while (true) {
+
+          try {
+            // 次の行がnullまたは501行以上なら処理を終える
+            if (!controller.readNext() || count++ > 500) {
+              break;
+            }
+          } catch (CSVFormatException e) {
+            // 項目数エラー
+            errorList[ITEMS_ERROR]++;
+            continue;
+          }
 
           // バリデーションエラーをparse
           CSVValidateResult validateResult = controller.validate();
@@ -86,9 +100,11 @@ public class PrjInfoBatchImpl extends CommonFunction implements PrjInfoBatch {
               // 未入力チェック
               if (msg.getMsgKey().equals("errors.required")) {
                 errorList[REQUIRED_ERROR]++;
+                break;
                 // 最大文字長チェック
               } else if (msg.getMsgKey().equals("errors.maxlength")) {
                 errorList[MAXLENGTH_ERROR]++;
+                break;
               }
             }
             continue;
@@ -196,11 +212,13 @@ public class PrjInfoBatchImpl extends CommonFunction implements PrjInfoBatch {
 
                 // 案件スキルID,登録,更新時間を格納
                 tprojSkill.prjSklId = tprojSkillSeq;
+                tprojSkill.sklId = (Integer)skillMap.get("skillId");
                 tprojSkill.createDate = getBaseDt();
                 tprojSkill.updateDate = getBaseDt();
-                tprojSkill.sklId = (Integer)skillMap.get("skillId");
                 // スキルリストに追加
-                tprojSkillList.add(tprojSkill);
+                if (containKeyword(tprojSkillList, tprojSkill.sklId)) {
+                  tprojSkillList.add(tprojSkill);
+                }
               }
             }
             // スキル管理マスタに登録されてない場合
@@ -215,9 +233,10 @@ public class PrjInfoBatchImpl extends CommonFunction implements PrjInfoBatch {
             TProjSkill tprojSkill = new TProjSkill();
             // 案件スキルID,登録,更新時間を格納
             tprojSkill.prjSklId = tprojSkillSeq;
+            tprojSkill.sklId = -1;
             tprojSkill.createDate = getBaseDt();
             tprojSkill.updateDate = getBaseDt();
-            tprojSkill.sklId = -1;
+
             // その他の長さが20を超えていた場合、20まで切り取る
             if (otherSkill.length() > 20) {
               tprojSkill.other = otherSkill.substring(0, 20);
@@ -228,18 +247,31 @@ public class PrjInfoBatchImpl extends CommonFunction implements PrjInfoBatch {
             tprojSkillList.add(tprojSkill);
           }
 
+          // 案件スキルテーブルリストの重複を削除
+          List<TProjSkill> tprojSkillListNew = new ArrayList<TProjSkill>(
+              new HashSet<TProjSkill>(tprojSkillList));
+
           // 案件情報テーブルのシーケンス番号を取得
           int tprojInfoSeq = new AnkenRegisterDao().getPrjIdSeq();
           // 年度＋シーケンス番号を案件IDへ格納
           tprojInfo.prjId = Integer.parseInt(fiscalYear + tprojInfoSeq);
 
           int result = 0;
-          // 案件スキルテーブルを登録処理
-          for (TProjSkill tprojSkill : tprojSkillList) {
-            result += new AnkenRegisterDao().prjSkillEntry(tprojSkill);
+          int kekka = 0;
+
+          try {
+            // 案件スキルテーブルを登録処理
+            for (TProjSkill tprojSkill : tprojSkillListNew) {
+              tprojSkill.createDate = getBaseDt();
+              tprojSkill.updateDate = getBaseDt();
+              result += new AnkenRegisterDao().prjSkillEntry(tprojSkill);
+            }
+            // 案件情報テーブル登録処理
+            kekka = new AnkenRegisterDao().prjEntry(tprojInfo);
+          } catch (Exception e) {
+            // TODO 自動生成された catch ブロック
+            e.printStackTrace();
           }
-          // 案件情報テーブル登録処理
-          int kekka = new AnkenRegisterDao().prjEntry(tprojInfo);
 
           // 成功判定
           if (result != 0 && kekka != 0) {
@@ -250,28 +282,36 @@ public class PrjInfoBatchImpl extends CommonFunction implements PrjInfoBatch {
         e.printStackTrace();
       } catch (CSVValidationResultRuntimeException e) {
         e.printStackTrace();
-      } catch (CSVFormatException e) {
-        // 項目数エラー
-        errorList[ITEMS_ERROR]++;
       }
 
-
     } catch (FileNotFoundException e) {
-      // TODO 自動生成された catch ブロック
       e.printStackTrace();
     } catch (UnsupportedEncodingException e1) {
-      // TODO 自動生成された catch ブロック
       e1.printStackTrace();
     }
 
-    String error = "登録成功：" + errorList[SUCCESS] + "件\n"
-            + "項目数エラー:" + errorList[ITEMS_ERROR] + "件\n"
-            + "未入力エラー:" + errorList[REQUIRED_ERROR] + "件\n"
-            + "最大文字長エラー:" + errorList[MAXLENGTH_ERROR] + "件\n"
-            + "データ形式エラー:" + errorList[DATE_ERROR] + "件\n"
-            + "マスタ存在エラー:" + errorList[MASTER_ERROR] + "件\n";
+    String result = "";
+    // 出力設置
+    if (errorList[SUCCESS] != 0) {
+      result += "登録成功：" + errorList[SUCCESS] + "件\n";
+    }
+    if (errorList[ITEMS_ERROR] != 0) {
+      result += "項目数エラー：" + errorList[ITEMS_ERROR] + "件\n";
+    }
+    if (errorList[REQUIRED_ERROR] != 0) {
+      result += "未入力エラー：" + errorList[REQUIRED_ERROR] + "件\n";
+    }
+    if (errorList[MAXLENGTH_ERROR] != 0) {
+      result += "最大文字長エラー：" + errorList[MAXLENGTH_ERROR] + "件\n";
+    }
+    if (errorList[DATE_ERROR] != 0) {
+      result += "データ形式エラー：" + errorList[DATE_ERROR] + "件\n";
+    }
+    if (errorList[MASTER_ERROR] != 0) {
+      result += "マスタ存在エラー：" + errorList[MASTER_ERROR] + "件\n";
+    }
 
-    return error;
+    return result;
   }
 
   /**
@@ -279,7 +319,7 @@ public class PrjInfoBatchImpl extends CommonFunction implements PrjInfoBatch {
    *
    * @return 案件情報テーブル
    */
-  public TProjInfo getTProjInfo() {
+  static TProjInfo getTProjInfo() {
     TProjInfo tprojInfo = new TProjInfo();
     tprojInfo.longTermFlg = false;
     tprojInfo.sameDayFlg = false;
@@ -290,5 +330,24 @@ public class PrjInfoBatchImpl extends CommonFunction implements PrjInfoBatch {
     tprojInfo.updateDate = getBaseDt();
 
     return tprojInfo;
+  }
+
+  /**
+   * 案件スキルの重複をチェックします。 .
+   *
+   * @param 案件スキルリスト
+   * @param キーワード
+   * @return true,false
+   */
+  static boolean containKeyword(List<TProjSkill> list, int keyword) {
+    if (list == null) {
+      return true;
+    }
+    for (TProjSkill tprojSkill : list) {
+      if (keyword == tprojSkill.sklId) {
+        return false;
+      }
+    }
+    return true;
   }
 }

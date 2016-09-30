@@ -24,7 +24,7 @@
       onclick="if(confirm('一括登録しますか？')) {
         return true;
       } else {
-        return false;}" />
+        return false;}" />&nbsp;
     <input type="button" value="戻る" onclick="location.href='../menu'" />
   </p>
 </div>
