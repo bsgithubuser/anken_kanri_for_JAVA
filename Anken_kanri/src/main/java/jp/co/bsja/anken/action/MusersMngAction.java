@@ -20,10 +20,10 @@ public class MusersMngAction {
   protected PersonalForm personalForm;
 
   /**
-  * 担当者管理マスタ画面遷移処理を行います。 .
-  *
-  * @return 担当者管理マスタ画面のJSPファイル名
-  */
+   * 担当者管理マスタ画面遷移処理を行います。 .
+   *
+   * @return 担当者管理マスタ画面のJSPファイル名
+   */
   @Execute(validator = false)
   public String index() {
     SingletonS2ContainerFactory.init();
@@ -58,9 +58,11 @@ public class MusersMngAction {
     S2Container container = SingletonS2ContainerFactory.getContainer();
     MUsersMngInterface mng = (MUsersMngInterface)container
         .getComponent("MUsersMng");
-    personalForm = mng.showMuser(personalForm);
-
-    return "info-entry.jsp";
+    if (mng.showMuser(personalForm) == null) {
+      return "index";
+    } else {
+      return "info-entry.jsp";
+    }
   }
 
   /**

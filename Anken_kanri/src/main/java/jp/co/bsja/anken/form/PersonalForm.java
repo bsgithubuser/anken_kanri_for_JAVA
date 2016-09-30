@@ -21,6 +21,9 @@ public class PersonalForm {
   @Required
   public String adminiRight;
 
+  /** 最終更新日時(排他制御に使用) .*/
+  public String date;
+
   /** パスワード . */
   @Mask(mask = "^[a-zA-Z0-9]+$")
   @Msg(key = "MSG_E00015")

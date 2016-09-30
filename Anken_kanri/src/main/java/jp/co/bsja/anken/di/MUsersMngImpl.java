@@ -1,6 +1,8 @@
 package jp.co.bsja.anken.di;
 import static jp.co.bsja.anken.common.CommonFunction.*;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +17,7 @@ import org.seasar.struts.util.RequestUtil;
 
 public class MUsersMngImpl implements MUsersMngInterface{
 
-  /**
+  /**.
    * 全担当者情報を取得します。
    *
    * @return formList 担当者情報一覧
@@ -52,6 +54,21 @@ public class MUsersMngImpl implements MUsersMngInterface{
   }
 
   /**
+   * 管理者権限(「開発者」等)を数値にします(「"0"」等)。 .
+   *
+   * @param admini .
+   * @return 管理者権限名
+   */
+  private String alterAdminiToNum(String admini) {
+    switch (admini) {
+      case "管理者": return "0";
+      case "一般": return "1";
+      case "開発者": return "9";
+      default : return "";
+    }
+  }
+
+  /**
    * 担当者情報を取得します。 .
    *
    * @param form .
@@ -59,14 +76,23 @@ public class MUsersMngImpl implements MUsersMngInterface{
    */
   public PersonalForm showMuser(PersonalForm form) {
     MUsersMngDao dao = new MUsersMngDao();
+    ActionMessages errors = new ActionMessages();
     //テーブルから情報取得
     List<BeanMap> list = dao.findMuser(form);
-    for (BeanMap map : list) {
-      form.userId = (int)map.get("userId");
-      form.userName = (String)map.get("userName");
-      form.adminiRight = alterAdmini((String)map.get("admin"));
+    if (list.size() == 0) {
+      errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("MSG_E00009", form.userName));
+      ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
+      return null;
+    } else {
+      for (BeanMap map : list) {
+        form.userId = (int)map.get("userId");
+        form.userName = (String)map.get("userName");
+        form.adminiRight = alterAdmini((String)map.get("admin"));
+        form.date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(map.get("updateDate"));
+      }
+      form.adminiRight = alterAdminiToNum(form.adminiRight);
+      return form;
     }
-    return form;
   }
 
   /**
@@ -111,7 +137,7 @@ public class MUsersMngImpl implements MUsersMngInterface{
       return count;
     }
     if ((form.passWord.length() == 8)
-          && (eq(form.passWord, form.certifiedPass))) {
+        && (eq(form.passWord, form.certifiedPass))) {
       //パスワードハッシュ化処理
       form.passWord = toEncryptedHashValue("SHA-256", form.passWord);
       count = dao.entryUser(form);
@@ -138,13 +164,24 @@ public class MUsersMngImpl implements MUsersMngInterface{
     if (empty(form.passWord)) {
       count = dao.updateUser(form);
     } else {
-      if ((form.passWord.length() == 8)
-              && (eq(form.passWord, form.certifiedPass))) {
-        //パスワードハッシュ化処理
-        form.passWord = toEncryptedHashValue("SHA-256", form.passWord);
-        count = dao.updateUser(form);
+      //排他制御
+      Timestamp date = Timestamp.valueOf(form.date);
+      String userId = Integer.toString(form.userId);
+      int resultCheckLock = dao.hasLocked("M_USERS", "USER_ID", userId, date);
+      if (resultCheckLock == 0) {
+        if ((form.passWord.length() == 8)
+            && (eq(form.passWord, form.certifiedPass))) {
+          //パスワードハッシュ化処理
+          form.passWord = toEncryptedHashValue("SHA-256", form.passWord);
+          //更新処理
+          count = dao.updateUser(form);
+        } else {
+          errors.add(ActionMessages.GLOBAL_MESSAGE,new ActionMessage("MSG_E00004"));
+          ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
+        }
       } else {
-        errors.add(ActionMessages.GLOBAL_MESSAGE,new ActionMessage("MSG_E00004"));
+        //排他制御エラー処理
+        errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("MSG_E00006", form.userName));
         ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
       }
     }
@@ -164,14 +201,14 @@ public class MUsersMngImpl implements MUsersMngInterface{
     count = existPrjInfo(form);
     if (count >= 1 ) {
       ActionMessages errors = new ActionMessages();
-      errors.add(ActionMessages.GLOBAL_MESSAGE,new ActionMessage("MSG_E00005"));
+      errors.add(ActionMessages.GLOBAL_MESSAGE,new ActionMessage("MSG_E00005", form.userName));
       ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
     }
     //担当者IDに紐付くログイン状況を取得し、「ログイン」の場合エラー
     loginJudge = findLoginState(form);
     if (loginJudge) {
       ActionMessages errors = new ActionMessages();
-      errors.add(ActionMessages.GLOBAL_MESSAGE,new ActionMessage("MSG_E00007"));
+      errors.add(ActionMessages.GLOBAL_MESSAGE,new ActionMessage("MSG_E00007", form.userName));
       ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
     }
     if ((count == 0) && !(loginJudge)) {

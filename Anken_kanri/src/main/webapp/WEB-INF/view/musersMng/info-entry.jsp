@@ -6,7 +6,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link type = "text/css" rel = "stylesheet" href = "../css/common.css"/>
-<title>Insert title here</title>
+<title>担当者管理マスタ</title>
 </head>
 <body>
 <jsp:include page="../common/header.jsp"/>
@@ -16,7 +16,12 @@
 <table>
   <tr>
     <th>担当者ID:</th>
+    <c:if test="${userId == 0}" var="flg">
+    <td><html:text styleClass =""  property="userId" size="20" readonly="true" value=""/></td>
+    </c:if>
+    <c:if test="${!flg}">
     <td><html:text styleClass =""  property="userId" size="20" readonly="true" value="${userId}"/></td>
+    </c:if>
   </tr>
   <tr>
     <th width="200">担当者名:<font color="#FF0000">*</font></th>
@@ -41,6 +46,7 @@
     </td>
   </tr>
 </table>
+                   <input type="hidden" name="date" value="${date}">
 <br>
 ${f:h(errorMessage)}
 <br>

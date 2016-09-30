@@ -5,12 +5,13 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link type = "text/css" rel = "stylesheet" href = "../css/common.css"/>
-<title>Insert title here</title>
+<title>担当者管理マスタ</title>
 </head>
 <body>
 
 <jsp:include page="../common/header.jsp"/>
 <p><u><b>担当者管理マスタ</b></u></p>
+<html:errors/>
  <div align="right">
    <s:form method="POST">
      <s:submit value = "新規作成" property="showEntry" />
@@ -31,42 +32,54 @@
     <td align="center"><c:out value = "${info.adminiRight}"/></td>
     <td align="center">
     <s:form action="showUpdate" method="Post">
-      <a href="javascript:edit('edit','${info.userId}')">編集</a>
+      <a href="javascript:edit('edit','${info.userId}', '${f:h(info.userName)}')">編集</a>
     </s:form>
     </td>
     <td align="center">
     <s:form action="delete" method="Post">
-      <a href="javascript:del('delete','${info.userId}')">削除</a>
+      <a href="javascript:del('delete','${info.userId}', '${f:h(info.userName)}')">削除</a>
     </s:form>
     </td>
   </tr>
   </c:forEach>
 </table>
-<s:form action="/menu/" method="Post">
+<s:form action="/masterMenu/" method="Post">
   <br>
   <div align="right"><s:submit value="戻る"/></div>
 </s:form>
 <jsp:include page="../common/footer.jsp"/>
 </body>
  <SCRIPT type="text/javascript" language="javascript">
-  function edit(text, userId) {
+  function edit(text, userId, name) {
     if (text == 'edit') {
       var id = document.createElement('input');
       id.type = 'hidden';
       id.name = 'userId';
       id.value = userId;
+      var userName = document.createElement('input');
+      userName.type = 'hidden';
+      userName.name = 'userName';
+      userName.value = name;
+      document.forms[1].appendChild(userName);
       document.forms[1].appendChild(id);
       document.forms[1].submit();
     }
   }
-  function del(text, userId) {
+  function del(text, userId, name) {
     if (text == 'delete') {
+      if (confirm(name+'を削除します。よろしいですか？') == true){
       var test = document.createElement('input');
       test.type = 'hidden';
       test.name = 'userId';
       test.value = userId;
+      var userName = document.createElement('input');
+      userName.type = 'hidden';
+      userName.name = 'userName';
+      userName.value = name;
       document.forms[2].appendChild(test);
+      document.forms[2].appendChild(userName);
       document.forms[2].submit();
+    }
     }
   }
  </SCRIPT>
