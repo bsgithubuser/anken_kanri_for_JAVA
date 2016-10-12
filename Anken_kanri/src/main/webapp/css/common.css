@@ -233,8 +233,15 @@ div.wrap {
   min-height: 98%;
 }
 
+div.dateErr {
+  position:relative;
+  left: 35px;
+  color: #ff0000;
+}
+
 footer {
   width: 100%;
   position: absolute;
   bottom: 0;
 }
+

@@ -1,5 +1,6 @@
 package jp.co.bsja.anken.form;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 public class PrjInfoListForm {
@@ -31,23 +32,64 @@ public class PrjInfoListForm {
   /** 発生日 . */
   public String genDate;
 
+  /** 画面表示用期間開始日 . */
+  public String periStDtDummy;
+
   /** 期間開始日 . */
-  public String periStDt;
+  public Timestamp periStDt;
+
+  /** 画面表示用期間終了日 . */
+  public String periEnDtDummy;
 
   /** 期間終了日 . */
-  public String periEnDt;
+  public Timestamp periEnDt;
 
   /** 会社名 . */
   public String compName;
 
-  /** 期間フラグ . */
-  public String periFlg;
+  /** 長期フラグ . */
+  public Boolean lngTrmFlg;
 
-  /** スキル名 . */
-  public String skillName;
+  /** 即日フラグ . */
+  public Boolean smDyFlg;
+
+  /** 随時フラグ . */
+  public Boolean anyTmFlg;
+
+  /** 概要 . */
+  public String overview;
+
+  /** スキルID . */
+  public List<String> skillId;
+
+  /** スキルID . */
+  public String selectedSkills;
 
   /** 延長 . */
-  public String exteFlg;
+  public String exteFlg = "none";
 
+  /** 検索方法 . */
+  public String kindOfSerch;
+
+  /** 検索したスキル名 . */
+  public String skillName;
+
+  /** 期間 . */
+  public String prjPeriod;
+
+  /** 延長マーク . */
+  public String extendFlg;
+
+  /** 印刷 . */
+  public String printFlg;
+
+  /** 画面再表示用_タブ名 . */
+  public String tabName = "tab2";
+
+  /** 更新日時 . */
+  public Timestamp updateDate;
+
+  /** 画面から受け取る更新日時 . */
+  public String updtDate;
 
 }

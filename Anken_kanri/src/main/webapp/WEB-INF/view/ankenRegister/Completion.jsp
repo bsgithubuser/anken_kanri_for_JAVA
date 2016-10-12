@@ -18,7 +18,7 @@
 
         <div class="links">
             <div class="sideBySide1">
-                <s:link href="一覧画面へ">一覧画面へ戻る</s:link>
+                <s:link href="/prjInfoList/">一覧画面へ戻る</s:link>
             </div>
             <div class="sideBySide2">
                 <s:link href="index">登録画面へ戻る</s:link>

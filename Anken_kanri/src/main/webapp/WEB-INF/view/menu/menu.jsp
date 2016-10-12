@@ -11,9 +11,9 @@
 <jsp:include page="../common/header.jsp"/>
 <p class="screenTytle"><u><b>メニュー</b></u></p>
 <br>
-<div class="menuItem" style="line-height:0"><a href="../prjList/"><u><b>・案件情報一覧</b></u></a></div>
+<div class="menuItem" style="line-height:0"><a href="../prjInfoList/"><u><b>・案件情報一覧</b></u></a></div>
 <br>
-<div class="menuItem" style="line-height:0"><a href="../prjRegist/"><u><b>・案件情報登録</b></u></a></div>
+<div class="menuItem" style="line-height:0"><a href="../ankenRegister/"><u><b>・案件情報登録</b></u></a></div>
 <br>
 <div class="menuItem" style="line-height:0"><a href="../prjInfoBatch/"><u><b>・案件情報取込処理</b></u></a></div>
 <br>

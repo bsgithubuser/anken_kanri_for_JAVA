@@ -4,6 +4,7 @@ import javax.annotation.Resource;
 
 import jp.co.bsja.anken.di.PrjInfoListInterface;
 import jp.co.bsja.anken.dto.SessionDto;
+import jp.co.bsja.anken.form.AnkenRegisterForm;
 import jp.co.bsja.anken.form.PrjInfoListForm;
 
 import org.seasar.framework.container.S2Container;
@@ -18,6 +19,9 @@ public class PrjInfoListAction {
   @Resource
   @ActionForm
   protected PrjInfoListForm prjInfoListForm;
+  @Resource
+  @ActionForm
+  protected AnkenRegisterForm ankenRegisterForm;
 
   /**
   * 案件情報一覧画面遷移処理を行います。 .
@@ -36,18 +40,64 @@ public class PrjInfoListAction {
   }
 
   /**
-   * 簡易検索を行います。 .
+   * 検索を行います。 .
    *
    * @return 案件情報一覧画面のJSPファイル名
    */
-  @Execute(validator = false)
+  @Execute(validator = true, input = "prj-info-list.jsp")
   public String select() {
     SingletonS2ContainerFactory.init();
     S2Container container = SingletonS2ContainerFactory.getContainer();
     PrjInfoListInterface prjInfoList = (PrjInfoListInterface)container
          .getComponent("PrjInfoList");
-    prjInfoListForm.prjInfoListFormList = prjInfoList.simpleSearch(prjInfoListForm);
-    return "prj-info-list.jsp";
+    prjInfoListForm.prjInfoListFormList = prjInfoList.search(prjInfoListForm, sessionDto);
+    return "/prjInfoList/";
+  }
+
+  /**
+   * マスタメニュー画面への遷移 実行メソッド .
+   * @return 遷移先jsp
+   */
+  @Execute(validator = false)
+  public String returnMenu() {
+    return "/menu/";
+  }
+
+  /**
+   * 案件情報編集 編集画面遷移メソッド .
+   * @return 遷移先jsp
+   */
+  @Execute(validator = false)
+  public String showUpdate() {
+    SingletonS2ContainerFactory.init();
+    S2Container container = SingletonS2ContainerFactory.getContainer();
+    PrjInfoListInterface prjInfoList = (PrjInfoListInterface)container
+         .getComponent("PrjInfoList");
+    prjInfoList.pullIdToARF(prjInfoListForm, ankenRegisterForm);
+    return "/ankenRegister/";
+  }
+
+  /**
+   * 案件情報削除 実行メソッド .
+   * @return 遷移先jsp
+   */
+  @Execute(validator = false)
+  public String delete() {
+    SingletonS2ContainerFactory.init();
+    S2Container container = SingletonS2ContainerFactory.getContainer();
+    PrjInfoListInterface prjInfoList = (PrjInfoListInterface)container
+         .getComponent("PrjInfoList");
+    prjInfoList.delete(prjInfoListForm, sessionDto);
+    return select();
+  }
+
+  /**
+   * 案件情報印刷 実行メソッド .
+   * @return 遷移先jsp
+   */
+  @Execute(validator = false)
+  public String print() {
+    return select();
   }
 
 }
