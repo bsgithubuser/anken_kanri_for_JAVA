@@ -44,20 +44,21 @@ INNER JOIN
 ON
     t_proj_info.prj_skl_id = extracted_skill.prj_skl_id
 WHERE
+    1=1
     /*IF periStDt != null && periEnDt != null*/
-     t_proj_info.gen_date BETWEEN /*periStDt*/ AND /*periEnDt*/
+     AND t_proj_info.gen_date BETWEEN /*periStDt*/ AND /*periEnDt*/
     /*END*/
 
     /*IF periStDt != null || periEnDt != null*/
      /*IF periStDt == null*/
-      t_proj_info.gen_date <= /*periEnDt*/ AND
+      AND t_proj_info.gen_date <= /*periEnDt*/
      /*END*/
      /*IF periEnDt == null*/
-      t_proj_info.gen_date >= /*periStDt*/ AND
+      AND t_proj_info.gen_date >= /*periStDt*/
      /*END*/
     /*END*/
 
-    t_proj_info.del_flg = false
+    AND t_proj_info.del_flg = false
 ORDER BY
     t_proj_info.gen_date,
     t_proj_info.prj_id,
