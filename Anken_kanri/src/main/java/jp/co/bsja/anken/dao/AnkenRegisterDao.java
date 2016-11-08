@@ -84,7 +84,12 @@ public class AnkenRegisterDao extends Dao {
         .where("CMPN_NAME = ?", param)
         .getSingleResult();
 
-    String cmpnId = String.valueOf(cmpn.cmpnId);
+    String cmpnId = "";
+
+    if (cmpn != null) {
+      cmpnId = String.valueOf(cmpn.cmpnId);
+    }
+
     return cmpnId;
 
   }
