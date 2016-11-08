@@ -247,7 +247,7 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
     if (tantoCount == 0) {
       //担当者なし
       errors.add(ActionMessages.GLOBAL_MESSAGE,
-          new ActionMessage("MSG_E0006","選択した担当者"));
+          new ActionMessage("MSG_E00006","選択した担当者"));
       ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
 
       return "ankenRegister.jsp";
@@ -268,7 +268,7 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
         }
         if (skillCount == 0) {
           errors.add(ActionMessages.GLOBAL_MESSAGE,
-              new ActionMessage("MSG_E0006","選択したスキル"));
+              new ActionMessage("MSG_E00006","選択したスキル"));
           ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
 
           return "ankenRegister.jsp";
@@ -280,7 +280,7 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
     if (CommonFunction.empty(cmpnId)) {
       //会社なし
       errors.add(ActionMessages.GLOBAL_MESSAGE,
-          new ActionMessage("MSG_E0006","入力した会社名"));
+          new ActionMessage("MSG_E00006","入力した会社名"));
       ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
 
       return "ankenRegister.jsp";
@@ -422,7 +422,7 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
     if (CommonFunction.empty(ankenList)) {
       //論理削除データあり
       errors.add(ActionMessages.GLOBAL_MESSAGE,
-          new ActionMessage("MSG_E0006", "案件ID" + ankenRegisterForm.id));
+          new ActionMessage("MSG_E00006", "案件ID" + ankenRegisterForm.id));
       ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
 
       return "ankenRegister.jsp";
@@ -435,7 +435,7 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
     if (hasLocked == 1) {
       //更新されている
       errors.add(ActionMessages.GLOBAL_MESSAGE,
-          new ActionMessage("MSG_E0006", "案件ID" + ankenRegisterForm.id));
+          new ActionMessage("MSG_E00006", "案件ID" + ankenRegisterForm.id));
       ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
 
       return "ankenRegister.jsp";
@@ -447,7 +447,7 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
     if (tantoCount == 0) {
       //担当者なし
       errors.add(ActionMessages.GLOBAL_MESSAGE,
-          new ActionMessage("MSG_E0006", "選択した担当者"));
+          new ActionMessage("MSG_E00006", "選択した担当者"));
       ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
 
       return "ankenRegister.jsp";
@@ -467,7 +467,7 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
         }
         if (skillCount == 0) {
           errors.add(ActionMessages.GLOBAL_MESSAGE,
-              new ActionMessage("MSG_E0006","選択したスキル"));
+              new ActionMessage("MSG_E00006","選択したスキル"));
           ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
 
           return "ankenRegister.jsp";
@@ -480,7 +480,7 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
     if (CommonFunction.empty(cmpnId)) {
       //会社なし
       errors.add(ActionMessages.GLOBAL_MESSAGE,
-          new ActionMessage("MSG_E0006", "入力した会社名"));
+          new ActionMessage("MSG_E00006", "入力した会社名"));
       ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
       return "ankenRegister.jsp";
     }
