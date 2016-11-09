@@ -178,6 +178,11 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
   @Override
   public String entry(AnkenRegisterForm ankenRegisterForm) {
 
+    //エラーメッセージが残っている場合はクリアする
+    if (!errors.isEmpty()) {
+      errors.clear();
+    }
+
     //必須入力チェック
     if (CommonFunction.empty(ankenRegisterForm.prjName)) {
       errors.add(ActionMessages.GLOBAL_MESSAGE,
@@ -373,6 +378,11 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
    */
   @Override
   public String edit(AnkenRegisterForm ankenRegisterForm) {
+
+    //エラーメッセージが残っている場合はクリアする
+    if (!errors.isEmpty()) {
+      errors.clear();
+    }
 
     //必須入力チェック
     if (CommonFunction.empty(ankenRegisterForm.prjName)) {
