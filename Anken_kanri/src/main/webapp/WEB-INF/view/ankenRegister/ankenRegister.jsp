@@ -171,13 +171,13 @@
         <dl>
           <dt>概要</dt>
           <dd>
-            <textarea cols=40 rows=5  name="orverview" value="${f:h(orverview)}"></textarea>
+            <textarea cols=40 rows=5  name="orverview">${f:h(orverview)}</textarea>
           </dd>
         </dl>
         <dl>
           <dt>その他</dt>
           <dd>
-            <textarea cols=40 rows=5 name="prjOther" value="${f:h(prjOther)}"></textarea>
+            <textarea cols=40 rows=5 name="prjOther">${f:h(prjOther)}</textarea>
           </dd>
         </dl>
         <html:hidden property="updateDate" value="${f:h(updateDate)}" />
