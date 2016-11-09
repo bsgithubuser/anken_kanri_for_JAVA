@@ -11,37 +11,38 @@
     <script type="text/javascript">
     <!--
         function del(code) {
-      if(confirm("入力中の内容が初期化されますがよろしいですか？") == true) {
-        var id = document.createElement('input');
-        id.type = 'hidden';
-        id.name = 'id';
-        id.value = code;
-        document.forms[0].appendChild(id);
-        document.forms[0].submit();
-
+            if(confirm("入力中の内容が初期化されますがよろしいですか？") == true) {
+                var id = document.createElement('input');
+                id.type = 'hidden';
+                id.name = 'id';
+                id.value = code;
+                document.forms[0].appendChild(id);
+                document.forms[0].submit();
             }
         }
 
-    function back() {
-        if(confirm("メニュー画面へ戻りますがよろしいですか？") == true) {
-            document.forms[1].submit();
-
+        function back() {
+            if(confirm("メニュー画面へ戻りますがよろしいですか？") == true) {
+                document.forms[1].submit();
             }
         }
 
-    function connecttext( textid, ischecked ) {
-         if( ischecked == true ) {
-            // チェックが入っていたら有効化
-            document.getElementById(textid).disabled = false;
-         }
-         else {
-            // チェックが入っていなかったら無効化
-            document.getElementById(textid).value="";
-            document.getElementById(textid).disabled = true;
+        function backPrjInfoList() {
+            if(confirm("一覧画面へ戻りますがよろしいですか？") == true) {
+                document.forms[3].submit();
+            }
+        }
 
-         }
-      }
-
+        function connecttext( textid, ischecked ) {
+            if( ischecked == true ) {
+                // チェックが入っていたら有効化
+                document.getElementById(textid).disabled = false;
+            } else {
+                // チェックが入っていなかったら無効化
+                document.getElementById(textid).value="";
+                document.getElementById(textid).disabled = true;
+            }
+        }
     -->
     </script>
 </head>
@@ -63,7 +64,7 @@
 
 
       <div class="div-table">
-                <s:form method="post">
+        <s:form method="post">
         <dl>
           <dt>案件ID</dt>
           <dd>
@@ -187,7 +188,7 @@
       </c:if>
       <c:if test="${f:h((editFlg) == 1)}">
           <s:submit property="edit" value="登録"></s:submit>
-          <input type="button" onClick="処理"  value="戻る" />
+          <input type="button" onClick="backPrjInfoList()"  value="戻る" />
       </c:if>
 
           <input type="button" onClick="del(${f:h(id)})"  value="クリア" />
@@ -201,6 +202,6 @@
     <jsp:include page="../common/footer.jsp" />
   </div>
 
-
+<s:form action="/prjInfoList" method="post"></s:form>
 </body>
 </html>
