@@ -314,15 +314,25 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
     boolean anyTimeFlg = false;
     boolean extentionflg = false;
 
-    if (ankenRegisterForm.longTermFlg.equals("1")) {
+    //長期フラグ
+    if (!CommonFunction.empty(ankenRegisterForm.longTermFlg)
+            && CommonFunction.eq(ankenRegisterForm.longTermFlg, "on")) {
       longTermFlg = true;
     }
-    if (ankenRegisterForm.sameDayFlg.equals("1")) {
+
+    //即日フラグ
+    if (!CommonFunction.empty(ankenRegisterForm.sameDayFlg)
+            && CommonFunction.eq(ankenRegisterForm.sameDayFlg, "on")) {
       sameDayFlg = true;
     }
-    if (ankenRegisterForm.anyTimeFlg.equals("1")) {
+
+    //随時フラグ
+    if (!CommonFunction.empty(ankenRegisterForm.anyTimeFlg)
+            && CommonFunction.eq(ankenRegisterForm.anyTimeFlg, "on")) {
       anyTimeFlg = true;
     }
+
+    //延長フラグ
     if (ankenRegisterForm.extentionFlg.equals("1")) {
       extentionflg = true;
     }
@@ -518,19 +528,31 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
       projSkill.updateDate = timestamp;
       dao.prjSkillEntry(projSkill);
     }
+
     boolean longTermFlg = false;
     boolean sameDayFlg = false;
     boolean anyTimeFlg = false;
     boolean extentionflg = false;
-    if (ankenRegisterForm.longTermFlg.equals("1")) {
+
+    //長期フラグ
+    if (!CommonFunction.empty(ankenRegisterForm.longTermFlg)
+            && CommonFunction.eq(ankenRegisterForm.longTermFlg, "on")) {
       longTermFlg = true;
     }
-    if (ankenRegisterForm.sameDayFlg.equals("1")) {
+
+    //即日フラグ
+    if (!CommonFunction.empty(ankenRegisterForm.sameDayFlg)
+            && CommonFunction.eq(ankenRegisterForm.sameDayFlg, "on")) {
       sameDayFlg = true;
     }
-    if (ankenRegisterForm.anyTimeFlg.equals("1")) {
+
+    //随時フラグ
+    if (!CommonFunction.empty(ankenRegisterForm.anyTimeFlg)
+            && CommonFunction.eq(ankenRegisterForm.anyTimeFlg, "on")) {
       anyTimeFlg = true;
     }
+
+    //延長フラグ
     if (ankenRegisterForm.extentionFlg.equals("1")) {
       extentionflg = true;
     }
