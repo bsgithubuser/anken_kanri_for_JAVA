@@ -68,7 +68,7 @@ public List<BeanMap> findMuser(PersonalForm form) {
     //jdbcManager取得
     JdbcManager jdbcManager = SingletonS2Container.getComponent("jdbcManager");
     int updateCount = 0;
-    if (form.passWord.length() == 8) {
+    if (!empty(form.passWord)) {
       updateCount = jdbcManager.updateBySql("UPDATE M_USERS SET"
       + " USER_NAME = ?, PASSWORD = ?, ADMIN = ?, LOGIN_STATE = ?, UPDATE_DATE = ?"
       + " WHERE USER_ID = ?",
