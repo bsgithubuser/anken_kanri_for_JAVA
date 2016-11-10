@@ -123,6 +123,7 @@ public class MUsersMngImpl implements MUsersMngInterface{
   public int registrationUser(PersonalForm form) {
     MUsersMngDao dao = new MUsersMngDao();
     ActionMessages errors = new ActionMessages();
+
     int count = 0;
     //パスワードnullチェック
     if (empty(form.passWord)) {
@@ -136,8 +137,16 @@ public class MUsersMngImpl implements MUsersMngInterface{
       ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
       return count;
     }
-    if ((form.passWord.length() == 8)
-        && (eq(form.passWord, form.certifiedPass))) {
+
+    //パスワード8桁チェック
+    if (form.passWord.length() < 8) {
+      errors.add(ActionMessages.GLOBAL_MESSAGE,new ActionMessage("MSG_E00015"));
+      ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
+      return count;
+    }
+
+    //パスワードと確認用パスワード同一チェック
+    if (eq(form.passWord, form.certifiedPass)) {
       //パスワードハッシュ化処理
       form.passWord = toEncryptedHashValue("SHA-256", form.passWord);
       count = dao.entryUser(form);
@@ -145,8 +154,8 @@ public class MUsersMngImpl implements MUsersMngInterface{
       errors.add(ActionMessages.GLOBAL_MESSAGE,new ActionMessage("MSG_E00004"));
       ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
     }
-    return count;
 
+    return count;
   }
 
   /**
