@@ -54,13 +54,13 @@ public class AnkenKanriCsv implements Serializable{
   @CSVColumn(columnIndex = 7, columnName = "期間終了日")
   public String periodTo;
 
-  /** 即日フラグ .*/
-  @CSVColumn(columnIndex = 8, columnName = "即日フラグ")
-  public String sameDayFlg;
-
   /** 随時フラグ .*/
-  @CSVColumn(columnIndex = 9, columnName = "随時フラグ")
+  @CSVColumn(columnIndex = 8, columnName = "随時フラグ")
   public String anyTimeFlg;
+
+  /** 即日フラグ .*/
+  @CSVColumn(columnIndex = 9, columnName = "即日フラグ")
+  public String sameDayFlg;
 
   /** 長期フラグ .*/
   @CSVColumn(columnIndex = 10, columnName = "長期フラグ")
