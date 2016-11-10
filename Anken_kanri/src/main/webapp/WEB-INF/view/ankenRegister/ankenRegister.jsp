@@ -115,12 +115,10 @@
           <dt>期間</dt>
           <dd>
             <input type="text" name="periFrom" value="${f:h(periFrom)}" />&ensp;～&ensp;<input type="text" name="periTo" value="${f:h(periTo)}" />
-            <input type="hidden" name="longTermFlg" value="1">
-            <input type="checkbox" name="longTermFlg" value="0" ${f:h(longTermFlg)} />長期&ensp;
-            <input type="hidden" name="sameDayFlg" value="1">
-            <input type="checkbox" name="sameDayFlg" value="0" ${f:h(sameDayFlg)} />即日&ensp;
-            <input type="hidden" name="anyTimeFlg" value="1">
-            <input type="checkbox" name="anyTimeFlg" value="0" ${f:h(anyTimeFlg)} />随時
+
+            <input type="checkbox" name="longTermFlg" ${f:h(longTermFlg)} />長期&ensp;
+            <input type="checkbox" name="sameDayFlg" ${f:h(sameDayFlg)} />即日&ensp;
+            <input type="checkbox" name="anyTimeFlg" ${f:h(anyTimeFlg)} />随時
           </dd>
         </dl>
         <dl>
