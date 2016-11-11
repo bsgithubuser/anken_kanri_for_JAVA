@@ -265,12 +265,14 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
       for (int i = 0;ankenRegisterForm.skillId.length > i;i++) {
         for (int j = 0;skillList.size() > j;j++) {
           String skill = String.valueOf(skillList.get(j).get("skillId"));
-          if (skill.equals(ankenRegisterForm.skillId[i])
-              || ankenRegisterForm.skillId[i].equals("-1")) {
+
+          if (CommonFunction.eq(ankenRegisterForm.skillId[i], skill)
+              || CommonFunction.eq(ankenRegisterForm.skillId[i], "-1")) {
             //スキルあり
             skillCount++;
           }
         }
+
         if (skillCount == 0) {
           errors.add(ActionMessages.GLOBAL_MESSAGE,
               new ActionMessage("MSG_E00006","選択したスキル"));
@@ -295,18 +297,28 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
     Timestamp timestamp = CommonFunction.getBaseDt();
 
     int prjSkillId = dao.getPrjSkillIdSeq();
-    for (int i = 0;ankenRegisterForm.skillId.length > i;i++) {
-      int skillId = Integer.parseInt(ankenRegisterForm.skillId[i]);
-      //スキルのその他入力がある場合
-      if (skillId == -1 && !CommonFunction.empty(ankenRegisterForm.skillOther)) {
-        projSkill.other = ankenRegisterForm.skillOther;
-      }
 
-      projSkill.prjSklId = prjSkillId;
-      projSkill.sklId = skillId;
-      projSkill.createDate = timestamp ;
-      projSkill.updateDate = timestamp ;
-      dao.prjSkillEntry(projSkill);
+    if (!CommonFunction.empty(ankenRegisterForm.skillId)) {
+      for (int i = 0;ankenRegisterForm.skillId.length > i;i++) {
+        int skillId = Integer.parseInt(ankenRegisterForm.skillId[i]);
+        //スキルのその他入力がある場合
+        if (CommonFunction.eq(skillId, -1) && !CommonFunction.empty(ankenRegisterForm.skillOther)) {
+          projSkill.other = ankenRegisterForm.skillOther;
+
+        } else if (CommonFunction.eq(skillId, -1) && CommonFunction.empty(ankenRegisterForm.skillOther)) {
+          //スキルのその他がチェック付いて未入力の場合
+          errors.add(ActionMessages.GLOBAL_MESSAGE,
+             new ActionMessage("MSG_E00001", "チェックが付いているスキルのその他"));
+                ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
+          return "ankenRegister.jsp";
+        }
+
+        projSkill.prjSklId = prjSkillId;
+        projSkill.sklId = skillId;
+        projSkill.createDate = timestamp ;
+        projSkill.updateDate = timestamp ;
+        dao.prjSkillEntry(projSkill);
+      }
     }
 
     boolean longTermFlg = false;
@@ -480,11 +492,14 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
       for (int i = 0;ankenRegisterForm.skillId.length > i;i++) {
         for (int j = 0;skillList.size() > j;j++) {
           String skill = String.valueOf(skillList.get(j).get("skillId"));
-          if (skill.equals(ankenRegisterForm.skillId[i])) {
+
+          if (CommonFunction.eq(ankenRegisterForm.skillId[i], skill)
+              || CommonFunction.eq(ankenRegisterForm.skillId[i], "-1")) {
             //スキルあり
             skillCount++;
           }
         }
+
         if (skillCount == 0) {
           errors.add(ActionMessages.GLOBAL_MESSAGE,
               new ActionMessage("MSG_E00006","選択したスキル"));
@@ -515,18 +530,30 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
     //案件スキルを編集
     Timestamp timestamp = CommonFunction.getBaseDt();
 
-    for (int i = 0; ankenRegisterForm.skillId.length > i; i++) {
-      int skillId = Integer.parseInt(ankenRegisterForm.skillId[i]);
-      //スキルのその他入力がある場合
-      if (skillId == -1 && !CommonFunction.empty(ankenRegisterForm.skillOther)) {
-        projSkill.other = ankenRegisterForm.skillOther;
-      }
+    if (!CommonFunction.empty(ankenRegisterForm.skillId)) {
+      for (int i = 0; ankenRegisterForm.skillId.length > i; i++) {
+        int skillId = Integer.parseInt(ankenRegisterForm.skillId[i]);
 
-      projSkill.prjSklId = projSkill.prjSklId;
-      projSkill.sklId = skillId;
-      projSkill.createDate = timestamp;
-      projSkill.updateDate = timestamp;
-      dao.prjSkillEntry(projSkill);
+        //スキルのその他入力がある場合
+        if (CommonFunction.eq(skillId, -1) && !CommonFunction.empty(ankenRegisterForm.skillOther)) {
+          projSkill.other = ankenRegisterForm.skillOther;
+
+        } else if (CommonFunction.eq(skillId, -1)
+            && CommonFunction.empty(ankenRegisterForm.skillOther)) {
+          //スキルのその他がチェック付いて未入力の場合
+          errors.add(ActionMessages.GLOBAL_MESSAGE,
+              new ActionMessage("MSG_E00001", "チェックが付いているスキルのその他"));
+
+          ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
+          return "ankenRegister.jsp";
+        }
+
+        projSkill.prjSklId = projSkill.prjSklId;
+        projSkill.sklId = skillId;
+        projSkill.createDate = timestamp;
+        projSkill.updateDate = timestamp;
+        dao.prjSkillEntry(projSkill);
+      }
     }
 
     boolean longTermFlg = false;
