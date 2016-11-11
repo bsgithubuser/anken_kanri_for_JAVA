@@ -115,24 +115,28 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
     ankenRegisterForm.disabledFlg = "disabled";
 
     List<BeanMap> skillView =  new ArrayList<BeanMap>();
-    if (!CommonFunction.empty(dbSkill)) {
+
+    if (!CommonFunction.empty(skillList)) {
       for (int i = 0; skillList.size() > i; i++) {
         boolean countFlg = false;
-        for (int j = 0; dbSkill.size() > j; j++) {
-          if (skillList.get(i).get("skillId").equals(dbSkill.get(j).get("sklId"))) {
-            BeanMap setSkill = new BeanMap();
-            setSkill.put("skillId", skillList.get(i).get("skillId"));
-            setSkill.put("skillName", skillList.get(i).get("skillName"));
-            setSkill.put("checked", "checked");
-            skillView.add(setSkill);
-            countFlg = true;
-          } else if (dbSkill.get(j).get("sklId").equals(-1)) {
-            ankenRegisterForm.skillOtherFlg = "checked";
-            ankenRegisterForm.skillOther = String.valueOf(dbSkill.get(j).get("other"));
-            ankenRegisterForm.disabledFlg = "";
+        if (!CommonFunction.empty(dbSkill)) {
+          for (int j = 0; dbSkill.size() > j; j++) {
+            if (skillList.get(i).get("skillId").equals(dbSkill.get(j).get("sklId"))) {
+              BeanMap setSkill = new BeanMap();
+              setSkill.put("skillId", skillList.get(i).get("skillId"));
+              setSkill.put("skillName", skillList.get(i).get("skillName"));
+              setSkill.put("checked", "checked");
+              skillView.add(setSkill);
+              countFlg = true;
+            } else if (dbSkill.get(j).get("sklId").equals(-1)) {
+              ankenRegisterForm.skillOtherFlg = "checked";
+              ankenRegisterForm.skillOther = String.valueOf(dbSkill.get(j).get("other"));
+              ankenRegisterForm.disabledFlg = "";
+            }
           }
         }
-        if (countFlg == false) {
+
+        if (!countFlg) {
           BeanMap setSkill = new BeanMap();
           setSkill.put("skillId", skillList.get(i).get("skillId"));
           setSkill.put("skillName", skillList.get(i).get("skillName"));
@@ -141,6 +145,7 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
         }
       }
     }
+
     ankenRegisterForm.skillList = skillView;
     if (!CommonFunction.empty(ankenList.periFrom)) {
       ankenRegisterForm.periFrom = sd.format(ankenList.periFrom.getTime()).toString();
@@ -237,6 +242,7 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
     }
 
     if (!CommonFunction.empty(ankenRegisterForm.periTo)) {
+      genDateFomat = fomat.matcher(ankenRegisterForm.periTo);
       if (genDateFomat.find() == false) {
         errors.add(ActionMessages.GLOBAL_MESSAGE,
             new ActionMessage("MSG_E00010"));
@@ -305,11 +311,13 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
         if (CommonFunction.eq(skillId, -1) && !CommonFunction.empty(ankenRegisterForm.skillOther)) {
           projSkill.other = ankenRegisterForm.skillOther;
 
-        } else if (CommonFunction.eq(skillId, -1) && CommonFunction.empty(ankenRegisterForm.skillOther)) {
+        } else if (CommonFunction.eq(skillId, -1)
+            && CommonFunction.empty(ankenRegisterForm.skillOther)) {
           //スキルのその他がチェック付いて未入力の場合
           errors.add(ActionMessages.GLOBAL_MESSAGE,
-             new ActionMessage("MSG_E00001", "チェックが付いているスキルのその他"));
-                ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
+              new ActionMessage("MSG_E00001", "チェックが付いているスキルのその他"));
+
+          ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
           return "ankenRegister.jsp";
         }
 
@@ -446,6 +454,28 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
       ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
 
       return "ankenRegister.jsp";
+    }
+
+    if (!CommonFunction.empty(ankenRegisterForm.periFrom)) {
+      genDateFomat = fomat.matcher(ankenRegisterForm.periFrom);
+      if (genDateFomat.find() == false) {
+        errors.add(ActionMessages.GLOBAL_MESSAGE,
+            new ActionMessage("MSG_E00010"));
+        ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
+
+        return "ankenRegister.jsp";
+      }
+    }
+
+    if (!CommonFunction.empty(ankenRegisterForm.periTo)) {
+      genDateFomat = fomat.matcher(ankenRegisterForm.periTo);
+      if (genDateFomat.find() == false) {
+        errors.add(ActionMessages.GLOBAL_MESSAGE,
+            new ActionMessage("MSG_E00010"));
+        ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
+
+        return "ankenRegister.jsp";
+      }
     }
 
     //更新前チェック
