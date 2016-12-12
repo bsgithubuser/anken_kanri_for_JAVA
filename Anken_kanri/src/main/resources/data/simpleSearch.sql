@@ -19,7 +19,9 @@ SELECT
     AND m_cmpn.cmpn_name LIKE '%' || /*compName*/'compName' || '%'
   /*END*/
   INNER JOIN m_users ON t_proj_info.user_id = m_users.user_id
+    /*IF userName != "全検索"*/
     AND m_users.user_name LIKE '%' || /*userName*/'userName' || '%'
+    /*END*/
   LEFT OUTER JOIN
     (
       SELECT

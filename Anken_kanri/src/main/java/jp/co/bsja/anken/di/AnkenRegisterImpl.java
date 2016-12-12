@@ -113,6 +113,7 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
     ankenRegisterForm.editFlg = 1;
     ankenRegisterForm.cmpnName = cmpn;
     ankenRegisterForm.disabledFlg = "disabled";
+    ankenRegisterForm.registantId = ankenList.userId;
 
     List<BeanMap> skillView =  new ArrayList<BeanMap>();
 

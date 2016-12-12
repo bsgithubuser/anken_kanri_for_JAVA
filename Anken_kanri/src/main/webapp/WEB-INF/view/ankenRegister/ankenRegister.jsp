@@ -87,11 +87,11 @@
           </dt>
 
           <dd>
-            <select name="userId" class="tantou">
+            <html:select property="userId" value="${f:h(registantId)}">
             <c:forEach items="${usersList}" var="data" >
-              <option size="1" value="${f:h(data.userId)}">${f:h(data.userName)}</option>
+              <html:option value="${f:h(data.userId)}">${f:h(data.userName)}</html:option>
             </c:forEach>
-            </select>
+            </html:select>
           </dd>
 
         </dl>

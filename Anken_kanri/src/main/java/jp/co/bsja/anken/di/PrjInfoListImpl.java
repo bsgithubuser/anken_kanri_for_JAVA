@@ -31,6 +31,8 @@ public class PrjInfoListImpl implements PrjInfoListInterface {
     PrjInfoListDao dao = new PrjInfoListDao();
     List<BeanMap> list = dao.findMusersName();
     List<String> nameList = new ArrayList<>();
+    //担当者名プルダウン先頭に「全検索」項目の追加
+    nameList.add("全検索");
     for (BeanMap map : list) {
       nameList.add((String)map.get("userName"));
     }

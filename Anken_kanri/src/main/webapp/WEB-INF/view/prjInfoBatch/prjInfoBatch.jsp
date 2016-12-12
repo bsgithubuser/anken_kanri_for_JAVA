@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link rel="stylesheet" type="text/css" href="${f:url("/css/common.css")}" />
+<link rel="stylesheet" type="text/css" href="${f:url('/css/common.css')}" />
 <title>案件情報取込処理</title>
 </head>
 <body>

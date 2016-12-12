@@ -18,6 +18,9 @@ public class AnkenRegisterForm {
   /** 担当者リスト . */
   public List<BeanMap> usersList;
 
+  /** 案件登録者ID . */
+  public int registantId;
+
   /** 案件ID . */
   public int id;
 
