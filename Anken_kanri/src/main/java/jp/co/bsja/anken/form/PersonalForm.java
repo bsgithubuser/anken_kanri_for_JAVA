@@ -25,13 +25,10 @@ public class PersonalForm {
   public String date;
 
   /** パスワード . */
-  @Mask(mask = "^[a-zA-Z0-9]+$")
-  @Msg(key = "MSG_E00015")
+  @Mask(mask = "^[a-zA-Z0-9]+$", msg = @Msg(key = "MSG_E00015", resource = true))
   public String passWord;
 
   /** パスワード確認用 . */
-  @Mask(mask = "^[a-zA-Z0-9]+$")
-  @Msg(key = "MSG_E00015")
   public String certifiedPass;
 
   /** 担当者情報一覧用変数 . */
