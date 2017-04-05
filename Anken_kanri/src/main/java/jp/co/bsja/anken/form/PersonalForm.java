@@ -2,6 +2,7 @@ package jp.co.bsja.anken.form;
 
 import java.util.List;
 
+import org.seasar.struts.annotation.Arg;
 import org.seasar.struts.annotation.Mask;
 import org.seasar.struts.annotation.Maxlength;
 import org.seasar.struts.annotation.Msg;
@@ -13,8 +14,8 @@ public class PersonalForm {
   public int userId;
 
   /** 担当者名 . */
-  @Required
-  @Maxlength(maxlength = 30)
+  @Required(arg0 = @Arg(key = "担当者名", resource = false ))
+  @Maxlength(maxlength = 30, arg0 = @Arg(key = "担当者名", resource = false ))
   public String userName;
 
   /** 管理者権限 . */
@@ -25,13 +26,10 @@ public class PersonalForm {
   public String date;
 
   /** パスワード . */
-  @Mask(mask = "^[a-zA-Z0-9]+$")
-  @Msg(key = "MSG_E00015")
+  @Mask(mask = "^[a-zA-Z0-9]+$", msg = @Msg(key = "MSG_E00015", resource = true))
   public String passWord;
 
   /** パスワード確認用 . */
-  @Mask(mask = "^[a-zA-Z0-9]+$")
-  @Msg(key = "MSG_E00015")
   public String certifiedPass;
 
   /** 担当者情報一覧用変数 . */
@@ -39,4 +37,6 @@ public class PersonalForm {
 
   /** 登録編集用モード判定用変数 . */
   public boolean mode;
+
+
 }
