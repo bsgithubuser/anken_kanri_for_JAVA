@@ -8,8 +8,6 @@ public class PrjInfoListForm {
   /** 担当者名一覧保持変数 . */
   public List<String> userNameList;
 
-  public String selectedUser;
-
   /** スキル管理マスタ一覧情報保持変数 . */
   public List<SkillMasterForm> skillMasterFormList;
 
