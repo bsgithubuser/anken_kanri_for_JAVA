@@ -6,6 +6,7 @@ import org.seasar.struts.annotation.Mask;
 import org.seasar.struts.annotation.Maxlength;
 import org.seasar.struts.annotation.Msg;
 import org.seasar.struts.annotation.Required;
+import org.seasar.struts.util.MessageResourcesUtil;
 
 public class PersonalForm {
 
@@ -36,4 +37,7 @@ public class PersonalForm {
 
   /** 登録編集用モード判定用変数 . */
   public boolean mode;
+
+  /** パスワード入力形式指定文言 . */
+  public String attentionMessage = MessageResourcesUtil.getMessage("MSG_I00011");
 }
