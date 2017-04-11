@@ -91,7 +91,7 @@ public class PrjInfoListDao extends Dao {
       beanMap.put("anyTmFlg", prjInfoListForm.anyTmFlg);
       beanMap.put("searchExt", extFlg);
       beanMap.put("exteFlg", extend);
-      beanMap.put("overview", prjInfoListForm.overview);
+      beanMap.put("overview", prjInfoListForm.serchOverview);
       beanMap.put("prjSklId", prjSklId);
       beanMap.put("prjSklIdCnt", prjSklId.size());
     }

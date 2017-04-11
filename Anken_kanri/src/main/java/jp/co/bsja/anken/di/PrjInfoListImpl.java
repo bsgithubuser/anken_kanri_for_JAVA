@@ -139,10 +139,41 @@ public class PrjInfoListImpl implements PrjInfoListInterface {
             }
           }
 
-          String extendFlg = "";
+          //延長フラグ非表示に変更のため、以下の処理をコメントアウト
+          /*String extendFlg = "";
           //延長フラグが true のとき○を表示する
           if ((boolean) map.get("extentionFlg")) {
             extendFlg = "○";
+          }*/
+
+          //概要 一行のみ一覧で表示、一行に表示する文字数を最大12文字に制限
+          //改行で区切った概要
+          String[] split = ((String) map.get("orverview")).split("\r\n|[\n\r\u2028\u2029\u0085]");
+
+          //一行目
+          String oneLineOrverview = split[0];
+          //概要が複数行の場合
+          if (split.length > 1) {
+            //一行目が13文字以上のとき、13文字以上を切り捨て
+            if (oneLineOrverview.length() > 12) {
+              oneLineOrverview = oneLineOrverview.substring(0, 12);
+            }
+            oneLineOrverview = oneLineOrverview + "…";
+          } else {
+            //概要が単行の場合
+            if (oneLineOrverview.length() > 12) {
+              oneLineOrverview = oneLineOrverview.substring(0, 12) + "…";
+            }
+          }
+
+          //ポップアップ表示用に改行を含んだ文字列を作る
+          String originalOrverview = null;
+          for (String oneLine: split) {
+            if (empty(originalOrverview)) {
+              originalOrverview = oneLine + BR;
+            } else {
+              originalOrverview += oneLine + BR;
+            }
           }
 
           form.prjId = String.valueOf(map.get("prjId"));
@@ -152,7 +183,9 @@ public class PrjInfoListImpl implements PrjInfoListInterface {
           form.genDate = formattedGenData;
           form.prjPeriod = prjPeriod;
           form.skillName = (String) map.get("skillName");
-          form.extendFlg = extendFlg;
+          //form.extendFlg = extendFlg;
+          form.overview = originalOrverview;
+          form.displayOverview = oneLineOrverview;
           form.updateDate = (Timestamp) map.get("updateDate");
 
           infoList.add(form);
@@ -303,7 +336,7 @@ public class PrjInfoListImpl implements PrjInfoListInterface {
     sessionDto.lngTrmFlg = prjInfoListForm.lngTrmFlg;
     sessionDto.smDyFlg = prjInfoListForm.smDyFlg;
     sessionDto.anyTmFlg = prjInfoListForm.anyTmFlg;
-    sessionDto.overview = prjInfoListForm.overview;
+    sessionDto.serchOverview = prjInfoListForm.serchOverview;
     sessionDto.selectedSkills = prjInfoListForm.selectedSkills;
     sessionDto.exteFlg = prjInfoListForm.exteFlg;
     sessionDto.kindOfSerch = prjInfoListForm.kindOfSerch;
@@ -326,7 +359,7 @@ public class PrjInfoListImpl implements PrjInfoListInterface {
     prjInfoListForm.lngTrmFlg = sessionDto.lngTrmFlg;
     prjInfoListForm.smDyFlg = sessionDto.smDyFlg;
     prjInfoListForm.anyTmFlg = sessionDto.anyTmFlg;
-    prjInfoListForm.overview = sessionDto.overview;
+    prjInfoListForm.serchOverview = sessionDto.serchOverview;
     prjInfoListForm.selectedSkills = sessionDto.selectedSkills;
     prjInfoListForm.exteFlg = sessionDto.exteFlg;
     prjInfoListForm.kindOfSerch = sessionDto.kindOfSerch;

@@ -11,7 +11,7 @@ SELECT
        t_proj_info.same_day_flg,
        t_proj_info.any_time_flg,
        COALESCE(extracted_skill.skill_name, '') AS skill_name,
-       t_proj_info.extention_flg,
+       t_proj_info.orverview,
        t_proj_info.update_date
   FROM t_proj_info
   INNER JOIN m_cmpn ON t_proj_info.cmpn_id = m_cmpn.cmpn_id

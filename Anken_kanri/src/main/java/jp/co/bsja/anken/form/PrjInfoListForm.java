@@ -57,7 +57,13 @@ public class PrjInfoListForm {
   public Boolean anyTmFlg;
 
   /** 概要 . */
+  public String serchOverview;
+
+  /** 概要 . */
   public String overview;
+
+  /** 一覧表示用概要 . */
+  public String displayOverview;
 
   /** スキルID . */
   public List<String> skillId;

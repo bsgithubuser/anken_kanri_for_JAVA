@@ -11,7 +11,7 @@ SELECT
     t_proj_info.same_day_flg,
     t_proj_info.any_time_flg,
     extracted_skill.skill_name,
-    t_proj_info.extention_flg,
+    t_proj_info.orverview,
     t_proj_info.update_date
 FROM
     t_proj_info

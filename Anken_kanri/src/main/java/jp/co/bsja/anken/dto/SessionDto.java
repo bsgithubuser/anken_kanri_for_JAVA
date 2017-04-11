@@ -42,4 +42,5 @@ public class SessionDto implements Serializable {
   public String exteFlg;
   public String kindOfSerch;
   public String tabName;
+  public String serchOverview;
 }

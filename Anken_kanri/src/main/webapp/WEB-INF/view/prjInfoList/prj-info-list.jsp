@@ -5,10 +5,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link type = "text/css" rel = "stylesheet" href = "../css/common.css"/>
+<link type = "text/css" rel = "stylesheet" href = "../css/modal.css"/>
 <link rel="stylesheet" href="../tablesorter/themes/blue/style.css" type="text/css" media="print, projection, screen" />
 <script src="../tablesorter/jquery-latest.js" type="text/javascript"></script>
 <script src="../tablesorter/jquery.tablesorter.min.js" type="text/javascript"></script>
 <script src="../tablesorter/jquery.metadata.js" type="text/javascript"></script>
+
 
 <script type="text/javascript">
 $(document).ready(function()
@@ -190,6 +192,141 @@ function appendListField(fieldList, formIndex){
   }
 }
 
+/*
+ * 概要モーダルを表示する
+ */
+function openModal(index){
+	var hiddenOrverview = document.getElementsByName('overview')[index].value;
+	document.getElementById("modal-text").innerHTML = hiddenOrverview;
+
+	/* モーダルの座標 */
+	var modalX = 0;
+	var modalY = 0;
+
+	/* 画面からフォーカスを外す */
+	$(this).blur();
+
+	/* オーバーレイ用のHTMLコードを、[body]内の最後に生成する */
+	$("body").append('<div id="modal-overlay"></div>');
+	$("#modal-overlay").fadeIn("normal");
+
+	/* センタリング */
+	centeringModalSyncer();
+	$("#modal-content").fadeIn("normal");
+
+	/* closeボタンがクリックされたときの処理 */
+	$("#modal-close").unbind().click(closeModal);
+
+	/* 画面サイズ変更時 */
+	$(window).resize(centeringModalSyncer) ;
+
+	/* ドラッグ可能領域でマウスが押下されたとき */
+	$('#draggable').mousedown(moveModal);
+
+	/*
+	 * モーダルをセンタリングする
+	 */
+	function centeringModalSyncer(){
+		$("#modal-text-area").attr('style', '');
+
+		 var width = $(window).width();
+		 var height = $(window).height();
+
+		 var cw = $("#modal-content").outerWidth();
+		 var ch = $("#modal-content").outerHeight();
+
+		 if(height < ch || height-ch < 50){
+			 $("#modal-text-area").css({"height": height - 250 + "px"});
+			 ch = $("#modal-content").outerHeight();
+		 }
+
+		 modalX = ((width - cw)/2);
+		 modalY = ((height - ch)/2);
+
+		 $("#modal-content").css({"left": modalX + "px", "top": modalY + "px"});
+	}
+
+	/*
+	 * モーダルを閉じる
+	 */
+	function closeModal(){
+		$("#modal-content,#modal-overlay").fadeOut("normal", function(){
+			$("#modal-overlay").remove();
+		});
+	}
+
+	/*
+	 * モーダルを移動させる
+	 */
+	function moveModal(event){
+		var mouseX = event.pageX;
+		var mouseY = event.pageY;
+
+		/* マウス移動時、マウスの左ボタンが上がった時のイベント追加 */
+		$(document)
+			.bind('mousemove.modal', function(event){
+				modalX += event.pageX - mouseX;
+				modalY += event.pageY - mouseY;
+				var modalState = restrictDisplayArea(modalX, modalY);
+
+				$("#modal-content").css({"left": modalState.x + "px", "top": modalState.y + "px"});
+
+				mouseX = event.pageX;
+				mouseY = event.pageY;
+
+				return false;
+			})
+			.bind('mouseup', function(){
+				$(document).unbind('mousemove.modal');
+			});
+
+		return false;
+	}
+
+	/*
+	 * モーダルが画面からはみ出す時、画面内に維持するよう値を修正する。
+	 */
+	function restrictDisplayArea(modalX, modalY){
+		var obj = new Object();
+		obj.x = modalX;
+		obj.y = modalY;
+
+		var modalWidth = document.getElementById("modal-content").offsetWidth;
+		var modalHeight = document.getElementById("modal-content").offsetHeight;
+
+		var maxHorizontal = $(window).width() - modalWidth;
+		var maxVertical = $(window).height() - modalHeight;
+
+		if(modalX < 1){
+			obj.x = 0;
+		}else if (maxHorizontal <= modalX){
+			obj.x = maxHorizontal;
+		}
+		if(modalY < 1){
+			obj.y = 0;
+		}else if(maxVertical <= modalY){
+			obj.y = maxVertical;
+		}
+		return obj;
+	}
+}
+
+/*
+ * close部分にマウスが乗った時、スタイルを変更する
+ */
+function mouseOver(param){
+	param.style.backgroundColor='#8be42b';
+	param.style.color='white';
+}
+
+/*
+ * close部分からマウスが離れたとき、スタイルを初期に戻す
+ */
+function mouseOut(param){
+	param.style.backgroundColor='lightgreen';
+	param.style.color='black';
+}
+
 </script>
 
 <title>Insert title here</title>
@@ -198,9 +335,26 @@ function appendListField(fieldList, formIndex){
 
 <jsp:include page="../common/header.jsp"/>
 
-<p><u><b>案件情報一覧</b></u></p>
 <s:form method="POST">
+
+<p>
+	<u><b>案件情報一覧</b></u>
+</p>
+
 <div>
+
+ <!-- 概要モーダル -->
+  <div id="modal-content">
+   <div id="draggable"></div>
+   <div id="scroll">
+    <div id="modal-text-area">
+     <pre id="modal-text"><!-- ここに概要の詳細を表示します --></pre>
+    </div>
+   </div>
+   <div id="modal-close" onmouseover="mouseOver(this)" onmouseout="mouseOut(this)">
+    close
+   </div>
+  </div>
 
   <div id="formatError" style="color:red; position: relative; left: 40px;">
    <html:errors/>
@@ -264,7 +418,7 @@ function appendListField(fieldList, formIndex){
     </tr>
     <tr>
       <th>概要</th>
-      <td><html:text property="overview" size="20" maxlength="30"/></td>
+      <td><html:text property="serchOverview" size="20" maxlength="30"/></td>
       <td><html:hidden property="kindOfSerch"  value="detailed"/></td>
       <td align="right"><s:submit value = "検索" onclick="return dateCheck('periStDtDummy', 'periEnDtDummy', 0);" property="select" />
       <input type="button" id="simpleSearch" onclick="location.href='#tab2';ChangeTab('tab2');hide('simpleSearch','detailedSearch');return false;" value="簡易検索" /></td>
@@ -334,12 +488,12 @@ function appendListField(fieldList, formIndex){
     <th>発生日</th>
     <th>期間</th>
     <th>スキル</th>
-    <th>延長</th>
+    <th>概要</th>
   </tr>
  </thead>
 
 <tbody>
- <c:forEach var = "prjInfo" items = "${prjInfoListFormList}">
+ <c:forEach var = "prjInfo" items = "${prjInfoListFormList}" varStatus = "status">
   <tr>
     <td align="center">
     <s:form action="print" method="Post">
@@ -363,7 +517,10 @@ function appendListField(fieldList, formIndex){
     <td align="left"><c:out value = "${prjInfo.genDate}"/></td>
     <td align="left"><pre><c:out value = "${prjInfo.prjPeriod}"/></pre></td>
     <td align="left"><pre><c:out value = "${prjInfo.skillName}"/></pre></td>
-    <td align="left"><c:out value = "${prjInfo.extendFlg}"/></td>
+    <td align="left">
+    	<a id="modal-open" href="javascript:openModal(${status.index})">${prjInfo.displayOverview}</a>
+    	<html:hidden property="overview" value="${prjInfo.overview}"/>
+    </td>
   </tr>
  </c:forEach>
  </tbody>
