@@ -27,10 +27,11 @@ $(document).ready(function()
     });
   }
 );
+
 /*
  * 初期表示時、タブの表示、スキルのチェック状態、延長チェック
  */
-function toInitialDisp(){
+function toInitialDisp(prjList){
   var holdTabNM = document.getElementsByName('tabName')[0].value;
   //全部消す
   document.getElementById('tab1').style.display = 'none';
@@ -54,6 +55,16 @@ function toInitialDisp(){
     }
   }
 
+  /* 検索結果がある場合、一括印刷ボタンを表示 */
+  if(prjList){
+	  document.getElementsByName("bulkPrint")[0].style.display = '';
+  }
+
+  /* 印刷画面の表示制御 */
+  var isDisplayPrintPage = document.getElementsByName('isDisplayPrintPage')[0].value;
+  if(isDisplayPrintPage){
+	  window.open("../print/", "print", "scrollbars=1, menubar=0, toolbar=0");
+  }
 }
 
 /*
@@ -88,27 +99,6 @@ function setDt(dummy, willSent, index){
   var sentField = document.getElementsByName(willSent)[index];
   sentField.value = dummysValue;
 }
-
-/*
- * チェックしたスキルのIDを保持する
- */
- function checkedSkill(checked, value){
-    var list = document.getElementsByName('selectedSkills')[0].value;
-    if(checked){
-      var overlap = list.indexOf(value);
-      if(overlap < 0){
-        document.getElementsByName('selectedSkills')[0].value += value + ',';
-      }
-    }
-
-    if(!checked){
-      var overlap = list.indexOf(value);
-        if(-1 < overlap){
-          var newList =list.replace(value + ',' , '' ) ;
-          document.getElementsByName('selectedSkills')[0].value = newList;
-        }
-    }
-  }
 
 /*
  * 日付が正しい形式で入力されているかチェックする
@@ -327,11 +317,37 @@ function mouseOut(param){
 	param.style.color='black';
 }
 
+/*
+ * チェックされた値を保持する
+ */
+function createCheckList(fieldName, checked, value){
+	var willPrintList = document.getElementsByName(fieldName)[0].value;
+	if(checked){
+		document.getElementsByName(fieldName)[0].value += value + ',';
+	}
+	if(!checked){
+		var newList =willPrintList.replace(value + ',' , '' );
+		document.getElementsByName(fieldName)[0].value = newList;
+	}
+}
+
+/* 印刷チェックを確認する */
+function checkIsPrint(checked, value) {
+	createCheckList('printAnknIds', checked, value);
+	var printIds = document.getElementsByName('printAnknIds')[0].value;
+	/* チェックされた案件が1件以上あるとき、印刷ボタンを表示する */
+	if (printIds) {
+		document.getElementsByName("print")[0].style.display = '';
+	} else {
+		document.getElementsByName("print")[0].style.display = 'none';
+	}
+}
+
 </script>
 
 <title>Insert title here</title>
 </head>
-<body onLoad="toInitialDisp()">
+<body onLoad="toInitialDisp('${prjInfoListFormList}')">
 
 <jsp:include page="../common/header.jsp"/>
 
@@ -409,7 +425,7 @@ function mouseOut(param){
       <th>スキル</th>
       <td colspan="3">
       <c:forEach var = "info" items = "${skillMasterFormList}" varStatus="infoNo">
-        <label><html:checkbox property="skillId" value="${info.skillId}" onchange="checkedSkill(this.checked, this.value);"/>${f:h(info.skillName)}</label>
+        <label><html:checkbox property="skillId" value="${info.skillId}" onchange="createCheckList('selectedSkills', this.checked, this.value);"/>${f:h(info.skillName)}</label>
         <c:if test="${infoNo.count %5 == 0}"></br></c:if>
       </c:forEach>
       </td>
@@ -497,7 +513,7 @@ function mouseOut(param){
   <tr>
     <td align="center">
     <s:form action="print" method="Post">
-      <html:checkbox property="printFlg" value="${ f:h(prjInfo.prjId) }"/>
+      <input type="checkbox" name="printFlg" onchange="checkIsPrint(this.checked, ${prjInfo.prjId});">
     </s:form>
     </td>
     <td align="center">
@@ -524,18 +540,30 @@ function mouseOut(param){
   </tr>
  </c:forEach>
  </tbody>
-
 </table>
 </div>
+
 <table>
-<s:form method="post">
-    <div class="returnButtonPosition">
-      <s:submit property="returnMenu" value="戻る"></s:submit>
-    </div>
-  </s:form>
+ <s:form method="post">
+  <div class="bottomButtons">
+   <div class="bottomButtonPosition">
+     <s:submit property="bulkPrint" value="一括印刷" style="display: none"></s:submit>
+   </div>
+   <div class="bottomButtonPosition">
+     <s:submit property="print" value="印刷" style="display: none"></s:submit>
+   </div>
+   <div class="bottomButtonPosition">
+     <s:submit property="returnMenu" value="戻る"></s:submit>
+   </div>
+  </div>
+
+  <html:hidden property="isDisplayPrintPage" value="${isDisplayPrintPage}"/>
+  <html:hidden property="printAnknIds" value=""/>
+ </s:form>
 </table>
 
-
-<jsp:include page="../common/footer.jsp"/>
+<div class="footer">
+ <jsp:include page="../common/footer.jsp"/>
+</div>
 </body>
 </html>

@@ -68,6 +68,7 @@ public class PrjInfoListImpl implements PrjInfoListInterface {
   @Override
   public List<PrjInfoListForm> search(PrjInfoListForm prjInfoListForm, SessionDto sessionDto) {
     PrjInfoListDao dao = new PrjInfoListDao();
+
     //検索条件保持
     pushSearchCondition(prjInfoListForm, sessionDto);
 
@@ -90,6 +91,9 @@ public class PrjInfoListImpl implements PrjInfoListInterface {
       if (prjSklId.size() != 0) {
         List<BeanMap> list = dao.search(prjInfoListForm, prjSklId);
         List<BeanMap> prjList = integrateIdentityPrj(list);
+
+        //印刷用に検索結果を保持
+        sessionDto.searchResultList = prjList;
 
         for (BeanMap map : prjList) {
           PrjInfoListForm form = new PrjInfoListForm();
@@ -299,6 +303,23 @@ public class PrjInfoListImpl implements PrjInfoListInterface {
       //削除フラグ更新処理
       dao.prjInfoUpdate(entity);
     }
+
+    //保持した検索条件を取り出す
+    pullSearchCondition(prjInfoListForm, sessionDto);
+  }
+
+  /**
+   * 印刷画面で使用する情報をSessionDtoに格納します .
+   * 新規画面で印刷画面を開くと、ここで印刷Formに値を入れても初期化されてしまうため .
+   *
+   */
+  @Override
+  public void holdPrintInfo(
+      PrjInfoListForm prjInfoListForm, SessionDto sessionDto, Boolean bulkFlag) {
+
+    prjInfoListForm.isDisplayPrintPage = true;
+    sessionDto.printAnknIds = prjInfoListForm.printAnknIds;
+    sessionDto.bulkFlag = bulkFlag;
 
     //保持した検索条件を取り出す
     pullSearchCondition(prjInfoListForm, sessionDto);

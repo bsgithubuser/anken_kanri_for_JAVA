@@ -98,4 +98,10 @@ public class PrjInfoListForm {
   /** 画面から受け取る更新日時 . */
   public String updtDate;
 
+  /** 印刷チェックされた案件IDのリスト . */
+  public String printAnknIds;
+
+  /** 印刷画面表示フラグ . */
+  public Boolean isDisplayPrintPage;
+
 }

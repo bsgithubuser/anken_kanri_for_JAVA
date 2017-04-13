@@ -29,4 +29,7 @@ public interface PrjInfoListInterface {
   public void pushSearchCondition(PrjInfoListForm prjInfoListForm, SessionDto sessionDto);
 
   public void pullSearchCondition(PrjInfoListForm prjInfoListForm, SessionDto sessionDto);
+
+  public void holdPrintInfo(
+      PrjInfoListForm prjInfoListForm, SessionDto sessionDto, Boolean bulkFlag);
 }

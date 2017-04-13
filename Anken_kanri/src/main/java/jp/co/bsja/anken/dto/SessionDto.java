@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 
+import org.seasar.framework.beans.util.BeanMap;
 import org.seasar.framework.container.annotation.tiger.Component;
 import org.seasar.framework.container.annotation.tiger.InstanceType;
 
@@ -43,4 +44,8 @@ public class SessionDto implements Serializable {
   public String kindOfSerch;
   public String tabName;
   public String serchOverview;
+  /* 印刷用 */
+  public List<BeanMap> searchResultList;
+  public String printAnknIds;
+  public Boolean bulkFlag;
 }

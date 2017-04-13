@@ -97,7 +97,26 @@ public class PrjInfoListAction {
    */
   @Execute(validator = false)
   public String print() {
-    return select();
+    SingletonS2ContainerFactory.init();
+    S2Container container = SingletonS2ContainerFactory.getContainer();
+    PrjInfoListInterface prjInfoList = (PrjInfoListInterface)container
+           .getComponent("PrjInfoList");
+    prjInfoList.holdPrintInfo(prjInfoListForm, sessionDto, false);
+    return "/prjInfoList/";
+  }
+
+  /**
+   * 案件情報一括印刷 実行メソッド .
+   * @return 遷移先jsp
+   */
+  @Execute(validator = false)
+  public String bulkPrint() {
+    SingletonS2ContainerFactory.init();
+    S2Container container = SingletonS2ContainerFactory.getContainer();
+    PrjInfoListInterface prjInfoList = (PrjInfoListInterface)container
+           .getComponent("PrjInfoList");
+    prjInfoList.holdPrintInfo(prjInfoListForm, sessionDto, true);
+    return "/prjInfoList/";
   }
 
 }

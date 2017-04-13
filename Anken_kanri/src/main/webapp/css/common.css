@@ -35,6 +35,23 @@ div.returnButtonPosition {
   text-align: right;
 }
 
+div.bottomButtons {
+	float: right;
+}
+
+div.bottomButtonPosition {
+  text-align: right;
+  float: left;
+  margin-top: 10px;
+  margin-left: 20px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+div.footer {
+	clear:both;
+}
+
 div.errorMessagePosition {
   margin-left: 50px;
 }

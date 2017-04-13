@@ -16,4 +16,5 @@
   <component name="CompMngMasterImpl" class="jp.co.bsja.anken.di.CompMngMasterImpl" instance="singleton"/>
   <component name="AnkenRegisterImpl" class="jp.co.bsja.anken.di.AnkenRegisterImpl" instance="singleton"/>
   <component name="PrjInfoBatchImpl" class="jp.co.bsja.anken.dao.impl.PrjInfoBatchImpl" instance="singleton"/>
+  <component name="Print" class="jp.co.bsja.anken.di.PrintImpl" instance="singleton"/>
 </components>
