@@ -10,6 +10,7 @@
 <!-- onLoadより、印刷ボタンとかをつけたほうがいいかも -->
 <!-- 画面が開いてすぐに印刷Dが表示されるので、画面外に項目が表示されるとスクロールして確認できない -->
 <body onLoad="window.print();">
+<jsp:include page="../common/PrintHeader.jsp"/>
 
  <table bgcolor = "black">
   <thead>
