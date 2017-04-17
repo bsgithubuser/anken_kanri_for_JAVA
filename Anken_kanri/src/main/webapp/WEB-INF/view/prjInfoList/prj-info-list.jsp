@@ -57,13 +57,13 @@ function toInitialDisp(prjList){
 
   /* 検索結果がある場合、一括印刷ボタンを表示 */
   if(prjList){
-	  document.getElementsByName("bulkPrint")[0].style.display = '';
+      document.getElementsByName("bulkPrint")[0].style.display = '';
   }
 
   /* 印刷画面の表示制御 */
   var isDisplayPrintPage = document.getElementsByName('isDisplayPrintPage')[0].value;
   if(isDisplayPrintPage){
-	  window.open("../print/", "print", "scrollbars=1, menubar=0, toolbar=0");
+      window.open("../print/", "print", "scrollbars=1, menubar=0, toolbar=0");
   }
 }
 
@@ -186,161 +186,161 @@ function appendListField(fieldList, formIndex){
  * 概要モーダルを表示する
  */
 function openModal(index){
-	var hiddenOrverview = document.getElementsByName('overview')[index].value;
-	document.getElementById("modal-text").innerHTML = hiddenOrverview;
+    var hiddenOrverview = document.getElementsByName('overview')[index].value;
+    document.getElementById("modal-text").innerHTML = hiddenOrverview;
 
-	/* モーダルの座標 */
-	var modalX = 0;
-	var modalY = 0;
+    /* モーダルの座標 */
+    var modalX = 0;
+    var modalY = 0;
 
-	/* 画面からフォーカスを外す */
-	$(this).blur();
+    /* 画面からフォーカスを外す */
+    $(this).blur();
 
-	/* オーバーレイ用のHTMLコードを、[body]内の最後に生成する */
-	$("body").append('<div id="modal-overlay"></div>');
-	$("#modal-overlay").fadeIn("normal");
+    /* オーバーレイ用のHTMLコードを、[body]内の最後に生成する */
+    $("body").append('<div id="modal-overlay"></div>');
+    $("#modal-overlay").fadeIn("normal");
 
-	/* センタリング */
-	centeringModalSyncer();
-	$("#modal-content").fadeIn("normal");
+    /* センタリング */
+    centeringModalSyncer();
+    $("#modal-content").fadeIn("normal");
 
-	/* closeボタンがクリックされたときの処理 */
-	$("#modal-close").unbind().click(closeModal);
+    /* closeボタンがクリックされたときの処理 */
+    $("#modal-close").unbind().click(closeModal);
 
-	/* 画面サイズ変更時 */
-	$(window).resize(centeringModalSyncer) ;
+    /* 画面サイズ変更時 */
+    $(window).resize(centeringModalSyncer) ;
 
-	/* ドラッグ可能領域でマウスが押下されたとき */
-	$('#draggable').mousedown(moveModal);
+    /* ドラッグ可能領域でマウスが押下されたとき */
+    $('#draggable').mousedown(moveModal);
 
-	/*
-	 * モーダルをセンタリングする
-	 */
-	function centeringModalSyncer(){
-		$("#modal-text-area").attr('style', '');
+    /*
+     * モーダルをセンタリングする
+     */
+    function centeringModalSyncer(){
+        $("#modal-text-area").attr('style', '');
 
-		 var width = $(window).width();
-		 var height = $(window).height();
+         var width = $(window).width();
+         var height = $(window).height();
 
-		 var cw = $("#modal-content").outerWidth();
-		 var ch = $("#modal-content").outerHeight();
+         var cw = $("#modal-content").outerWidth();
+         var ch = $("#modal-content").outerHeight();
 
-		 if(height < ch || height-ch < 50){
-			 $("#modal-text-area").css({"height": height - 250 + "px"});
-			 ch = $("#modal-content").outerHeight();
-		 }
+         if(height < ch || height-ch < 50){
+             $("#modal-text-area").css({"height": height - 250 + "px"});
+             ch = $("#modal-content").outerHeight();
+         }
 
-		 modalX = ((width - cw)/2);
-		 modalY = ((height - ch)/2);
+         modalX = ((width - cw)/2);
+         modalY = ((height - ch)/2);
 
-		 $("#modal-content").css({"left": modalX + "px", "top": modalY + "px"});
-	}
+         $("#modal-content").css({"left": modalX + "px", "top": modalY + "px"});
+    }
 
-	/*
-	 * モーダルを閉じる
-	 */
-	function closeModal(){
-		$("#modal-content,#modal-overlay").fadeOut("normal", function(){
-			$("#modal-overlay").remove();
-		});
-	}
+    /*
+     * モーダルを閉じる
+     */
+    function closeModal(){
+        $("#modal-content,#modal-overlay").fadeOut("normal", function(){
+            $("#modal-overlay").remove();
+        });
+    }
 
-	/*
-	 * モーダルを移動させる
-	 */
-	function moveModal(event){
-		var mouseX = event.pageX;
-		var mouseY = event.pageY;
+    /*
+     * モーダルを移動させる
+     */
+    function moveModal(event){
+        var mouseX = event.pageX;
+        var mouseY = event.pageY;
 
-		/* マウス移動時、マウスの左ボタンが上がった時のイベント追加 */
-		$(document)
-			.bind('mousemove.modal', function(event){
-				modalX += event.pageX - mouseX;
-				modalY += event.pageY - mouseY;
-				var modalState = restrictDisplayArea(modalX, modalY);
+        /* マウス移動時、マウスの左ボタンが上がった時のイベント追加 */
+        $(document)
+            .bind('mousemove.modal', function(event){
+                modalX += event.pageX - mouseX;
+                modalY += event.pageY - mouseY;
+                var modalState = restrictDisplayArea(modalX, modalY);
 
-				$("#modal-content").css({"left": modalState.x + "px", "top": modalState.y + "px"});
+                $("#modal-content").css({"left": modalState.x + "px", "top": modalState.y + "px"});
 
-				mouseX = event.pageX;
-				mouseY = event.pageY;
+                mouseX = event.pageX;
+                mouseY = event.pageY;
 
-				return false;
-			})
-			.bind('mouseup', function(){
-				$(document).unbind('mousemove.modal');
-			});
+                return false;
+            })
+            .bind('mouseup', function(){
+                $(document).unbind('mousemove.modal');
+            });
 
-		return false;
-	}
+        return false;
+    }
 
-	/*
-	 * モーダルが画面からはみ出す時、画面内に維持するよう値を修正する。
-	 */
-	function restrictDisplayArea(modalX, modalY){
-		var obj = new Object();
-		obj.x = modalX;
-		obj.y = modalY;
+    /*
+     * モーダルが画面からはみ出す時、画面内に維持するよう値を修正する。
+     */
+    function restrictDisplayArea(modalX, modalY){
+        var obj = new Object();
+        obj.x = modalX;
+        obj.y = modalY;
 
-		var modalWidth = document.getElementById("modal-content").offsetWidth;
-		var modalHeight = document.getElementById("modal-content").offsetHeight;
+        var modalWidth = document.getElementById("modal-content").offsetWidth;
+        var modalHeight = document.getElementById("modal-content").offsetHeight;
 
-		var maxHorizontal = $(window).width() - modalWidth;
-		var maxVertical = $(window).height() - modalHeight;
+        var maxHorizontal = $(window).width() - modalWidth;
+        var maxVertical = $(window).height() - modalHeight;
 
-		if(modalX < 1){
-			obj.x = 0;
-		}else if (maxHorizontal <= modalX){
-			obj.x = maxHorizontal;
-		}
-		if(modalY < 1){
-			obj.y = 0;
-		}else if(maxVertical <= modalY){
-			obj.y = maxVertical;
-		}
-		return obj;
-	}
+        if(modalX < 1){
+            obj.x = 0;
+        }else if (maxHorizontal <= modalX){
+            obj.x = maxHorizontal;
+        }
+        if(modalY < 1){
+            obj.y = 0;
+        }else if(maxVertical <= modalY){
+            obj.y = maxVertical;
+        }
+        return obj;
+    }
 }
 
 /*
  * close部分にマウスが乗った時、スタイルを変更する
  */
 function mouseOver(param){
-	param.style.backgroundColor='#8be42b';
-	param.style.color='white';
+    param.style.backgroundColor='#8be42b';
+    param.style.color='white';
 }
 
 /*
  * close部分からマウスが離れたとき、スタイルを初期に戻す
  */
 function mouseOut(param){
-	param.style.backgroundColor='lightgreen';
-	param.style.color='black';
+    param.style.backgroundColor='lightgreen';
+    param.style.color='black';
 }
 
 /*
  * チェックされた値を保持する
  */
 function createCheckList(fieldName, checked, value){
-	var willPrintList = document.getElementsByName(fieldName)[0].value;
-	if(checked){
-		document.getElementsByName(fieldName)[0].value += value + ',';
-	}
-	if(!checked){
-		var newList =willPrintList.replace(value + ',' , '' );
-		document.getElementsByName(fieldName)[0].value = newList;
-	}
+    var willPrintList = document.getElementsByName(fieldName)[0].value;
+    if(checked){
+        document.getElementsByName(fieldName)[0].value += value + ',';
+    }
+    if(!checked){
+        var newList =willPrintList.replace(value + ',' , '' );
+        document.getElementsByName(fieldName)[0].value = newList;
+    }
 }
 
 /* 印刷チェックを確認する */
 function checkIsPrint(checked, value) {
-	createCheckList('printAnknIds', checked, value);
-	var printIds = document.getElementsByName('printAnknIds')[0].value;
-	/* チェックされた案件が1件以上あるとき、印刷ボタンを表示する */
-	if (printIds) {
-		document.getElementsByName("print")[0].style.display = '';
-	} else {
-		document.getElementsByName("print")[0].style.display = 'none';
-	}
+    createCheckList('printAnknIds', checked, value);
+    var printIds = document.getElementsByName('printAnknIds')[0].value;
+    /* チェックされた案件が1件以上あるとき、印刷ボタンを表示する */
+    if (printIds) {
+        document.getElementsByName("print")[0].style.display = '';
+    } else {
+        document.getElementsByName("print")[0].style.display = 'none';
+    }
 }
 
 </script>
@@ -354,7 +354,7 @@ function checkIsPrint(checked, value) {
 <s:form method="POST">
 
 <p>
-	<u><b>案件情報一覧</b></u>
+    <u><b>案件情報一覧</b></u>
 </p>
 
 <div>
@@ -489,7 +489,7 @@ function checkIsPrint(checked, value) {
 
 </script>
 
-<div style="height:250px; overflow-y:scroll;">
+<div style="height:500px; overflow-y:scroll;">
 <table id="searchResults" class="tablesorter">
 
  <thead>
@@ -534,8 +534,8 @@ function checkIsPrint(checked, value) {
     <td align="left"><pre><c:out value = "${prjInfo.prjPeriod}"/></pre></td>
     <td align="left"><pre><c:out value = "${prjInfo.skillName}"/></pre></td>
     <td align="left">
-    	<a id="modal-open" href="javascript:openModal(${status.index})">${prjInfo.displayOverview}</a>
-    	<html:hidden property="overview" value="${prjInfo.overview}"/>
+        <a id="modal-open" href="javascript:openModal(${status.index})">${prjInfo.displayOverview}</a>
+        <html:hidden property="overview" value="${prjInfo.overview}"/>
     </td>
   </tr>
  </c:forEach>

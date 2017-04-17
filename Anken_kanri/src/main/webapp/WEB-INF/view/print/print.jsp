@@ -14,8 +14,8 @@
   <thead>
    <tr bgcolor = "lightgreen">
     <th width="30%">案件情報</th>
-    <th width="15%">発生日/期間</th>
-    <th width="55%">概要</th>
+    <th width="20%">発生日/期間</th>
+    <th width="50%">概要</th>
    </tr>
   </thead>
 
