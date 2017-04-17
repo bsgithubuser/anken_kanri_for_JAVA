@@ -10,12 +10,12 @@
 <body onLoad="window.print();">
 <jsp:include page="../common/PrintHeader.jsp"/>
 
- <table bgcolor = "black" width="100%" style= "table-layout: fixed;">
+ <table bgcolor = "white" border="1" bordercolor="black" cellspacing="0" width="100%" style= "table-layout: fixed;">
   <thead>
    <tr bgcolor = "lightgreen">
     <th width="30%">案件情報</th>
-    <th width="15%">発生日・期間</th>
-    <th width="55%">概要</th>
+    <th width="20%">発生日・期間</th>
+    <th width="50%">概要</th>
    </tr>
   </thead>
 
