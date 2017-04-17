@@ -22,6 +22,7 @@ import org.seasar.struts.util.ActionMessagesUtil;
 import org.seasar.struts.util.RequestUtil;
 
 public class PrjInfoListImpl implements PrjInfoListInterface {
+     public static final String UNSET_ITEM = "未設定";
   /**
    * 担当者マスタの担当者名全てを取得します。 .
    *
@@ -104,8 +105,8 @@ public class PrjInfoListImpl implements PrjInfoListInterface {
 
           //期間を出力用に整形する
           String prjPeriod = null;
-          String periFrom = "未設定";
-          String periTo = "未設定";
+          String periFrom = UNSET_ITEM;
+          String periTo = UNSET_ITEM;
 
           if (!empty(map.get("periFrom"))) {
             periFrom = sdf.format(map.get("periFrom"));
