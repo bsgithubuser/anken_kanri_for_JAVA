@@ -104,8 +104,8 @@ public class PrjInfoListImpl implements PrjInfoListInterface {
 
           //期間を出力用に整形する
           String prjPeriod = null;
-          String periFrom = null;
-          String periTo = null;
+          String periFrom = "未設定";
+          String periTo = "未設定";
 
           if (!empty(map.get("periFrom"))) {
             periFrom = sdf.format(map.get("periFrom"));
