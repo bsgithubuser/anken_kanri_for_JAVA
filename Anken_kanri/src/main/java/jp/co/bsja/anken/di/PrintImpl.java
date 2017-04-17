@@ -1,6 +1,7 @@
 package jp.co.bsja.anken.di;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +51,7 @@ public class PrintImpl implements PrintInterface {
             //TODO 案件名 改行/省略処理
             //TODO 概要 改行/省略処理
             //TODO スキル名の改行はずす
+            mapEdit(map);
             printList.add(map);
           }
         }
@@ -61,6 +63,7 @@ public class PrintImpl implements PrintInterface {
         //TODO 案件名 改行/省略処理
         //TODO 概要 改行/省略処理
         //TODO スキル名の改行はずす
+        mapEdit(map);
         printList.add(map);
       }
     }
@@ -68,6 +71,33 @@ public class PrintImpl implements PrintInterface {
     printForm.printPrjList = printList;
   }
 
+  /**
+   * 簡易印刷用編集処理.
+   *
+   * @param map 印刷対象の案件情報（発生日、期間From、期間To）
+   */
+  public void mapEdit(BeanMap map) {
+    String unSetDay = "未設定";
+      // 発生日をString型でフォーマットする
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+    if (!CommonFunction.empty(map.get("genDate"))) {
+      map.put("genDate", sdf.format(map.get("genDate")));
+    } else {
+      map.put("genDate", unSetDay);
+    }
+      // 期間FromをString型でフォーマットする
+    if (!CommonFunction.empty(map.get("periFrom"))) {
+      map.put("periFrom", sdf.format(map.get("periFrom")));
+    } else {
+      map.put("periFrom", unSetDay);
+    }
+      // 期間ToをString型でフォーマットする
+    if (!CommonFunction.empty(map.get("periTo"))) {
+      map.put("periTo", sdf.format(map.get("periTo")));
+    } else {
+      map.put("periTo", unSetDay);
+    }
+  }
   //POIテスト用
   @Override
   public void poiTest() throws IOException {
