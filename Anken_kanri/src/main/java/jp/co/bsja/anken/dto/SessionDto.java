@@ -52,5 +52,6 @@ public class SessionDto implements Serializable {
   /* 案件情報登録 */
   public List<BeanMap> skillList;
   public List<BeanMap> usersList;
+  public List<BeanMap> cmpnList;
   public int editFlg;
 }

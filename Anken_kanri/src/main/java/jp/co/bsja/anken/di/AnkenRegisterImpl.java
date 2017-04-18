@@ -42,6 +42,7 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
     //スキルと担当者と案件IDを画面へ渡す
     List<BeanMap> skillList = dao.selectAll("M_SKILL");
     List<BeanMap> usersList = dao.selectAll("M_USERS");
+    List<BeanMap> cmpnList = dao.selectAll("M_CMPN");
     int idSeq = dao.getPrjIdSeq();
     String id = String.valueOf(idSeq);
     String fiscalYear = CommonFunction.fiscalYear();
@@ -66,8 +67,10 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
     }
     sessionDto.skillList = skillView;
     sessionDto.usersList = usersList;
+    sessionDto.cmpnList = cmpnList;
     ankenRegisterForm.skillList = skillView;
     ankenRegisterForm.usersList = usersList;
+    ankenRegisterForm.cmpnList = cmpnList;
     ankenRegisterForm.id = prjId;
     ankenRegisterForm.genDate = sdf.format(new java.util.Date().getTime());
     ankenRegisterForm.userId = userId;
@@ -92,6 +95,7 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
     //スキルと担当者と案件情報を画面へ渡す
     List<BeanMap> skillList = dao.selectAll("M_SKILL");
     List<BeanMap> usersList = dao.selectAll("M_USERS");
+    List<BeanMap> cmpnList = dao.selectAll("M_CMPN");
     TProjInfo ankenList = dao.initEdit(ankenRegisterForm.id);
 
 
@@ -110,7 +114,9 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
 
     sessionDto.usersList = usersList;
+    sessionDto.cmpnList = cmpnList;
     ankenRegisterForm.usersList = usersList;
+    ankenRegisterForm.cmpnList = cmpnList;
     ankenRegisterForm.updateDate = update;
     ankenRegisterForm.prjName = ankenList.prjName;
     ankenRegisterForm.genDate = sdf.format(ankenList.genDate.getTime());
@@ -621,6 +627,7 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
     // セッションから初期表示時のスキルリストと担当者リストを取得する
     List<BeanMap> skillList = sessionDto.skillList;
     List<BeanMap> usersList = sessionDto.usersList;
+    List<BeanMap> cmpnList = sessionDto.cmpnList;
     // フォームから長期・即日・随時の各チェックボックスの値を取得する
     String longTermFlg = ankenRegisterForm.longTermFlg;
     String sameDayFlg = ankenRegisterForm.sameDayFlg;
@@ -660,5 +667,8 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
     ankenRegisterForm.skillList = skillView;
     // 初期表示時の担当者リストをフォームに反映させる
     ankenRegisterForm.usersList = usersList;
+    // 初期表示時の会社名リストをフォームに反映させる
+    ankenRegisterForm.cmpnList = cmpnList;
+
   }
 }

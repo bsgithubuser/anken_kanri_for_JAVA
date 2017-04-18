@@ -133,8 +133,13 @@
             会社名<span class="required">*</span>
           </dt>
           <dd>
-            <input type="text" name="cmpnName" value="${f:h(cmpnName)}" />
+            <html:select property="cmpnName" value="${f:h(cmpnName)}">
+            <c:forEach items="${cmpnList}" var="data" >
+              <html:option value="${f:h(data.cmpnName)}">${f:h(data.cmpnName)}</html:option>
+            </c:forEach>
+            </html:select>
           </dd>
+
         </dl>
         <dl>
           <dt>期間</dt>
