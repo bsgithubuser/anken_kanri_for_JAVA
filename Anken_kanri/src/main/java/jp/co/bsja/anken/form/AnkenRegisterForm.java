@@ -28,7 +28,7 @@ public class AnkenRegisterForm {
   public TProjInfo ankenList;
 
   /** スキルその他 . */
-  public String skillOther;
+//  public String skillOther;
 
   /** 案件名 . */
   public String prjName;
@@ -73,9 +73,9 @@ public class AnkenRegisterForm {
   public String updateDate;
 
   /** スキルその他フラグ. */
-  public String skillOtherFlg;
+//  public String skillOtherFlg;
 
   /** スキルその他入力可否フラグ. */
-  public String disabledFlg;
+//  public String disabledFlg;
 
 }

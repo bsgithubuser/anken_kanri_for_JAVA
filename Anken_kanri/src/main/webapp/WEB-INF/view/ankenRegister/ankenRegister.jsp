@@ -6,30 +6,52 @@
     <meta http-equiv="Content-Language" content="ja" />
     <meta http-equiv="Content-Style-Type" content="text/css" />
     <link rel="stylesheet" type="text/css" href="../css/common.css" />
+    <link type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/hot-sneaks/jquery-ui.css" rel="stylesheet" />
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/i18n/jquery.ui.datepicker-ja.min.js"></script>
 <title>案件情報登録</title>
 
     <script type="text/javascript">
     <!--
-        function del(code) {
-            if(confirm("入力中の内容が初期化されますがよろしいですか？") == true) {
-                var id = document.createElement('input');
-                id.type = 'hidden';
-                id.name = 'id';
-                id.value = code;
-                document.forms[0].appendChild(id);
-                document.forms[0].submit();
+        function del() {
+            if(confirm("<bean:message key="MSG_I00012" />") == true) {
+                var form = document.forms[1];
+                form.prjName.value = '';
+                form.genDate.value = '${f:h(genDate)}';
+                form.cmpnName.value = '';
+                form.periFrom.value = '';
+                form.periTo.value = '';
+                form.longTermFlg.checked = false;
+                form.sameDayFlg.checked = false;
+                form.anyTimeFlg.checked = false;
+                form.extentionFlg[1].checked = true;
+                form.orverview.value = '';
+                form.prjOther.value = '';
+
+                var userId = form.userId.getElementsByTagName('option');
+                for (i = 0; i < userId.length; i++) {
+                    if (userId[i].text == 'admin') {
+                        userId[i].selected = true;
+                        break;
+                    }
+                }
+                var skillId = form.skillId;
+                for (i = 0; i < skillId.length; i++) {
+                    skillId[i].checked = false;
+                }
             }
         }
 
         function back() {
-            if(confirm("メニュー画面へ戻りますがよろしいですか？") == true) {
-                document.forms[1].submit();
+            if(confirm("<bean:message key="MSG_I00008" />") == true) {
+                document.forms[0].submit();
             }
         }
 
         function backPrjInfoList() {
-            if(confirm("一覧画面へ戻りますがよろしいですか？") == true) {
-                document.forms[3].submit();
+            if(confirm("<bean:message key="MSG_I00013" />") == true) {
+                document.forms[2].submit();
             }
         }
 
@@ -43,11 +65,14 @@
                 document.getElementById(textid).disabled = true;
             }
         }
+
+        $(function(){$("#genDate").datepicker();});
+        $(function(){$("#periTo").datepicker();});
+        $(function(){$("#periFrom").datepicker();});
     -->
     </script>
 </head>
 <body>
-<s:form action="clear" method="post"></s:form>
 <s:form action="/menu" method="post"></s:form>
   <div>
     <jsp:include page="../common/header.jsp" />
@@ -87,7 +112,7 @@
           </dt>
 
           <dd>
-            <html:select property="userId" value="${f:h(registantId)}">
+            <html:select property="userId" value="${f:h(userId)}">
             <c:forEach items="${usersList}" var="data" >
               <html:option value="${f:h(data.userId)}">${f:h(data.userName)}</html:option>
             </c:forEach>
@@ -100,7 +125,7 @@
             発生日<span class="required">*</span>
           </dt>
           <dd>
-            <input type="text" name="genDate" value="${f:h(genDate)}" />
+            <input type="text" id="genDate" name="genDate" value="${f:h(genDate)}" />
           </dd>
         </dl>
         <dl>
@@ -114,7 +139,7 @@
         <dl>
           <dt>期間</dt>
           <dd>
-            <input type="text" name="periFrom" value="${f:h(periFrom)}" />&ensp;～&ensp;<input type="text" name="periTo" value="${f:h(periTo)}" />
+            <input type="text" id="periFrom" name="periFrom" value="${f:h(periFrom)}" />&ensp;～&ensp;<input type="text" id="periTo" name="periTo" value="${f:h(periTo)}" />
 
             <input type="checkbox" name="longTermFlg" ${f:h(longTermFlg)} />長期&ensp;
             <input type="checkbox" name="sameDayFlg" ${f:h(sameDayFlg)} />即日&ensp;
@@ -156,6 +181,7 @@
   }
 %>
                 </c:forEach>
+                <!--
                 <br />
                                 <input type="checkbox" name="skillId" value="-1"name="skillOther" ${f:h(skillOtherFlg)}
                                 onclick="connecttext('skillOther',this.checked);" />
@@ -164,6 +190,7 @@
                     <input type="text" id="skillOther"	name="skillOther" class="skill-text"
                     value="${f:h(skillOther)}" ${f:h(disabledFlg)} />
                    </span>
+                 -->
               </span>
             </dd>
           </dl>
@@ -189,7 +216,7 @@
           <input type="button" onClick="backPrjInfoList()"  value="戻る" />
       </c:if>
 
-          <input type="button" onClick="del(${f:h(id)})"  value="クリア" />
+          <input type="button" onClick="del()"  value="クリア" />
 
       </s:form>
             </div>

@@ -3,16 +3,16 @@ package jp.co.bsja.anken.di;
 
 import java.sql.Date;
 import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import jp.co.bsja.anken.common.CommonFunction;
 import jp.co.bsja.anken.dao.AnkenRegisterDao;
+import jp.co.bsja.anken.dto.SessionDto;
 import jp.co.bsja.anken.entity.TProjInfo;
 import jp.co.bsja.anken.entity.TProjSkill;
 import jp.co.bsja.anken.form.AnkenRegisterForm;
@@ -37,19 +37,25 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
    * @return JSPファイル名
    */
   @Override
-  public String initEntry(AnkenRegisterForm ankenRegisterForm) {
+  public String initEntry(AnkenRegisterForm ankenRegisterForm, SessionDto sessionDto) {
 
     //スキルと担当者と案件IDを画面へ渡す
     List<BeanMap> skillList = dao.selectAll("M_SKILL");
-    List<BeanMap> usersList;
-    usersList = dao.selectAll("M_USERS");
+    List<BeanMap> usersList = dao.selectAll("M_USERS");
     int idSeq = dao.getPrjIdSeq();
     String id = String.valueOf(idSeq);
     String fiscalYear = CommonFunction.fiscalYear();
     String stId = fiscalYear + id;
-    int prjId;
-    prjId = Integer.parseInt(stId);
+    int prjId = Integer.parseInt(stId);
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
 
+    int userId = 0;
+    for (int i = 0; i < usersList.size(); i++) {
+      if (CommonFunction.eq(usersList.get(i).get("userName").toString(), "admin")) {
+        userId = CommonFunction.asInt(usersList.get(i).get("userId").toString(), userId);
+        break;
+      }
+    }
     List<BeanMap> skillView =  new ArrayList<BeanMap>();
     for (int i = 0; skillList.size() > i; i++) {
       BeanMap setSkill = new BeanMap();
@@ -58,11 +64,16 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
       setSkill.put("checked", "0");
       skillView.add(setSkill);
     }
+    sessionDto.skillList = skillView;
+    sessionDto.usersList = usersList;
     ankenRegisterForm.skillList = skillView;
     ankenRegisterForm.usersList = usersList;
     ankenRegisterForm.id = prjId;
-    ankenRegisterForm.skillOtherFlg = "0";
-    ankenRegisterForm.disabledFlg = "disabled";
+    ankenRegisterForm.genDate = sdf.format(new java.util.Date().getTime());
+    ankenRegisterForm.userId = userId;
+//    ankenRegisterForm.skillOtherFlg = "0";
+//    ankenRegisterForm.disabledFlg = "disabled";
+    sessionDto.editFlg = 0;
     ankenRegisterForm.editFlg = 0;
     ankenRegisterForm.extentionFlg = "0";
 
@@ -76,13 +87,11 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
    * @return JSPファイル名
    */
   @Override
-  public String initEdit(AnkenRegisterForm ankenRegisterForm) {
+  public String initEdit(AnkenRegisterForm ankenRegisterForm, SessionDto sessionDto) {
 
     //スキルと担当者と案件情報を画面へ渡す
-    List<BeanMap> skillList;
-    skillList = dao.selectAll("M_SKILL");
-    List<BeanMap> userList;
-    userList = dao.selectAll("M_USERS");
+    List<BeanMap> skillList = dao.selectAll("M_SKILL");
+    List<BeanMap> usersList = dao.selectAll("M_USERS");
     TProjInfo ankenList = dao.initEdit(ankenRegisterForm.id);
 
 
@@ -95,25 +104,23 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
 
       return "一覧画面";
     }
-    String cmpn;
-    cmpn = dao.cmpm(ankenList.cmpnId);
-    String update;
-    List<BeanMap> dbSkill;
-    dbSkill = dao.ankenSkill(ankenList.prjSklId);
-    update = ankenList.updateDate.toString();
-    SimpleDateFormat sd;
-    sd = new SimpleDateFormat("yyyy/MM/dd");
+    String cmpn = dao.cmpm(ankenList.cmpnId);
+    List<BeanMap> dbSkill = dao.ankenSkill(ankenList.prjSklId);
+    String update = ankenList.updateDate.toString();
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
 
-    ankenRegisterForm.usersList = userList;
+    sessionDto.usersList = usersList;
+    ankenRegisterForm.usersList = usersList;
     ankenRegisterForm.updateDate = update;
     ankenRegisterForm.prjName = ankenList.prjName;
-    ankenRegisterForm.genDate = sd.format(ankenList.genDate.getTime()).toString();
+    ankenRegisterForm.genDate = sdf.format(ankenList.genDate.getTime());
     ankenRegisterForm.orverview = ankenList.orverview;
     ankenRegisterForm.prjOther = ankenList.other;
+    sessionDto.editFlg = 1;
     ankenRegisterForm.editFlg = 1;
     ankenRegisterForm.cmpnName = cmpn;
-    ankenRegisterForm.disabledFlg = "disabled";
-    ankenRegisterForm.registantId = ankenList.userId;
+//    ankenRegisterForm.disabledFlg = "disabled";
+    ankenRegisterForm.userId = ankenList.userId;
 
     List<BeanMap> skillView =  new ArrayList<BeanMap>();
 
@@ -129,10 +136,10 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
               setSkill.put("checked", "checked");
               skillView.add(setSkill);
               countFlg = true;
-            } else if (dbSkill.get(j).get("sklId").equals(-1)) {
-              ankenRegisterForm.skillOtherFlg = "checked";
-              ankenRegisterForm.skillOther = String.valueOf(dbSkill.get(j).get("other"));
-              ankenRegisterForm.disabledFlg = "";
+//            } else if (dbSkill.get(j).get("sklId").equals(-1)) {
+//              ankenRegisterForm.skillOtherFlg = "checked";
+//              ankenRegisterForm.skillOther = String.valueOf(dbSkill.get(j).get("other"));
+//              ankenRegisterForm.disabledFlg = "";
             }
           }
         }
@@ -147,18 +154,16 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
       }
     }
 
+    sessionDto.skillList = skillView;
     ankenRegisterForm.skillList = skillView;
     if (!CommonFunction.empty(ankenList.periFrom)) {
-      ankenRegisterForm.periFrom = sd.format(ankenList.periFrom.getTime()).toString();
+      ankenRegisterForm.periFrom = sdf.format(ankenList.periFrom.getTime());
     }
     if (!CommonFunction.empty(ankenList.periTo)) {
-      ankenRegisterForm.periTo = sd.format(ankenList.periTo.getTime()).toString();
+      ankenRegisterForm.periTo = sdf.format(ankenList.periTo.getTime());
     }
     if (ankenList.longTermFlg == true) {
       ankenRegisterForm.longTermFlg = "checked";
-    }
-    if (ankenList.sameDayFlg == true) {
-      ankenRegisterForm.sameDayFlg = "checked";
     }
     if (ankenList.sameDayFlg == true) {
       ankenRegisterForm.sameDayFlg = "checked";
@@ -309,18 +314,18 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
       for (int i = 0;ankenRegisterForm.skillId.length > i;i++) {
         int skillId = Integer.parseInt(ankenRegisterForm.skillId[i]);
         //スキルのその他入力がある場合
-        if (CommonFunction.eq(skillId, -1) && !CommonFunction.empty(ankenRegisterForm.skillOther)) {
-          projSkill.other = ankenRegisterForm.skillOther;
-
-        } else if (CommonFunction.eq(skillId, -1)
-            && CommonFunction.empty(ankenRegisterForm.skillOther)) {
-          //スキルのその他がチェック付いて未入力の場合
-          errors.add(ActionMessages.GLOBAL_MESSAGE,
-              new ActionMessage("MSG_E00001", "チェックが付いているスキルのその他"));
-
-          ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
-          return "ankenRegister.jsp";
-        }
+//        if (CommonFunction.eq(skillId, -1) && !CommonFunction.empty(ankenRegisterForm.skillOther)) {
+//          projSkill.other = ankenRegisterForm.skillOther;
+//
+//        } else if (CommonFunction.eq(skillId, -1)
+//            && CommonFunction.empty(ankenRegisterForm.skillOther)) {
+//          //スキルのその他がチェック付いて未入力の場合
+//          errors.add(ActionMessages.GLOBAL_MESSAGE,
+//              new ActionMessage("MSG_E00001", "チェックが付いているスキルのその他"));
+//
+//          ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
+//          return "ankenRegister.jsp";
+//        }
 
         projSkill.prjSklId = prjSkillId;
         projSkill.sklId = skillId;
@@ -330,52 +335,26 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
       }
     }
 
-    boolean longTermFlg = false;
-    boolean sameDayFlg = false;
-    boolean anyTimeFlg = false;
-    boolean extentionflg = false;
+    // 長期・即日・随時のチェックボックスの値が「on」である場合は、 true にする
+    boolean longTermFlg = CommonFunction.eq(ankenRegisterForm.longTermFlg, "on");
+    boolean sameDayFlg = CommonFunction.eq(ankenRegisterForm.sameDayFlg, "on");
+    boolean anyTimeFlg = CommonFunction.eq(ankenRegisterForm.anyTimeFlg, "on");
+    // 延長のラジオボタンの値が「1」である場合は、 true にする
+    boolean extentionFlg = CommonFunction.eq(ankenRegisterForm.extentionFlg, "1");
 
-    //長期フラグ
-    if (!CommonFunction.empty(ankenRegisterForm.longTermFlg)
-            && CommonFunction.eq(ankenRegisterForm.longTermFlg, "on")) {
-      longTermFlg = true;
+    Date periFrom = null;
+    Date periTo = null;
+
+    // 発生日・期間開始日・期間終了日のテキストボックスの値を「yyyy/MM/dd」の形式で Date型 にする
+    Date genDate = new Date(CommonFunction.parseDate(ankenRegisterForm.genDate,
+        CommonFunction.FORMAT_YMD_SLASH).getTime());
+    java.util.Date from = CommonFunction.parseDate(ankenRegisterForm.periFrom, CommonFunction.FORMAT_YMD_SLASH);
+    if (!CommonFunction.empty(from)) {
+      periFrom = new Date(from.getTime());
     }
-
-    //即日フラグ
-    if (!CommonFunction.empty(ankenRegisterForm.sameDayFlg)
-            && CommonFunction.eq(ankenRegisterForm.sameDayFlg, "on")) {
-      sameDayFlg = true;
-    }
-
-    //随時フラグ
-    if (!CommonFunction.empty(ankenRegisterForm.anyTimeFlg)
-            && CommonFunction.eq(ankenRegisterForm.anyTimeFlg, "on")) {
-      anyTimeFlg = true;
-    }
-
-    //延長フラグ
-    if (ankenRegisterForm.extentionFlg.equals("1")) {
-      extentionflg = true;
-    }
-
-    DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-    Date genDate = null;
-    Date from = null;
-    Date to = null;
-    try {
-      java.util.Date genSdf = sdf.parse(ankenRegisterForm.genDate);
-      genDate = new Date(genSdf.getTime());
-      if (!CommonFunction.empty(ankenRegisterForm.periFrom)) {
-        java.util.Date fromSdf = sdf.parse(ankenRegisterForm.periFrom);
-        from = new Date(fromSdf.getTime());
-      }
-      if (!CommonFunction.empty(ankenRegisterForm.periTo)) {
-        java.util.Date toSdf = sdf.parse(ankenRegisterForm.periTo);
-        to = new Date(toSdf.getTime());
-      }
-    } catch (ParseException e) {
-      // TODO 自動生成された catch ブロック
-      e.printStackTrace();
+    java.util.Date to = CommonFunction.parseDate(ankenRegisterForm.periTo, CommonFunction.FORMAT_YMD_SLASH);
+    if (!CommonFunction.empty(to)) {
+      periTo = new Date(to.getTime());
     }
 
 
@@ -386,12 +365,12 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
     projInfo.cmpnId = Integer.parseInt(cmpnId);
     projInfo.prjSklId = prjSkillId;
     projInfo.genDate = genDate;
-    projInfo.periFrom = from;
-    projInfo.periTo = to;
+    projInfo.periFrom = periFrom;
+    projInfo.periTo = periTo;
     projInfo.longTermFlg = longTermFlg;
     projInfo.sameDayFlg = sameDayFlg;
     projInfo.anyTimeFlg = anyTimeFlg;
-    projInfo.extentionFlg = extentionflg;
+    projInfo.extentionFlg = extentionFlg;
     projInfo.orverview = ankenRegisterForm.orverview;
     projInfo.other = ankenRegisterForm.prjOther;
     projInfo.delFlg = false;
@@ -552,8 +531,7 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
     }
 
     //案件スキルを削除
-    TProjInfo ankenSkillList =
-        dao.initEdit(ankenList.prjId);
+    TProjInfo ankenSkillList = dao.initEdit(ankenList.prjId);
 
     projSkill.prjSklId = ankenSkillList.prjSklId;
     dao.delete(projSkill.prjSklId);
@@ -566,18 +544,18 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
         int skillId = Integer.parseInt(ankenRegisterForm.skillId[i]);
 
         //スキルのその他入力がある場合
-        if (CommonFunction.eq(skillId, -1) && !CommonFunction.empty(ankenRegisterForm.skillOther)) {
-          projSkill.other = ankenRegisterForm.skillOther;
-
-        } else if (CommonFunction.eq(skillId, -1)
-            && CommonFunction.empty(ankenRegisterForm.skillOther)) {
-          //スキルのその他がチェック付いて未入力の場合
-          errors.add(ActionMessages.GLOBAL_MESSAGE,
-              new ActionMessage("MSG_E00001", "チェックが付いているスキルのその他"));
-
-          ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
-          return "ankenRegister.jsp";
-        }
+//        if (CommonFunction.eq(skillId, -1) && !CommonFunction.empty(ankenRegisterForm.skillOther)) {
+//          projSkill.other = ankenRegisterForm.skillOther;
+//
+//        } else if (CommonFunction.eq(skillId, -1)
+//            && CommonFunction.empty(ankenRegisterForm.skillOther)) {
+//          //スキルのその他がチェック付いて未入力の場合
+//          errors.add(ActionMessages.GLOBAL_MESSAGE,
+//              new ActionMessage("MSG_E00001", "チェックが付いているスキルのその他"));
+//
+//          ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
+//          return "ankenRegister.jsp";
+//        }
 
         projSkill.prjSklId = projSkill.prjSklId;
         projSkill.sklId = skillId;
@@ -587,52 +565,26 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
       }
     }
 
-    boolean longTermFlg = false;
-    boolean sameDayFlg = false;
-    boolean anyTimeFlg = false;
-    boolean extentionflg = false;
+    // 長期・即日・随時のチェックボックスの値が「on」である場合は、 true にする
+    boolean longTermFlg = CommonFunction.eq(ankenRegisterForm.longTermFlg, "on");
+    boolean sameDayFlg = CommonFunction.eq(ankenRegisterForm.sameDayFlg, "on");
+    boolean anyTimeFlg = CommonFunction.eq(ankenRegisterForm.anyTimeFlg, "on");
+    // 延長のラジオボタンの値が「1」である場合は、 true にする
+    boolean extentionFlg = CommonFunction.eq(ankenRegisterForm.extentionFlg, "1");
 
-    //長期フラグ
-    if (!CommonFunction.empty(ankenRegisterForm.longTermFlg)
-            && CommonFunction.eq(ankenRegisterForm.longTermFlg, "on")) {
-      longTermFlg = true;
+    Date periFrom = null;
+    Date periTo = null;
+
+    // 発生日・期間開始日・期間終了日のテキストボックスの値を「yyyy/MM/dd」の形式で Date型 にする
+    Date genDate = new Date(CommonFunction.parseDate(ankenRegisterForm.genDate,
+        CommonFunction.FORMAT_YMD_SLASH).getTime());
+    java.util.Date from = CommonFunction.parseDate(ankenRegisterForm.periFrom, CommonFunction.FORMAT_YMD_SLASH);
+    if (!CommonFunction.empty(from)) {
+      periFrom = new Date(from.getTime());
     }
-
-    //即日フラグ
-    if (!CommonFunction.empty(ankenRegisterForm.sameDayFlg)
-            && CommonFunction.eq(ankenRegisterForm.sameDayFlg, "on")) {
-      sameDayFlg = true;
-    }
-
-    //随時フラグ
-    if (!CommonFunction.empty(ankenRegisterForm.anyTimeFlg)
-            && CommonFunction.eq(ankenRegisterForm.anyTimeFlg, "on")) {
-      anyTimeFlg = true;
-    }
-
-    //延長フラグ
-    if (ankenRegisterForm.extentionFlg.equals("1")) {
-      extentionflg = true;
-    }
-
-    DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-    Date genDate = null;
-    Date from = null;
-    Date to = null;
-    try {
-      java.util.Date genSdf = sdf.parse(ankenRegisterForm.genDate);
-      genDate = new Date(genSdf.getTime());
-      if (!CommonFunction.empty(ankenRegisterForm.periFrom)) {
-        java.util.Date fromSdf = sdf.parse(ankenRegisterForm.periFrom);
-        from = new Date(fromSdf.getTime());
-      }
-      if (!CommonFunction.empty(ankenRegisterForm.periTo)) {
-        java.util.Date toSdf = sdf.parse(ankenRegisterForm.periTo);
-        to = new Date(toSdf.getTime());
-      }
-    } catch (ParseException e) {
-      // TODO 自動生成された catch ブロック
-      e.printStackTrace();
+    java.util.Date to = CommonFunction.parseDate(ankenRegisterForm.periTo, CommonFunction.FORMAT_YMD_SLASH);
+    if (!CommonFunction.empty(to)) {
+      periTo = new Date(to.getTime());
     }
 
     //案件情報更新
@@ -642,12 +594,12 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
     projInfo.prjSklId = projSkill.prjSklId;
     projInfo.cmpnId = Integer.parseInt(cmpnId);;
     projInfo.genDate = genDate;
-    projInfo.periFrom = from;
-    projInfo.periTo = to;
+    projInfo.periFrom = periFrom;
+    projInfo.periTo = periTo;
     projInfo.longTermFlg = longTermFlg;
     projInfo.sameDayFlg = sameDayFlg;
     projInfo.anyTimeFlg = anyTimeFlg;
-    projInfo.extentionFlg = extentionflg;
+    projInfo.extentionFlg = extentionFlg;
     projInfo.orverview = ankenRegisterForm.orverview;
     projInfo.other = ankenRegisterForm.prjOther;
     projInfo.createDate = ankenList.createDate;
@@ -659,39 +611,54 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
   }
 
   /**
-   * 画面入力クリア処理を行います。.
+   * 画面入力値保持処理を行います。.
    * @ankenRegisterForm 案件情報登録フォーム
    */
   @Override
-  public void clear(AnkenRegisterForm ankenRegisterForm) {
-    List<BeanMap> skillList = dao.selectAll("M_SKILL");
-    List<BeanMap> usersList;
-    usersList = dao.selectAll("M_USERS");
-    TProjInfo ankenList;
-    ankenList = dao.initEdit(ankenRegisterForm.id);
+  public void preserve(AnkenRegisterForm ankenRegisterForm, SessionDto sessionDto) {
+    // セッションから処理する内容が登録なのか更新なのか示す値を取得する
+    int editFlg = sessionDto.editFlg;
+    // セッションから初期表示時のスキルリストと担当者リストを取得する
+    List<BeanMap> skillList = sessionDto.skillList;
+    List<BeanMap> usersList = sessionDto.usersList;
+    // フォームから長期・即日・随時の各チェックボックスの値を取得する
+    String longTermFlg = ankenRegisterForm.longTermFlg;
+    String sameDayFlg = ankenRegisterForm.sameDayFlg;
+    String anyTimeFlg = ankenRegisterForm.anyTimeFlg;
+    // フォームから各スキルのチェックボックスの値を取得し、String型 のリストにした変数を作成する
+    List<String> skillId;
+    if (ankenRegisterForm.skillId != null) {
+      skillId = Arrays.asList(ankenRegisterForm.skillId);
+    } else {
+      skillId = new ArrayList<String>();
+    }
+    // 各スキルのチェックボックスのチェック状態を保持したリストを作成する
     List<BeanMap> skillView =  new ArrayList<BeanMap>();
     for (int i = 0; skillList.size() > i; i++) {
-      BeanMap setSkill = new BeanMap();
-      setSkill.put("skillId", skillList.get(i).get("skillId"));
-      setSkill.put("skillName", skillList.get(i).get("skillName"));
-      setSkill.put("checked", "0");
+      BeanMap setSkill = skillList.get(i);
+      if (skillId.contains(skillList.get(i).get("skillId").toString())) {
+        setSkill.replace("checked", "checked");
+      } else {
+        setSkill.replace("checked", "");
+      }
       skillView.add(setSkill);
     }
-    ankenRegisterForm.skillList = skillView;
-    ankenRegisterForm.usersList = usersList;
 
-    if (!CommonFunction.empty(ankenList)) {
-      //案件情報あり
-      String update;
-      update = ankenList.updateDate.toString();
-      ankenRegisterForm.ankenList = ankenList;
-      ankenRegisterForm.updateDate = update;
-      ankenRegisterForm.skillOtherFlg = "0";
-      ankenRegisterForm.disabledFlg = "disabled";
-      ankenRegisterForm.extentionFlg = "0";
-      ankenRegisterForm.editFlg = 1;
-    } else {
-      ankenRegisterForm.editFlg = 0;
+    // 処理する内容が登録なのか更新なのか示す値をフォームに反映させる
+    ankenRegisterForm.editFlg = editFlg;
+    // 長期・即日・随時のチェックボックスのチェック状態をフォームに反映させる
+    if (CommonFunction.eq(longTermFlg, "on")) {
+      ankenRegisterForm.longTermFlg = "checked";
     }
+    if (CommonFunction.eq(sameDayFlg, "on")) {
+      ankenRegisterForm.sameDayFlg = "checked";
+    }
+    if (CommonFunction.eq(anyTimeFlg, "on")) {
+      ankenRegisterForm.anyTimeFlg = "checked";
+    }
+    // チェック状態を保持したスキルリストをフォームに反映させる
+    ankenRegisterForm.skillList = skillView;
+    // 初期表示時の担当者リストをフォームに反映させる
+    ankenRegisterForm.usersList = usersList;
   }
 }

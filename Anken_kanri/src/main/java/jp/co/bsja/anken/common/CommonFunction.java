@@ -262,5 +262,42 @@ public class CommonFunction {
     fiscalYear = String.valueOf(year);
     return fiscalYear;
   }
-}
 
+  /**
+   * 文字列を指定された形式で日付に変換して返します。.<br>
+   * 変換に失敗した場合は null を返します。.<br>
+   * 日付フォーマッタは日付の形式になっていなかった場合、「yyyy/MM/dd」を指定します。.
+   *
+   * @param targ 日付にする文字列
+   * @param fmt 日付フォーマッタ
+   * @return 変換した日付または null
+   */
+  public static Date parseDate(String targ, String fmt) {
+    // 引数の日付にする文字列が空の場合は null を返す
+    if (empty(targ)) {
+      return null;
+    }
+
+    // 引数の日付フォーマッタでフォーマットを指定する
+    // 日付フォーマッタが日付の形式ではなかった場合は「yyyy/MM/dd」にする
+    SimpleDateFormat sdf;
+    if (!empty(fmt)) {
+      if (eqAny(fmt, FORMAT_YMD_SLASH, FORMAT_YMD_HYPHEN, FORMAT_YMDHMS_SLASH,
+          FORMAT_YMDHMS_HYPEN, FORMAT_YMDHMSS_SLASH, FORMAT_YMDHMSS_HYPEN)) {
+        sdf = new SimpleDateFormat(fmt);
+      } else {
+        sdf = new SimpleDateFormat(FORMAT_YMD_SLASH);
+      }
+    } else {
+      sdf = new SimpleDateFormat(FORMAT_YMD_SLASH);
+    }
+
+    // 指定されたフォーマットに従って文字列を日付に変換して返す
+    // 変換に失敗した場合は null を返す
+    try {
+      return sdf.parse(targ);
+    } catch (ParseException e) {
+      return null;
+    }
+  }
+}

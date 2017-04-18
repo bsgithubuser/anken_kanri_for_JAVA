@@ -48,4 +48,9 @@ public class SessionDto implements Serializable {
   public List<BeanMap> searchResultList;
   public String printAnknIds;
   public Boolean bulkFlag;
+
+  /* 案件情報登録 */
+  public List<BeanMap> skillList;
+  public List<BeanMap> usersList;
+  public int editFlg;
 }

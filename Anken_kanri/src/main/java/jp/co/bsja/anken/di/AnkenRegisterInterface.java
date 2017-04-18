@@ -1,5 +1,6 @@
 package jp.co.bsja.anken.di;
 
+import jp.co.bsja.anken.dto.SessionDto;
 import jp.co.bsja.anken.form.AnkenRegisterForm;
 
 public interface AnkenRegisterInterface {
@@ -8,14 +9,14 @@ public interface AnkenRegisterInterface {
    * @param ankenRegisterForm 案件情報登録フォーム
    * @return JSPファイル名
    */
-  public String initEntry(AnkenRegisterForm ankenRegisterForm);
+  public String initEntry(AnkenRegisterForm ankenRegisterForm, SessionDto sessionDto);
 
   /**
    * 案件情報編集初期表示.
    * @param ankenRegisterForm 案件情報登録フォーム
    * @return JSPファイル名
    */
-  public String initEdit(AnkenRegisterForm ankenRegisterForm);
+  public String initEdit(AnkenRegisterForm ankenRegisterForm, SessionDto sessionDto);
 
   /**
    * 案件情報登録処理.
@@ -32,8 +33,8 @@ public interface AnkenRegisterInterface {
   public String edit(AnkenRegisterForm ankenRegisterForm);
 
   /**
-   * 画面入力クリア処理.
+   * 画面入力値保持処理.
    * @param ankenRegisterForm 案件情報登録フォーム
    */
-  public void clear(AnkenRegisterForm ankenRegisterForm);
+  public void preserve(AnkenRegisterForm ankenRegisterForm, SessionDto sessionDto);
 }

@@ -32,9 +32,9 @@ public class AnkenRegisterAction {
     String jsp;
 
     if (ankenRegisterForm.id == 0) {
-      jsp = ankenRegister.initEntry(ankenRegisterForm);
+      jsp = ankenRegister.initEntry(ankenRegisterForm, sessionDto);
     } else {
-      jsp = ankenRegister.initEdit(ankenRegisterForm);
+      jsp = ankenRegister.initEdit(ankenRegisterForm, sessionDto);
     }
     return jsp;
   }
@@ -52,7 +52,7 @@ public class AnkenRegisterAction {
     String jsp = ankenRegister.entry(ankenRegisterForm);
 
     if (jsp.equals("ankenRegister.jsp")) {
-      ankenRegister.clear(ankenRegisterForm);
+      ankenRegister.preserve(ankenRegisterForm, sessionDto);
     }
 
     return jsp;
@@ -72,24 +72,9 @@ public class AnkenRegisterAction {
     String jsp = ankenRegister.edit(ankenRegisterForm);
 
     if (jsp.equals("ankenRegister.jsp")) {
-      ankenRegister.clear(ankenRegisterForm);
+      ankenRegister.preserve(ankenRegisterForm, sessionDto);
     }
 
     return jsp;
-  }
-
-  /**
-   * 入力項目のクリア処理を行います。 .
-   * @return 新規登録画面のJSPファイル名
-   */
-  @Execute(validator = false)
-  public String clear() {
-    SingletonS2ContainerFactory.init();
-    S2Container container = SingletonS2ContainerFactory.getContainer();
-    AnkenRegisterInterface  ankenRegister = (AnkenRegisterInterface)container
-        .getComponent("AnkenRegisterImpl");
-    ankenRegister.clear(ankenRegisterForm);
-
-    return "ankenRegister.jsp";
   }
 }
