@@ -25,10 +25,9 @@ public interface CompMngMasterInterface {
    * @param name 会社名
    * @param nameKana フリガナ
    * @param id 会社ID
-   * @param flgAfterClickDialog 同じ会社名のデータがある場合の確認ダイアログで「はい」を押したかどうか(「はい」を押したら1になります)
    * @return 0...エラー 1...異常なし
    */
-  public int entry(String name, String nameKana, String id, int flgAfterClickDialog);
+  public int entry(String name, String nameKana, String id);
 
   /**
    *更新処理をするメソッドです。

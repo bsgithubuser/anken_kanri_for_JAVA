@@ -26,12 +26,24 @@ public class CompMngMasterDao extends Dao{
   }
 
   /**.
-   * データベースに同じ名前の会社名が何件あるか検索するメソッドです。
+   * 登録時にデータベースに同じ名前,フリガナの会社名が何件あるか検索するメソッドです。
    * @param name 会社名
+   * @param kana フリガナ
    * @return ヒットした件数
    */
-  public int checkSameName(String name) {
-    return (int)jdbcManager.from(MCmpn.class).where("CMPN_NAME = ?",name).getCount();
+  public int checkSameName(String name,String kana) {
+      return (int)jdbcManager.from(MCmpn.class).where("CMPN_NAME = ? AND CMPN_NAME_FURI = ?",name,kana).getCount();
+  }
+
+  /**.
+   * 更新時にデータベースに同じ名前,フリガナの会社名が何件あるか検索するメソッドです。
+   * @param name 会社名
+   * @param kana フリガナ
+   * @param id 会社ID
+   * @return ヒットした件数
+   */
+  public int checkSameNameEdit(String name,String kana,String id) {
+      return (int)jdbcManager.from(MCmpn.class).where("CMPN_NAME = ? AND CMPN_NAME_FURI = ? AND CMPN_ID <> ?",name,kana,Integer.parseInt(id)).getCount();
   }
 
   /**

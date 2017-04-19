@@ -62,12 +62,12 @@ public class CompMngMasterAction {
       //登録処理
       int count = compMngMaster.entry(compMngMasterForm.nameItem,
           compMngMasterForm.nameKanaItem,
-          compMngMasterForm.idItemString, compMngMasterForm.flgAfterClickDialog);
+          compMngMasterForm.idItemString);
       if (count == 2) {
         //同じ名前の会社が既にデータベースにあったので、jspで確認ダイアログを表示させます。
-        compMngMasterForm.sameNameFlag = 1;
-        compMngMasterForm.popUpData = MessageResourcesUtil
-            .getMessage("MSG_I00007", compMngMasterForm.nameItem);
+//        compMngMasterForm.sameNameFlag = 1;
+//        compMngMasterForm.popUpData = MessageResourcesUtil
+//            .getMessage("MSG_I00007", compMngMasterForm.nameItem);
         return "entry-comp-mng.jsp";
       } else if (count == 1) {
         //エラー

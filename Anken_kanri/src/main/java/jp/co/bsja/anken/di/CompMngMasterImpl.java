@@ -33,11 +33,13 @@ public class CompMngMasterImpl implements CompMngMasterInterface {
   }
 
   @Override
-  public int entry(String name, String nameKana, String id, int flgAfterClickDialog) {
+  public int entry(String name, String nameKana, String id) {
     ActionMessages errors = new ActionMessages();
-    if (checkSameName(name) != 0 && flgAfterClickDialog == 0) {
-      //登録画面に戻ってダイアログを表示
-      return 2;
+    if (checkSameName(name,nameKana) != 0) {
+            errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
+                    "MSG_E00019", name,nameKana));
+            ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
+            return 1;
     } else {
       //登録処理
       if (executeEntry(name, nameKana) == 1) {
@@ -61,6 +63,13 @@ public class CompMngMasterImpl implements CompMngMasterInterface {
       ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
       return 1;
     } else {
+      //重複チェック
+      if (checkSameNameEdit(name,nameKana,id) != 0 ) {
+        errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
+                    "MSG_E00019", name,nameKana));
+        ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
+        return 1;
+      }
       //更新処理
       if (executeUpdate(id, name, nameKana) == 1) {
         return 0;
@@ -102,11 +111,25 @@ public class CompMngMasterImpl implements CompMngMasterInterface {
   /*
    * 登録の際に同じ会社名がデータベースにいくつあるか検索するメソッドです。
    * @param name 会社名
-   * @return 検索してヒットした数
+   * @param kana フリガナ
+   * @return ヒットした件数
    */
-  private int checkSameName(String name) {
+  private int checkSameName(String name, String kana) {
     CompMngMasterDao dao = new CompMngMasterDao();
-    int count = dao.checkSameName(name);
+    int count = dao.checkSameName(name,kana);
+    return count;
+  }
+
+  /*
+   * 更新の際に同じ会社名がデータベースにいくつあるか検索するメソッドです。
+   * @param name 会社名
+   * @param kana フリガナ
+   * @param id 会社ID
+   * @return ヒットした件数
+   */
+  private int checkSameNameEdit(String name, String kana, String id) {
+    CompMngMasterDao dao = new CompMngMasterDao();
+    int count = dao.checkSameNameEdit(name,kana,id);
     return count;
   }
 
