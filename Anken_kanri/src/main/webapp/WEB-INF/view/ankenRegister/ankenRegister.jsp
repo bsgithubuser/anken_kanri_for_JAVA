@@ -19,7 +19,6 @@
                 var form = document.forms[1];
                 form.prjName.value = '';
                 form.genDate.value = '${f:h(genDate)}';
-                form.cmpnName.value = '';
                 form.periFrom.value = '';
                 form.periTo.value = '';
                 form.longTermFlg.checked = false;
