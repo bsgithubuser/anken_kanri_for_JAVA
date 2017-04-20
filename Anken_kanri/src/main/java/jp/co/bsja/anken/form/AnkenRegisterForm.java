@@ -42,6 +42,9 @@ public class AnkenRegisterForm {
   /** 会社名 . */
   public String cmpnName;
 
+  /** 会社ID . */
+  public String cmpnId;
+
   /** 発生日 . */
   public String genDate;
 

@@ -127,6 +127,7 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
     ankenRegisterForm.cmpnName = cmpn;
 //    ankenRegisterForm.disabledFlg = "disabled";
     ankenRegisterForm.userId = ankenList.userId;
+    ankenRegisterForm.cmpnId =  String.valueOf(ankenList.cmpnId);
 
     List<BeanMap> skillView =  new ArrayList<BeanMap>();
 
@@ -222,13 +223,13 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
 
       return "ankenRegister.jsp";
     }
-    if (CommonFunction.empty(ankenRegisterForm.cmpnName)) {
-      errors.add(ActionMessages.GLOBAL_MESSAGE,
-          new ActionMessage("MSG_E00001","会社名"));
-      ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
-
-      return "ankenRegister.jsp";
-    }
+//    if (CommonFunction.empty(ankenRegisterForm.cmpnName)) {
+//      errors.add(ActionMessages.GLOBAL_MESSAGE,
+//          new ActionMessage("MSG_E00001","会社名"));
+//      ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
+//
+//      return "ankenRegister.jsp";
+//    }
 
     //日付フォーマットチェック
     Pattern fomat = Pattern.compile("^(\\d{4})/(0[1-9]|1[0-2])/(0[1-9]|[12][0-9]|3[01])$");
@@ -301,15 +302,16 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
       }
     }
 
-    String cmpnId = dao.cmpmCheck(ankenRegisterForm.cmpnName);
-    if (CommonFunction.empty(cmpnId)) {
-      //会社なし
-      errors.add(ActionMessages.GLOBAL_MESSAGE,
-          new ActionMessage("MSG_E00006","入力した会社名"));
-      ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
-
-      return "ankenRegister.jsp";
-    }
+//    会社名入力→マスタから取得した会社名プルダウンに改修した為、存在チェック不要
+//    String cmpnId = dao.cmpmCheck(ankenRegisterForm.cmpnName);
+//    if (CommonFunction.empty(cmpnId)) {
+//      //会社なし
+//      errors.add(ActionMessages.GLOBAL_MESSAGE,
+//          new ActionMessage("MSG_E00006","入力した会社名"));
+//      ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
+//
+//      return "ankenRegister.jsp";
+//    }
 
     //案件スキル登録
     Timestamp timestamp = CommonFunction.getBaseDt();
@@ -368,7 +370,7 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
     projInfo.prjId = ankenRegisterForm.id;
     projInfo.prjName = ankenRegisterForm.prjName;
     projInfo.userId = ankenRegisterForm.userId;
-    projInfo.cmpnId = Integer.parseInt(cmpnId);
+    projInfo.cmpnId = Integer.parseInt(ankenRegisterForm.cmpnId);
     projInfo.prjSklId = prjSkillId;
     projInfo.genDate = genDate;
     projInfo.periFrom = periFrom;
@@ -422,13 +424,13 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
 
       return "ankenRegister.jsp";
     }
-    if (CommonFunction.empty(ankenRegisterForm.cmpnName)) {
-      errors.add(ActionMessages.GLOBAL_MESSAGE,
-          new ActionMessage("MSG_E00001","会社名"));
-      ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
-
-      return "ankenRegister.jsp";
-    }
+//    if (CommonFunction.empty(ankenRegisterForm.cmpnName)) {
+//      errors.add(ActionMessages.GLOBAL_MESSAGE,
+//          new ActionMessage("MSG_E00001","会社名"));
+//      ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
+//
+//      return "ankenRegister.jsp";
+//    }
 
     //日付フォーマットチェック
     Pattern fomat = Pattern.compile("^(\\d{4})/(0[1-9]|1[0-2])/(0[1-9]|[12][0-9]|3[01])$");
@@ -526,15 +528,15 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
       }
     }
 
-    String cmpnId = dao.cmpmCheck(ankenRegisterForm.cmpnName);
-
-    if (CommonFunction.empty(cmpnId)) {
-      //会社なし
-      errors.add(ActionMessages.GLOBAL_MESSAGE,
-          new ActionMessage("MSG_E00006", "入力した会社名"));
-      ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
-      return "ankenRegister.jsp";
-    }
+//    String cmpnId = dao.cmpmCheck(ankenRegisterForm.cmpnName);
+//
+//    if (CommonFunction.empty(cmpnId)) {
+//      //会社なし
+//      errors.add(ActionMessages.GLOBAL_MESSAGE,
+//          new ActionMessage("MSG_E00006", "入力した会社名"));
+//      ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
+//      return "ankenRegister.jsp";
+//    }
 
     //案件スキルを削除
     TProjInfo ankenSkillList = dao.initEdit(ankenList.prjId);
@@ -598,7 +600,7 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
     projInfo.prjName = ankenRegisterForm.prjName;
     projInfo.userId = ankenRegisterForm.userId;
     projInfo.prjSklId = projSkill.prjSklId;
-    projInfo.cmpnId = Integer.parseInt(cmpnId);;
+    projInfo.cmpnId = Integer.parseInt(ankenRegisterForm.cmpnId);
     projInfo.genDate = genDate;
     projInfo.periFrom = periFrom;
     projInfo.periTo = periTo;

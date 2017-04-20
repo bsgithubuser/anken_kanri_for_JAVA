@@ -133,9 +133,9 @@
             会社名<span class="required">*</span>
           </dt>
           <dd>
-            <html:select property="cmpnName" value="${f:h(cmpnName)}">
+            <html:select property="cmpnId" value="${f:h(cmpnId)}">
             <c:forEach items="${cmpnList}" var="data" >
-              <html:option value="${f:h(data.cmpnName)}">${f:h(data.cmpnName)}</html:option>
+              <html:option value="${f:h(data.cmpnId)}">${f:h(data.cmpnName)}</html:option>
             </c:forEach>
             </html:select>
           </dd>
