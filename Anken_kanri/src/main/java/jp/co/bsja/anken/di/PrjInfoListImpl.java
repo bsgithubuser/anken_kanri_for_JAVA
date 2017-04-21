@@ -24,8 +24,8 @@ import org.seasar.struts.util.RequestUtil;
 public class PrjInfoListImpl implements PrjInfoListInterface {
   public static final String UNSET_ITEM = "未設定";
   public static final String LONG_TERM = "長期";
-  public static final String SAME_DAY = "即日";
-  public static final String ANY_TIME = "随時";
+  public static final String SAME_DAY  = "即日";
+  public static final String ANY_TIME  = "随時";
   public static final String BR = System.getProperty("line.separator");
 
   /**
