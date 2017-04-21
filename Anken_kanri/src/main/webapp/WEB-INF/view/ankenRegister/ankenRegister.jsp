@@ -18,7 +18,6 @@
             if(confirm("<bean:message key="MSG_I00012" />") == true) {
                 var form = document.forms[1];
                 form.prjName.value = '';
-                form.genDate.value = '${f:h(genDate)}';
                 form.periFrom.value = '';
                 form.periTo.value = '';
                 form.longTermFlg.checked = false;
@@ -35,6 +34,14 @@
                         break;
                     }
                 }
+
+                // 発生日のテキストボックスに現在の日付を「yyyy/MM/dd」の形式で入力する
+                var now = new Date();
+                var nowYear = now.getFullYear();
+                var nowMonth = ('0' + (now.getMonth() + 1)).slice(-2);
+                var nowDate = ('0' + now.getDate()).slice(-2);
+                form.genDate.value = nowYear + '/' + nowMonth + '/' + nowDate;
+
                 var skillId = form.skillId;
                 for (i = 0; i < skillId.length; i++) {
                     skillId[i].checked = false;
