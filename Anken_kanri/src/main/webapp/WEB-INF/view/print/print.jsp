@@ -32,9 +32,7 @@
       【発生日】<BR>
        <c:out value = "${f:h(list.genDate)}"/><BR>
       【期間】<BR>
-       <c:out value = "${f:h(list.periFrom)}"/>
-       <BR>&nbsp;&nbsp;&nbsp;&nbsp;～<BR>
-       <c:out value = "${f:h(list.periTo)}"/>
+       <c:out value = "${f:h(list.printPriod)}"/>
       </td>
       <td bgcolor = "white" valign="top" style= "word-break : break-all;"><c:out value = "${f:h(list.orverview)}"/></td>
      </tr>

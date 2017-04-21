@@ -85,18 +85,18 @@ public class PrintImpl implements PrintInterface {
     } else {
       map.put("genDate", unSetDay);
     }
-      // 期間FromをString型でフォーマットする
-    if (!CommonFunction.empty(map.get("periFrom"))) {
-      map.put("periFrom", sdf.format(map.get("periFrom")));
-    } else {
-      map.put("periFrom", unSetDay);
-    }
-      // 期間ToをString型でフォーマットする
-    if (!CommonFunction.empty(map.get("periTo"))) {
-      map.put("periTo", sdf.format(map.get("periTo")));
-    } else {
-      map.put("periTo", unSetDay);
-    }
+//      // 期間FromをString型でフォーマットする
+//    if (!CommonFunction.empty(map.get("periFrom"))) {
+//      map.put("periFrom", sdf.format(map.get("periFrom")));
+//    } else {
+//      map.put("periFrom", unSetDay);
+//    }
+//      // 期間ToをString型でフォーマットする
+//    if (!CommonFunction.empty(map.get("periTo"))) {
+//      map.put("periTo", sdf.format(map.get("periTo")));
+//    } else {
+//      map.put("periTo", unSetDay);
+//    }
   }
   //POIテスト用
   @Override

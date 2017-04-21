@@ -144,6 +144,7 @@ public class PrjInfoListImpl implements PrjInfoListInterface {
           form.userName = (String) map.get("userName");
           form.genDate = formattedGenData;
           form.prjPeriod = displyPriodFormat(map);
+          map.put("printPriod", displyPriodFormat(map));
           form.skillName = (String) map.get("skillName");
           form.overview = originalOrverview;
           form.displayOverview = oneLineOrverview;
