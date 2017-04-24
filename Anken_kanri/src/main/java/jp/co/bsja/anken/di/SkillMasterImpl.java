@@ -22,7 +22,7 @@ public class SkillMasterImpl implements SkillMasterInterface {
   public void fetchAllSkill(SkillMasterForm skillMasterForm) {
     //検索処理
     SkillMasterDao dao = new SkillMasterDao();
-    List<BeanMap> list = dao.findAllSkill("M_SKILL", "skill_id");
+    List<BeanMap> list = dao.SearchAndSortAllSkill("skill_id");
 
     skillMasterForm.skillList = list;
   }
@@ -56,26 +56,35 @@ public class SkillMasterImpl implements SkillMasterInterface {
 
   @Override
   public String checkOverlapOrSave(SkillMasterForm skillMasterForm, SessionDto sessionDto) {
-	    //重複確認処理
-	    SkillMasterDao dao = new SkillMasterDao();
-	    int count = dao.checkOverlap("M_SKILL", "skill_name", skillMasterForm.skillName);
-	    String destination = "skill-master-regist.jsp";
+    //重複確認処理
+    SkillMasterDao dao = new SkillMasterDao();
+    int count = 0;
+    if (!empty(skillMasterForm.skillId)) {
+      count = dao.editCheckOverlap(skillMasterForm.skillName, skillMasterForm.skillId);
+    } else {
+      count = dao.signUpCheckOverlap("skill_name", skillMasterForm.skillName);
+    }
 
-	    //返された count の値が1以下なら、登録処理を開始する
-	    if (count < 1) {
-	      int save = save(skillMasterForm, sessionDto);
-	      destination = decideDestination(save, skillMasterForm);
-	    } else {
-	      //overlap が1以上なら、重複するスキル名で登録するか確認
-	      //一度登録画面に戻る
-	      sessionDto.skillId = skillMasterForm.skillId;
-	      sessionDto.skillName = skillMasterForm.skillName;
-	      sessionDto.skillNumber = skillMasterForm.skillNumber;
+    String destination = "skill-master-regist.jsp";
 
-	      skillMasterForm.overlap = count;
-	    }
+    //返された count の値が1以下なら、登録処理を開始する
+    if (count < 1) {
+      int save = save(skillMasterForm, sessionDto);
+      destination = decideDestination(save, skillMasterForm);
+    } else {
+      //重複エラーを出し、登録画面に戻る
+      sessionDto.skillId = skillMasterForm.skillId;
+      sessionDto.skillName = skillMasterForm.skillName;
+      sessionDto.skillNumber = skillMasterForm.skillNumber;
 
-	    return destination;
+//    skillMasterForm.overlap = count;
+
+      ActionMessages errors = new ActionMessages();
+      errors.add(ActionMessages.GLOBAL_MESSAGE,
+                            new ActionMessage("MSG_E00021", skillMasterForm.skillName));
+      ActionMessagesUtil.addErrors(RequestUtil.getRequest(), errors);
+    }
+    return destination;
   }
 
   @Override
@@ -90,7 +99,7 @@ public class SkillMasterImpl implements SkillMasterInterface {
     entity.skillName = skillMasterForm.skillName;
     int number = 0;
     if (!empty(skillMasterForm.skillNumber)) {
-      // DBに登録するため、スキル番号をint型に修正する
+      // DBに登録するため、並び順をint型に修正する
       number = Integer.parseInt(skillMasterForm.skillNumber);
     }
     entity.skillNumber = number;

@@ -43,7 +43,7 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
 
     //スキルと担当者と案件IDを画面へ渡す
 
-    List<BeanMap> skillList = skillDao.findAllSkill("M_SKILL", "skill_Number");
+    List<BeanMap> skillList = skillDao.SearchAndSortAllSkill("skill_Number");
     List<BeanMap> usersList = dao.selectAll("M_USERS");
     List<BeanMap> cmpnList = dao.selectAll("M_CMPN");
     int idSeq = dao.getPrjIdSeq();
@@ -96,7 +96,7 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
   public String initEdit(AnkenRegisterForm ankenRegisterForm, SessionDto sessionDto) {
 
     //スキルと担当者と案件情報を画面へ渡す
-	List<BeanMap> skillList = skillDao.findAllSkill("M_SKILL", "skill_Number");
+	List<BeanMap> skillList = skillDao.SearchAndSortAllSkill("skill_Number");
     List<BeanMap> usersList = dao.selectAll("M_USERS");
     List<BeanMap> cmpnList = dao.selectAll("M_CMPN");
     TProjInfo ankenList = dao.initEdit(ankenRegisterForm.id);

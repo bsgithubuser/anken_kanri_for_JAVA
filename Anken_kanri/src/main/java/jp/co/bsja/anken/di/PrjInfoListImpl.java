@@ -55,7 +55,7 @@ public class PrjInfoListImpl implements PrjInfoListInterface {
 //    PrjInfoListDao dao = new PrjInfoListDao();
 	SkillMasterDao skillDao = new SkillMasterDao();
 //    List<BeanMap> list = dao.findSkillInfo();
-	List<BeanMap> list = skillDao.findAllSkill("M_SKILL", "skill_number");
+	List<BeanMap> list = skillDao.SearchAndSortAllSkill("skill_number");
     List<SkillMasterForm> formList = new ArrayList<>();
     for (BeanMap map : list) {
       SkillMasterForm skillMasterForm = new SkillMasterForm();
@@ -245,7 +245,7 @@ public class PrjInfoListImpl implements PrjInfoListInterface {
      */
   public String formatFromTo(String from, String to) {
     String makeFromTo = "";
-    if (empty(from) && empty(from)) {
+    if (empty(from) && empty(to)) {
       makeFromTo = UNSET_ITEM + "～" + BR + UNSET_ITEM;
       return makeFromTo;
     }

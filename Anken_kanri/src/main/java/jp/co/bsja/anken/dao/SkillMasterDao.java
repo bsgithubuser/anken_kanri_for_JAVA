@@ -9,42 +9,53 @@ import org.seasar.framework.beans.util.BeanMap;
 
 public class SkillMasterDao extends Dao {
 
-	 /**
-	   * 検索条件指定なし全件検索SQL.
-	   *
-	   * @param tableName テーブル名
-	   * @return 検索結果リスト
-	   */
-	/*  public List<BeanMap> findAllSkill(String tableName) {
-	    return jdbcManager.selectBySql(BeanMap.class,
-	        "SELECT * FROM " + tableName + " ORDER BY skill_id asc").getResultList();
-	  }
-	*/
+  /**
+   * 検索条件指定なし全件検索SQL.
+   *
+   * @return 検索結果リスト
+   */
+  public List<BeanMap> findAllSkill() {
+    return jdbcManager.selectBySql(BeanMap.class,
+        "SELECT * FROM M_SKILL ORDER BY skill_id asc").getResultList();
+  }
 
-	  /**
-	   * 検索条件指定なし全件検索SQL.
-	   *
-	   * @tableName tableName テーブル名
-	   * @columnName columnName カラム名
-	   * @return 検索結果リスト
-	   */
-	  public List<BeanMap> findAllSkill(String tableName, String columnName) {
-	    return jdbcManager.selectBySql(BeanMap.class,
-	        "SELECT * FROM " + tableName + " ORDER BY " + columnName + " asc").getResultList();
-	  }
 
   /**
-   * 重複チェックSQL .
+   * 全件検索して引数に指定した列名の昇順で並び替えるSQL.
    *
-   * @tableName tableName テーブル名
    * @columnName columnName カラム名
-   * @params params パラメータ
+   * @return 検索結果リスト
+   */
+  public List<BeanMap> SearchAndSortAllSkill(String columnName) {
+    return jdbcManager.selectBySql(BeanMap.class,
+        "SELECT * FROM M_SKILL ORDER BY " + columnName + " asc").getResultList();
+  }
+
+  /**
+   * 新規登録時重複チェックSQL .
+   *
+   * @params params 入力したスキル名
    * @return 1以上で重複
    */
-  public int checkOverlap(String tableName, String columnName, String params) {
+  public int signUpCheckOverlap(String columnName, String params) {
     return jdbcManager.selectBySql(
             Integer.class,
-            "SELECT count(*) FROM " + tableName + " WHERE " + columnName + " = '" + params + "'")
+            "SELECT count(*) FROM M_SKILL WHERE LOWER('" + params + "') = LOWER(skill_name)")
+        .getSingleResult();
+  }
+
+  /**
+   * 編集時重複チェックSQL .
+   *
+   * @params1 params1 入力したスキル名
+   * @params2 params2 編集するID
+   * @return 1以上で重複
+   */
+  public int editCheckOverlap(String params1, String params2) {
+    return jdbcManager.selectBySql(
+            Integer.class,
+            "SELECT count(*) FROM M_SKILL"
+            + " WHERE LOWER('" + params1 + "') = LOWER(skill_name) AND skill_id != " + params2)
         .getSingleResult();
   }
 

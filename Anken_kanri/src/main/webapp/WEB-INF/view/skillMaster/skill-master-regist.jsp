@@ -19,6 +19,7 @@
             /*
              * 重複するスキル名を登録していいか確認する
              */
+/*
             function checkOverlap(){
               var overlap = document.getElementById("overlap").value;
               var name = document.getElementById("skillName").value;
@@ -26,7 +27,8 @@
                 if(confirm("登録しようとした「"+ name +"」と同じ名前が存在します。よろしいですか？") == true){
                         document.forms[1].submit();
                 }
-              }
+            }
+*/
 
             }
         </script>
@@ -59,7 +61,7 @@
                             </td>
                         </tr>
                          <tr>
-                            <th class="inputTytle">スキル番号</th>
+                            <th class="inputTytle">並び順</th>
                             <td class="inputPosition">
                                 <input type="text" id="skillNumber" name="skillNumber" style="ime-mode: inactive;" maxlength="3"
                                  value="${f:h(fetchSkillData.skillNumber)}"/>
@@ -81,7 +83,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <th class="inputTytle">スキル番号</th>
+                            <th class="inputTytle">並び順</th>
                             <td class="inputPosition">
                                 <input type="text" id="skillNumber" name="skillNumber" style="ime-mode: inactive;"  maxlength="3"
                                  value="${f:h(skillNumber)}"/>

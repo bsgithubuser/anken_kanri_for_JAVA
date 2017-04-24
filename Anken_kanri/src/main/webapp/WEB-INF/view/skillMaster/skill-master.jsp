@@ -89,7 +89,7 @@
                         <tr class="listTytle">
                             <th class="titleStyle">スキル管理ID</th>
                             <th class="titleStyle">スキル名</th>
-                            <th class="titleStyle">スキル番号</th>
+                            <th class="titleStyle">並び順</th>
                             <th class="titleStyle">編集</th>
                             <th class="titleStyle">削除</th>
                         </tr>
