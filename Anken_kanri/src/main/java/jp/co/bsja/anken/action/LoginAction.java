@@ -57,6 +57,7 @@ public class LoginAction extends CommonFunction{
     //パスワードをハッシュ化
     loginForm.tempPassword = toEncryptedHashValue("SHA-256", loginForm.password);
 
+
     //user情報取得
     MUsers userList = login.getUser(loginForm);
 
