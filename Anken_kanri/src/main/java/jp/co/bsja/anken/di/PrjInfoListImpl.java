@@ -53,7 +53,7 @@ public class PrjInfoListImpl implements PrjInfoListInterface {
    */
   public List<SkillMasterForm> findSkillInfo() {
 //    PrjInfoListDao dao = new PrjInfoListDao();
-	SkillMasterDao skillDao = new SkillMasterDao();
+    SkillMasterDao skillDao = new SkillMasterDao();
 //    List<BeanMap> list = dao.findSkillInfo();
 	List<BeanMap> list = skillDao.SearchAndSortAllSkill("skill_number");
     List<SkillMasterForm> formList = new ArrayList<>();
