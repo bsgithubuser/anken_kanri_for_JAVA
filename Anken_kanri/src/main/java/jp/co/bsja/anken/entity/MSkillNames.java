@@ -1,19 +1,21 @@
 package jp.co.bsja.anken.entity;
 
 import java.sql.Timestamp;
+
 import javax.annotation.Generated;
+
 import org.seasar.extension.jdbc.name.PropertyName;
 
 /**
  * {@link MSkill}のプロパティ名の集合です。
- * 
+ *
  */
 @Generated(value = {"S2JDBC-Gen 2.4.46", "org.seasar.extension.jdbc.gen.internal.model.NamesModelFactoryImpl"}, date = "2016/09/12 17:12:05")
 public class MSkillNames {
 
     /**
      * skillIdのプロパティ名を返します。
-     * 
+     *
      * @return skillIdのプロパティ名
      */
     public static PropertyName<Integer> skillId() {
@@ -22,7 +24,7 @@ public class MSkillNames {
 
     /**
      * skillNameのプロパティ名を返します。
-     * 
+     *
      * @return skillNameのプロパティ名
      */
     public static PropertyName<String> skillName() {
@@ -30,8 +32,17 @@ public class MSkillNames {
     }
 
     /**
+     * skillNumberのプロパティ名を返します。
+     *
+     * @return skillNumberのプロパティ名
+     */
+    public static PropertyName<String> skillNumber(){
+    	return new PropertyName<String>("skillNumber");
+    }
+
+    /**
      * createDateのプロパティ名を返します。
-     * 
+     *
      * @return createDateのプロパティ名
      */
     public static PropertyName<Timestamp> createDate() {
@@ -40,7 +51,7 @@ public class MSkillNames {
 
     /**
      * updateDateのプロパティ名を返します。
-     * 
+     *
      * @return updateDateのプロパティ名
      */
     public static PropertyName<Timestamp> updateDate() {
@@ -60,7 +71,7 @@ public class MSkillNames {
 
         /**
          * インスタンスを構築します。
-         * 
+         *
          * @param name
          *            名前
          */
@@ -70,7 +81,7 @@ public class MSkillNames {
 
         /**
          * インスタンスを構築します。
-         * 
+         *
          * @param parent
          *            親
          * @param name
@@ -96,6 +107,15 @@ public class MSkillNames {
          */
         public PropertyName<String> skillName() {
             return new PropertyName<String>(this, "skillName");
+        }
+
+        /**
+         * skillNumberのプロパティ名を返します。
+         *
+         * @return skillNumberのプロパティ名
+         */
+        public PropertyName<String> skillNumber(){
+        	return new PropertyName<String>(this, "skillNumber");
         }
 
         /**

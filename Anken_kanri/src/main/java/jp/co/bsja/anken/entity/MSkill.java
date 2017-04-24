@@ -27,6 +27,10 @@ public class MSkill implements Serializable {
     @Column(length = 40, nullable = false, unique = false)
     public String skillName;
 
+    /** skillNumber プロパティ*/
+    @Column(precision = 10, nullable = false, unique = false)
+    public Integer skillNumber;
+
     /** createDateプロパティ */
     @Column(nullable = true, unique = false)
     public Timestamp createDate;

@@ -81,9 +81,10 @@ public class SkillMasterAction {
    */
   @Execute(validator = false)
   public String saveOverlapName() {
-    //セッションに格納したIDとスキル名を受け取る
+    //セッションに格納したIDとスキル名とスキル番号を受け取る
     skillMasterForm.skillId = sessionDto.skillId;
     skillMasterForm.skillName = sessionDto.skillName;
+    skillMasterForm.skillNumber = sessionDto.skillNumber;
 
     SingletonS2ContainerFactory.init();
     S2Container container = SingletonS2ContainerFactory.getContainer();

@@ -5,7 +5,9 @@ import java.util.List;
 
 import org.seasar.framework.beans.util.BeanMap;
 import org.seasar.struts.annotation.Arg;
+import org.seasar.struts.annotation.Mask;
 import org.seasar.struts.annotation.Maxlength;
+import org.seasar.struts.annotation.Msg;
 import org.seasar.struts.annotation.Required;
 
 public class SkillMasterForm {
@@ -16,6 +18,10 @@ public class SkillMasterForm {
   @Required(arg0 = @Arg(key = "スキル名", resource = false ))
   @Maxlength(maxlength = 40, arg0 = @Arg(key = "スキル名", resource = false ))
   public String skillName;
+
+  /** スキル番号 . */
+  @Mask(mask = "^[0-9]+$", msg = @Msg(key = "MSG_E00020", resource = true))
+  public String skillNumber;
 
   /** スキル名重複数 . */
   public int overlap;

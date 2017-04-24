@@ -35,3 +35,35 @@ table.tablesorter thead tr .headerSortDown {
 table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {
 background-color: #8dbdd8;
 }
+
+/* skillTables */
+table.skillTableSorter {
+  border-collapse: collapse;
+  background-color: #000000;
+  border: 1px #000000 solid;
+}
+table.skillTableSorter tr .header {
+  background-image: url(bg.gif);
+  background-repeat: no-repeat;
+  background-position: center right;
+  cursor: pointer;
+  padding-right: 20px;
+}
+table.skillTableSorter tbody td {
+  border: 1px #000000 solid;
+  padding: 8px;
+}
+table.skillTableSorter tbody tr.odd td {
+  background-color:#F0F0F6;
+}
+table.skillTableSorter thead tr .headerSortUp {
+  background-image: url(asc.gif);
+}
+table.skillTableSorter thead tr .headerSortDown {
+  background-image: url(desc.gif);
+}
+table.skillTableSorter thead tr .headerSortDown, table.skillTableSorter thead tr .headerSortUp {
+  background-color: #8dbdd8;
+}
+
+

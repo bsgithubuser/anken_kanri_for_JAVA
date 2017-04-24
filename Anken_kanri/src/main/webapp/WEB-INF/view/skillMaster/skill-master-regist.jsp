@@ -13,6 +13,7 @@
              */
             function clearSkillName(){
                 document.getElementById("skillName").value = "";
+                document.getElementById("skillNumber").value = "";
             }
 
             /*
@@ -57,6 +58,13 @@
                                 <input type="text" id="skillName" name="skillName" style="ime-mode: active;" value="${f:h(fetchSkillData.skillName)}">
                             </td>
                         </tr>
+                         <tr>
+                            <th class="inputTytle">スキル番号</th>
+                            <td class="inputPosition">
+                                <input type="text" id="skillNumber" name="skillNumber" style="ime-mode: inactive;" maxlength="3"
+                                 value="${f:h(fetchSkillData.skillNumber)}"/>
+                            </td>
+                        </tr>
                       </c:if>
                       <c:if test="${f:h(fetchSkillData == null)}">
                         <tr>
@@ -70,6 +78,13 @@
                             <th class="inputTytle">スキル名</th>
                             <td class="inputPosition">
                                 <input type="text" id="skillName" name="skillName" style="ime-mode: active;" value="${f:h(skillName)}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="inputTytle">スキル番号</th>
+                            <td class="inputPosition">
+                                <input type="text" id="skillNumber" name="skillNumber" style="ime-mode: inactive;"  maxlength="3"
+                                 value="${f:h(skillNumber)}"/>
                             </td>
                         </tr>
                       </c:if>

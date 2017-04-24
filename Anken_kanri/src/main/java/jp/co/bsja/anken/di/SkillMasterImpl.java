@@ -22,7 +22,7 @@ public class SkillMasterImpl implements SkillMasterInterface {
   public void fetchAllSkill(SkillMasterForm skillMasterForm) {
     //検索処理
     SkillMasterDao dao = new SkillMasterDao();
-    List<BeanMap> list = dao.findAllSkill("M_SKILL");
+    List<BeanMap> list = dao.findAllSkill("M_SKILL", "skill_id");
 
     skillMasterForm.skillList = list;
   }
@@ -56,28 +56,26 @@ public class SkillMasterImpl implements SkillMasterInterface {
 
   @Override
   public String checkOverlapOrSave(SkillMasterForm skillMasterForm, SessionDto sessionDto) {
-    //重複確認処理
-    SkillMasterDao dao = new SkillMasterDao();
-    String skillName = skillMasterForm.skillName;
-    int count = dao.checkOverlap("M_SKILL", "skill_name", skillName);
-    String destination = null;
+	    //重複確認処理
+	    SkillMasterDao dao = new SkillMasterDao();
+	    int count = dao.checkOverlap("M_SKILL", "skill_name", skillMasterForm.skillName);
+	    String destination = "skill-master-regist.jsp";
 
-    //返された count の値が1以下なら、登録処理を開始する
-    if (count < 1) {
-      int save = save(skillMasterForm, sessionDto);
-      destination = decideDestination(save, skillMasterForm);
+	    //返された count の値が1以下なら、登録処理を開始する
+	    if (count < 1) {
+	      int save = save(skillMasterForm, sessionDto);
+	      destination = decideDestination(save, skillMasterForm);
+	    } else {
+	      //overlap が1以上なら、重複するスキル名で登録するか確認
+	      //一度登録画面に戻る
+	      sessionDto.skillId = skillMasterForm.skillId;
+	      sessionDto.skillName = skillMasterForm.skillName;
+	      sessionDto.skillNumber = skillMasterForm.skillNumber;
 
-    } else {
-      //overlap が1以上なら、重複するスキル名で登録するか確認
-      //一度登録画面に戻る
-      sessionDto.skillId = skillMasterForm.skillId;
-      sessionDto.skillName = skillMasterForm.skillName;
+	      skillMasterForm.overlap = count;
+	    }
 
-      skillMasterForm.overlap = count;
-
-      destination = "skill-master-regist.jsp";
-    }
-    return destination;
+	    return destination;
   }
 
   @Override
@@ -90,6 +88,12 @@ public class SkillMasterImpl implements SkillMasterInterface {
 
     //入力されたスキル名と更新日時をentityに格納する
     entity.skillName = skillMasterForm.skillName;
+    int number = 0;
+    if (!empty(skillMasterForm.skillNumber)) {
+      // DBに登録するため、スキル番号をint型に修正する
+      number = Integer.parseInt(skillMasterForm.skillNumber);
+    }
+    entity.skillNumber = number;
     entity.updateDate = baseDt;
     int result = 0;
 
@@ -158,7 +162,7 @@ public class SkillMasterImpl implements SkillMasterInterface {
 
   @Override
   public void delete(SkillMasterForm skillMasterForm) {
-    //案件スキルテlーブル検索
+    //案件スキルテーブル検索
     SkillMasterDao dao = new SkillMasterDao();
     //検索用に、スキルIDをint型に直す
     int skillId = Integer.parseInt(skillMasterForm.skillId);

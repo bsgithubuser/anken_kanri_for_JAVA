@@ -4,11 +4,14 @@ table.tablePosition {
   margin-left: 50px;
 }
 
+/*style.css内のtable.skillTableSorterに統合しました*/
+/*
 table.tableStyle {
   border-collapse: collapse;
     background-color: #000000;
     border: 1px #000000 solid;
 }
+*/
 
 th.titleStyle {
   border: 1px #000000 solid;

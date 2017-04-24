@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 
 import jp.co.bsja.anken.common.CommonFunction;
 import jp.co.bsja.anken.dao.AnkenRegisterDao;
+import jp.co.bsja.anken.dao.SkillMasterDao;
 import jp.co.bsja.anken.dto.SessionDto;
 import jp.co.bsja.anken.entity.TProjInfo;
 import jp.co.bsja.anken.entity.TProjSkill;
@@ -26,6 +27,7 @@ import org.seasar.struts.util.RequestUtil;
 public class AnkenRegisterImpl implements AnkenRegisterInterface {
 
   AnkenRegisterDao dao = new AnkenRegisterDao();
+  SkillMasterDao skillDao = new SkillMasterDao();
   TProjInfo projInfo = new TProjInfo();
   TProjSkill projSkill = new TProjSkill();
   ActionMessages errors = new ActionMessages();
@@ -40,7 +42,8 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
   public String initEntry(AnkenRegisterForm ankenRegisterForm, SessionDto sessionDto) {
 
     //スキルと担当者と案件IDを画面へ渡す
-    List<BeanMap> skillList = dao.selectAll("M_SKILL");
+
+    List<BeanMap> skillList = skillDao.findAllSkill("M_SKILL", "skill_Number");
     List<BeanMap> usersList = dao.selectAll("M_USERS");
     List<BeanMap> cmpnList = dao.selectAll("M_CMPN");
     int idSeq = dao.getPrjIdSeq();
@@ -93,7 +96,7 @@ public class AnkenRegisterImpl implements AnkenRegisterInterface {
   public String initEdit(AnkenRegisterForm ankenRegisterForm, SessionDto sessionDto) {
 
     //スキルと担当者と案件情報を画面へ渡す
-    List<BeanMap> skillList = dao.selectAll("M_SKILL");
+	List<BeanMap> skillList = skillDao.findAllSkill("M_SKILL", "skill_Number");
     List<BeanMap> usersList = dao.selectAll("M_USERS");
     List<BeanMap> cmpnList = dao.selectAll("M_CMPN");
     TProjInfo ankenList = dao.initEdit(ankenRegisterForm.id);

@@ -6,8 +6,23 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link type = "text/css" rel = "stylesheet" href = "../css/common.css"/>
         <link type = "text/css" rel = "stylesheet" href = "../css/skillMaster.css"/>
+        <link rel="stylesheet" href="../tablesorter/themes/blue/style.css" type="text/css" media="print, projection, screen" />
         <title>Insert title here</title>
+        <script src="../tablesorter/jquery-latest.js" type="text/javascript"></script>
+        <script src="../tablesorter/jquery.tablesorter.min.js" type="text/javascript"></script>
+        <script src="../tablesorter/jquery.metadata.js" type="text/javascript"></script>
         <script type="text/javascript" language=javascript>
+            $(document).ready(function()
+                {
+                  $("#skillList").tablesorter({
+                      headers: {
+                          3: { sorter: false },
+                          4: { sorter: false }
+                      }
+                  });
+                }
+              );
+
             /*
              * 編集押下時、対象のスキルIDをFormに渡す
              */
@@ -69,17 +84,21 @@
             </s:form>
             <tr>
                 <td>
-                    <table class="tableStyle">
+                    <table id="skillList" class="skillTableSorter">
+                      <thead>
                         <tr class="listTytle">
                             <th class="titleStyle">スキル管理ID</th>
                             <th class="titleStyle">スキル名</th>
+                            <th class="titleStyle">スキル番号</th>
                             <th class="titleStyle">編集</th>
                             <th class="titleStyle">削除</th>
                         </tr>
+                      </thead>
                         <c:forEach var="date" items="${skillList}">
                             <tr class="columnStyle">
                                 <td class="listStyle">${date.skillId}</td>
                                 <td class="listStyle">${date.skillName}</td>
+                                <td class="listStyle">${date.skillNumber}</td>
                                 <s:form action="regist" method="post">
                                     <td class="listStyle"><a href="#" onclick="editSkill(${f:h(date.skillId)},'${f:h(date.skillName)}');">編集</a></td>
                                 </s:form>

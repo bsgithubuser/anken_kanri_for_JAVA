@@ -152,21 +152,21 @@
           <dd>
             <input type="text" id="periFrom" name="periFrom" value="${f:h(periFrom)}" />&ensp;～&ensp;<input type="text" id="periTo" name="periTo" value="${f:h(periTo)}" />
 
-            <input type="checkbox" name="longTermFlg" ${f:h(longTermFlg)} />長期&ensp;
-            <input type="checkbox" name="sameDayFlg" ${f:h(sameDayFlg)} />即日&ensp;
-            <input type="checkbox" name="anyTimeFlg" ${f:h(anyTimeFlg)} />随時
+            <label><input type="checkbox" name="longTermFlg" ${f:h(longTermFlg)} />長期</label>&ensp;
+            <label><input type="checkbox" name="sameDayFlg" ${f:h(sameDayFlg)} />即日</label>&ensp;
+            <label><input type="checkbox" name="anyTimeFlg" ${f:h(anyTimeFlg)} />随時</label>
           </dd>
         </dl>
         <dl>
           <dt>延長</dt>
           <dd>
           <c:if test="${f:h((extentionFlg) == 0)}">
-            <input name="extentionFlg" type="radio" value="1" />あり
-            <input type="radio" name="extentionFlg" value="0" checked  />なし
+            <label><input name="extentionFlg" type="radio" value="1" />あり</label>
+            <label><input type="radio" name="extentionFlg" value="0" checked  />なし</label>
             </c:if>
             <c:if test="${f:h((extentionFlg) == 1)}">
-            <input name="extentionFlg" type="radio" value="1" checked />あり
-                        <input type="radio" name="extentionFlg" value="0"  />なし
+            <label><input name="extentionFlg" type="radio" value="1" checked />あり</label>
+            <label><input type="radio" name="extentionFlg" value="0"  />なし</label>
                     </c:if>
           </dd>
         </dl>
@@ -179,13 +179,13 @@
   int i = 0;
  %>
                                 <c:forEach items="${skillList}" var="list">
-                    <input type="checkbox" name="skillId"value="${f:h(list.skillId)}" ${f:h(list.checked)} />
-                                        ${f:h(list.skillName)}&ensp;
+                    <label><input type="checkbox" name="skillId"value="${f:h(list.skillId)}" ${f:h(list.checked)} />
+                                        ${f:h(list.skillName)}</label>&ensp;
 <%
   i++;
 %>
 <%
-  if (i == 5) {
+  if (i % 5 == 0) {
 %>
                   <br />
 <%

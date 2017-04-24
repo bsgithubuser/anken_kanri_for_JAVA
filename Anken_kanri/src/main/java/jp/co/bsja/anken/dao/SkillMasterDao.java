@@ -9,16 +9,29 @@ import org.seasar.framework.beans.util.BeanMap;
 
 public class SkillMasterDao extends Dao {
 
-  /**
-   * 検索条件指定なし全件検索SQL.
-   *
-   * @param tableName テーブル名
-   * @return 検索結果リスト
-   */
-  public List<BeanMap> findAllSkill(String tableName) {
-    return jdbcManager.selectBySql(BeanMap.class,
-        "SELECT * FROM " + tableName + " ORDER BY skill_id asc").getResultList();
-  }
+	 /**
+	   * 検索条件指定なし全件検索SQL.
+	   *
+	   * @param tableName テーブル名
+	   * @return 検索結果リスト
+	   */
+	/*  public List<BeanMap> findAllSkill(String tableName) {
+	    return jdbcManager.selectBySql(BeanMap.class,
+	        "SELECT * FROM " + tableName + " ORDER BY skill_id asc").getResultList();
+	  }
+	*/
+
+	  /**
+	   * 検索条件指定なし全件検索SQL.
+	   *
+	   * @tableName tableName テーブル名
+	   * @columnName columnName カラム名
+	   * @return 検索結果リスト
+	   */
+	  public List<BeanMap> findAllSkill(String tableName, String columnName) {
+	    return jdbcManager.selectBySql(BeanMap.class,
+	        "SELECT * FROM " + tableName + " ORDER BY " + columnName + " asc").getResultList();
+	  }
 
   /**
    * 重複チェックSQL .

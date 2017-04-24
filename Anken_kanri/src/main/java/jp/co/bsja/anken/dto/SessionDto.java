@@ -24,6 +24,7 @@ public class SessionDto implements Serializable {
   /* スキル管理マスタ */
   public String skillId;
   public String skillName;
+  public String skillNumber;
   public Timestamp createDate;
   public Timestamp updateDate;
 

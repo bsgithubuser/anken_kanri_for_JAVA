@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jp.co.bsja.anken.dao.PrjInfoListDao;
+import jp.co.bsja.anken.dao.SkillMasterDao;
 import jp.co.bsja.anken.dto.SessionDto;
 import jp.co.bsja.anken.entity.TProjInfo;
 import jp.co.bsja.anken.form.AnkenRegisterForm;
@@ -22,7 +23,12 @@ import org.seasar.struts.util.ActionMessagesUtil;
 import org.seasar.struts.util.RequestUtil;
 
 public class PrjInfoListImpl implements PrjInfoListInterface {
-     public static final String UNSET_ITEM = "未設定";
+  public static final String UNSET_ITEM = "未設定";
+  public static final String LONG_TERM = "長期";
+  public static final String SAME_DAY  = "即日";
+  public static final String ANY_TIME  = "随時";
+  public static final String BR = System.getProperty("line.separator");
+
   /**
    * 担当者マスタの担当者名全てを取得します。 .
    *
@@ -46,8 +52,10 @@ public class PrjInfoListImpl implements PrjInfoListInterface {
    * @return formList スキル情報マスタ一覧
    */
   public List<SkillMasterForm> findSkillInfo() {
-    PrjInfoListDao dao = new PrjInfoListDao();
-    List<BeanMap> list = dao.findSkillInfo();
+//    PrjInfoListDao dao = new PrjInfoListDao();
+	SkillMasterDao skillDao = new SkillMasterDao();
+//    List<BeanMap> list = dao.findSkillInfo();
+	List<BeanMap> list = skillDao.findAllSkill("M_SKILL", "skill_number");
     List<SkillMasterForm> formList = new ArrayList<>();
     for (BeanMap map : list) {
       SkillMasterForm skillMasterForm = new SkillMasterForm();
@@ -103,54 +111,6 @@ public class PrjInfoListImpl implements PrjInfoListInterface {
           SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
           String formattedGenData = sdf.format(map.get("genDate"));
 
-          //期間を出力用に整形する
-          String prjPeriod = null;
-          String periFrom = UNSET_ITEM;
-          String periTo = UNSET_ITEM;
-
-          if (!empty(map.get("periFrom"))) {
-            periFrom = sdf.format(map.get("periFrom"));
-          }
-          if (!empty(map.get("periTo"))) {
-            periTo = sdf.format(map.get("periTo"));
-          }
-
-          //改行
-          String BR = System.getProperty("line.separator");
-
-          //periFromとperiTo両方に値があれば、それを表示する
-          if (!empty(periFrom) && !empty(periTo)){
-            prjPeriod = periFrom + "～" + BR + periTo;
-          } else if ((boolean) map.get("longTermFlg")) {
-          //長期フラグが true のとき "periFrom～長期"又は"長期"
-            if (!empty(periFrom)) {
-              prjPeriod = periFrom + "～" + BR + "長期";
-            } else {
-              prjPeriod = "長期";
-            }
-          } else if ((boolean) map.get("anyTimeFlg")) {
-          //随時フラグが true のとき "随時～periTo"又は"随時"
-            if (!empty(periTo)) {
-              prjPeriod = "随時" + BR + "～" + periTo;
-            } else {
-              prjPeriod = "随時";
-            }
-          } else if ((boolean) map.get("sameDayFlg")) {
-          //即日フラグが true のとき "即日～periTo"又は"即日"
-            if (!empty(periTo)) {
-              prjPeriod = "即日" + BR + "～" + periTo;
-            } else {
-              prjPeriod = "即日";
-            }
-          }
-
-          //延長フラグ非表示に変更のため、以下の処理をコメントアウト
-          /*String extendFlg = "";
-          //延長フラグが true のとき○を表示する
-          if ((boolean) map.get("extentionFlg")) {
-            extendFlg = "○";
-          }*/
-
           //概要 一行のみ一覧で表示、一行に表示する文字数を最大12文字に制限
           //改行で区切った概要
           String[] split = ((String) map.get("orverview")).split("\r\n|[\n\r\u2028\u2029\u0085]");
@@ -186,9 +146,9 @@ public class PrjInfoListImpl implements PrjInfoListInterface {
           form.cmpName = (String) map.get("cmpnName");
           form.userName = (String) map.get("userName");
           form.genDate = formattedGenData;
-          form.prjPeriod = prjPeriod;
+          form.prjPeriod = displyPriodFormat(map);
+          map.put("printPriod", displyPriodFormat(map));
           form.skillName = (String) map.get("skillName");
-          //form.extendFlg = extendFlg;
           form.overview = originalOrverview;
           form.displayOverview = oneLineOrverview;
           form.updateDate = (Timestamp) map.get("updateDate");
@@ -204,6 +164,93 @@ public class PrjInfoListImpl implements PrjInfoListInterface {
     }
 
     return infoList;
+  }
+
+  /**
+   * 案件情報一覧用の期間の表示内容を設定します .
+   *
+   * @return displyPriod 表示用期間
+   */
+  public String displyPriodFormat(BeanMap map) {
+    String displyPriod = "";
+    String periFrom = null;
+    String periTo = null;
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+
+    if (!empty(map.get("periFrom"))) {
+      periFrom = sdf.format(map.get("periFrom"));
+    }
+    if (!empty(map.get("periTo"))) {
+      periTo = sdf.format(map.get("periTo"));
+    }
+
+        // periFromとperiTo両方に値があれば、それを表示する
+    if (!empty(periFrom) && !empty(periTo)) {
+      displyPriod = formatFromTo(periFrom,periTo);
+    } else {
+       // periFromとperiTo両方とも未入力
+      if (empty(periFrom) && empty(periTo)) {
+                // フラグが全てFALSEの場合
+        if (!(boolean) map.get("longTermFlg")
+                        && !(boolean) map.get("anyTimeFlg")
+                        && !(boolean) map.get("sameDayFlg")) {
+          displyPriod = formatFromTo(UNSET_ITEM,UNSET_ITEM);
+        } else {
+          if ((boolean) map.get("longTermFlg")) {
+            if ((boolean) map.get("sameDayFlg")) {
+              return formatFromTo(SAME_DAY,LONG_TERM);
+            }
+            if ((boolean) map.get("anyTimeFlg")) {
+              return formatFromTo(ANY_TIME,LONG_TERM);
+            }
+            return LONG_TERM;
+          } else if ((boolean) map.get("sameDayFlg")) {
+            return SAME_DAY;
+          } else if ((boolean) map.get("anyTimeFlg")) {
+            return ANY_TIME;
+          }
+        }
+      } else {
+        // periFromとperiToいずれかに値がある場合
+        if (!empty(periFrom)) {
+          // Fromのみ入力あり
+          if ((boolean) map.get("longTermFlg")) {
+            // 長期フラグが true
+            displyPriod = formatFromTo(periFrom,LONG_TERM);
+          } else {
+            displyPriod = formatFromTo(periFrom,UNSET_ITEM);
+          }
+        } else {
+          // Toのみ入力あり
+          if ((boolean) map.get("sameDayFlg")) {
+            // 随時フラグが true
+            displyPriod = formatFromTo(SAME_DAY,periTo);
+          } else if ((boolean) map.get("anyTimeFlg")) {
+            // 即日フラグが true
+            displyPriod = formatFromTo(ANY_TIME,periTo);
+          } else {
+            // 随時 即日フラグが false
+            displyPriod = formatFromTo(UNSET_ITEM,periTo);
+          }
+        }
+      }
+    }
+    return displyPriod;
+  }
+
+    /**
+     * 案件情報一覧用の期間をFrom～Toに整形します .
+     *
+     * @return formatFromTo 表示用期間
+     */
+  public String formatFromTo(String from, String to) {
+    String makeFromTo = "";
+    if (empty(from) && empty(from)) {
+      makeFromTo = UNSET_ITEM + "～" + BR + UNSET_ITEM;
+      return makeFromTo;
+    }
+    makeFromTo = from + "～" + BR + to;
+    return makeFromTo;
   }
 
   /**
