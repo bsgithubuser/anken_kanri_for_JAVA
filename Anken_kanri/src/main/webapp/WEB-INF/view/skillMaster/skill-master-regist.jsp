@@ -54,7 +54,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <th class="inputTytle">スキル名</th>
+                            <th class="inputTytle">スキル名<span class="required">*</span></th>
                             <td class="inputPosition">
                                 <input type="text" id="skillName" name="skillName" style="ime-mode: active;" value="${f:h(fetchSkillData.skillName)}">
                             </td>
@@ -76,7 +76,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <th class="inputTytle">スキル名</th>
+                            <th class="inputTytle">スキル名<span class="required">*</span></th>
                             <td class="inputPosition">
                                 <input type="text" id="skillName" name="skillName" style="ime-mode: active;" value="${f:h(skillName)}">
                             </td>
