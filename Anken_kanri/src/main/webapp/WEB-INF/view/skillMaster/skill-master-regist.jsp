@@ -28,9 +28,8 @@
                         document.forms[1].submit();
                 }
             }
-*/
-
             }
+*/
         </script>
     </head>
     <body onLoad="checkOverlap()">
