@@ -259,34 +259,29 @@ public class PrjInfoListImpl implements PrjInfoListInterface {
    * @return list 統合後案件情報一覧
    */
   public List<BeanMap> integrateIdentityPrj(List<BeanMap> list){
-    for (int i = 0; i < list.size(); i++) {
-      BeanMap originColumn = list.get(i);
-      String originPrjId = String.valueOf(originColumn.get("prjId"));
+    List<BeanMap> prjList = new ArrayList<BeanMap>();
+    BeanMap prjData = list.get(0);
+    for (int i = 1; i < list.size(); i++) {
+      BeanMap originalData = list.get(i);
+      //案件情報IDが重複していた場合
+      if (prjData.get("prjId").equals(originalData.get("prjId"))) {
+        //改行
+        String BR = System.getProperty("line.separator");
 
-      for (int j = 0; j < list.size(); j++) {
-        // originColumn 以外の列
-        if (i != j) {
-          BeanMap column = list.get(j);
-          String prjId = String.valueOf(column.get("prjId"));
-
-          //案件情報IDの重複があった場合
-          if (originPrjId.equals(prjId)) {
-            //改行
-            String BR = System.getProperty("line.separator");
-
-            //重複している列のスキル名を取り出し、originColumnのスキル名に追加する
-            String originSkill = String.valueOf(originColumn.get("skillName"));
-            String skillName = String.valueOf(column.get("skillName"));
-            String combined = originSkill + BR + skillName;
-            originColumn.put("skillName", combined);
-
-            //重複していたほうのcolumnをlistから削除する
-            list.remove(j);
-          }
-        }
+        //スキル名を取り出し、prjDataのスキル名に連結する
+        String prjSkill = String.valueOf(prjData.get("skillName"));
+        String originalskill = String.valueOf(originalData.get("skillName"));
+        String unionSkill = prjSkill + BR + originalskill;
+        prjData.put("skillName", unionSkill);
+      //案件IDが重複していなかった場合、統合後のリストにデータを追加する
+      } else {
+        prjList.add(prjData);
+        prjData = originalData;
       }
     }
-    return list;
+    prjList.add(prjData);
+
+	  return prjList;
   }
 
   /**
