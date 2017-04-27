@@ -261,9 +261,7 @@ public class PrjInfoListImpl implements PrjInfoListInterface {
   public List<BeanMap> integrateIdentityPrj(List<BeanMap> list) {
     List<BeanMap> prjList = new ArrayList<BeanMap>();
     BeanMap prjData = new BeanMap();
-    //改行
-    final String BR = System.getProperty("line.separator");
-    if (list.size() != 0) {
+    if (list.size() > 0) {
       prjData = list.get(0);
       for (int i = 1; i < list.size(); i++) {
         BeanMap originalData = list.get(i);
