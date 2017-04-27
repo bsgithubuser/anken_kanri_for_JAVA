@@ -258,30 +258,31 @@ public class PrjInfoListImpl implements PrjInfoListInterface {
    *
    * @return list 統合後案件情報一覧
    */
-  public List<BeanMap> integrateIdentityPrj(List<BeanMap> list){
+  public List<BeanMap> integrateIdentityPrj(List<BeanMap> list) {
     List<BeanMap> prjList = new ArrayList<BeanMap>();
-    BeanMap prjData = list.get(0);
-    for (int i = 1; i < list.size(); i++) {
-      BeanMap originalData = list.get(i);
-      //案件情報IDが重複していた場合
-      if (prjData.get("prjId").equals(originalData.get("prjId"))) {
-        //改行
-        String BR = System.getProperty("line.separator");
-
-        //スキル名を取り出し、prjDataのスキル名に連結する
-        String prjSkill = String.valueOf(prjData.get("skillName"));
-        String originalskill = String.valueOf(originalData.get("skillName"));
-        String unionSkill = prjSkill + BR + originalskill;
-        prjData.put("skillName", unionSkill);
-      //案件IDが重複していなかった場合、統合後のリストにデータを追加する
-      } else {
-        prjList.add(prjData);
-        prjData = originalData;
+    BeanMap prjData = new BeanMap();
+    //改行
+    final String BR = System.getProperty("line.separator");
+    if (list.size() != 0) {
+      prjData = list.get(0);
+      for (int i = 1; i < list.size(); i++) {
+        BeanMap originalData = list.get(i);
+        //案件情報IDが重複していた場合
+        if (prjData.get("prjId").equals(originalData.get("prjId"))) {
+          //スキル名を取り出し、prjDataのスキル名に連結する
+          String prjSkill = String.valueOf(prjData.get("skillName"));
+          String originalskill = String.valueOf(originalData.get("skillName"));
+          String unionSkill = prjSkill + BR + originalskill;
+          prjData.put("skillName", unionSkill);
+        //案件IDが重複していなかった場合、統合後のリストにデータを追加する
+        } else {
+          prjList.add(prjData);
+          prjData = originalData;
+        }
       }
+      prjList.add(prjData);
     }
-    prjList.add(prjData);
-
-	  return prjList;
+    return prjList;
   }
 
   /**
