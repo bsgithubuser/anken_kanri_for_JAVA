@@ -55,7 +55,7 @@ public class PrjInfoListAction {
   }
 
   /**
-   * 編集画面から戻る際の検索を行います .
+   * 編集画面から戻に保持した検索条件で検索を行います .
    *
    * @return 案件情報一覧画面のJSPファイル名
    */
