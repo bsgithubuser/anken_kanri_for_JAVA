@@ -238,6 +238,6 @@
     <jsp:include page="../common/footer.jsp" />
   </div>
 
-<s:form action="/prjInfoList" method="post"></s:form>
+<s:form action="/prjInfoList/returnList" method="post"></s:form>
 </body>
 </html>

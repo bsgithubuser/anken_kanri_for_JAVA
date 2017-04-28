@@ -55,6 +55,23 @@ public class PrjInfoListAction {
   }
 
   /**
+   * 編集画面から戻る際の検索を行います .
+   *
+   * @return 案件情報一覧画面のJSPファイル名
+   */
+  @Execute(validator = true, input = "prj-info-list.jsp")
+  public String returnList() {
+    SingletonS2ContainerFactory.init();
+    S2Container container = SingletonS2ContainerFactory.getContainer();
+    PrjInfoListInterface prjInfoList = (PrjInfoListInterface)container
+         .getComponent("PrjInfoList");
+    //検索条件取得
+    prjInfoList.pullSearchCondition(prjInfoListForm, sessionDto);
+    prjInfoListForm.prjInfoListFormList = prjInfoList.search(prjInfoListForm, sessionDto);
+    return "/prjInfoList/";
+  }
+
+  /**
    * マスタメニュー画面への遷移 実行メソッド .
    * @return 遷移先jsp
    */
